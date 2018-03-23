@@ -1,0 +1,11 @@
+*.pyc
+.idea/*
+*.egg-info/*
+dist/*
+
+# Unit test / coverage reports
+.tox/
+.coverage
+.coverage.*
+.pytest_cache/*
+/htmlcov/
