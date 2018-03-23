@@ -1,0 +1,5 @@
+[run]
+source =
+    exonetapi
+omit =
+    tests/*
