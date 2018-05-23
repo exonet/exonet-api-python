@@ -107,6 +107,33 @@ class testResource(unittest.TestCase):
             })
         )
 
+    def test_get_json_relationships(self):
+        resource = create_resource.create_resource(
+            'fake',
+            relationships={
+                'thing': {
+                    'data' : {
+                        'type': 'things',
+                        'id' : 'thingID'
+                    }
+                }
+            }
+        )
+
+        self.assertEqual(
+            json.dumps(resource.get_json_relationships()),
+            json.dumps(
+                {
+                    'thing': {
+                        'data': {
+                            'type': 'things',
+                            'id': 'thingID'
+                        }
+                    }
+                }
+            )
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

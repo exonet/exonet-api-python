@@ -103,15 +103,15 @@ class Resource:
         relationships = {}
 
         for relation_name, relation in self.__relationships.items():
+            relationships[relation_name] = {}
             if type(relation) is list:
                 relation_list = []
                 for relation_resource in relation:
                     relation_list.append(relation_resource.to_json_resource_identifier())
-                relationships[relation_name] = {}
                 relationships[relation_name]['data'] = relation_list
-
+            elif type(relation) is dict:
+                relationships[relation_name]['data'] = relation['data']
             else:
-                relationships[relation_name] = {}
                 relationships[relation_name]['data'] = relation.to_json_resource_identifier()
 
         return relationships
