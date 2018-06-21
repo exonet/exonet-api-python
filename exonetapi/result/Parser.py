@@ -9,10 +9,6 @@ class Parser:
     """Parse API responses into Resources.
     Accepts JSON strings in the JSON-API format.
     """
-    # The plain JSON as a string.
-    __data = None
-    # The parsed JSON data as a dict.
-    __json_data = None
 
     def __init__(self, data):
         self.__data = data
