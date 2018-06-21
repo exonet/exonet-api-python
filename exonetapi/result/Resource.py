@@ -50,7 +50,32 @@ class Resource:
         """
         return self.__id
 
-    def relationship(self, name, data):
+    def relationship(self, name, *data):
+        """Define a new relationship for this resource, replace an existing one or get an existing one.
+        When data is provided the relationship is set, without data the relationship is returned.
+
+        :param name: The name of the relation to set.
+        :param data: The value of the relation, can be a Resource or a dict of Resources.
+        :return: self when setting a relationship, or the actual relationship when getting it
+        """
+        if len(data) is 1:
+            return self.set_relationship(name, data[0])
+
+        return self.get_relationship(name)
+
+    def get_relationship(self, name):
+        """Get a relationship for this resource.
+
+        :param name: The name of the relation to get.
+        :return: The defined relation or None
+        """
+
+        if name in self.__relationships:
+            return self.__relationships[name]
+
+        return None
+
+    def set_relationship(self, name, data):
         """Define a new relationship for this resource or replace an existing one.
         Can be a relation to a single Resource or a dict of Resources.
 
