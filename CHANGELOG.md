@@ -6,6 +6,9 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ## Unreleased
 [Compare 0.0.2 - Unreleased](https://github.com/exonet/exonet-api-python/compare/0.0.2...master)
+### Added
+- Individual methods to set or get relationships from a resource object.
+
 ### Changed
 - Most class variables changed to instance variables.
   This enforces the defaults to be set, instead of using the same variables from another instance.
