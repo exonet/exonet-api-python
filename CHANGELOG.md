@@ -6,6 +6,9 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ## Unreleased
 [Compare 0.0.2 - Unreleased](https://github.com/exonet/exonet-api-python/compare/0.0.2...master)
+### Added
+- Ready to use examples to get ticket details.
+
 ### Changed
 - Most class variables changed to instance variables.
   This enforces the defaults to be set, instead of using the same variables from another instance.
