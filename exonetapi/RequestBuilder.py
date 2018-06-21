@@ -17,18 +17,19 @@ class RequestBuilder:
     __host = None
     # An Authenticator instance to use when making requests to the API.
     __authenticator = None
-    # The resource name to access.
-    __resource_name = None
-    # Optional resource ID.
-    __id = None
-    # Optional related resources name.
-    __related = None
-    # The query params that will be used in the GET requests. Can contain filters and page options.
-    __query_params = {}
 
     def __init__(self, host, authenticator):
         self.__host = host
         self.__authenticator = authenticator
+
+        # The resource name to access.
+        self.__resource_name = None
+        # Optional resource ID.
+        self.__id = None
+        # Optional related resources name.
+        self.__related = None
+        # The query params that will be used in the GET requests. Can contain filters and page options.
+        self.__query_params = {}
 
     def set_resource(self, resource_name):
         """Prepare this RequestBuilder to query a specific resource.

@@ -7,23 +7,20 @@ from inflection import underscore
 class Resource:
     """Basic Resource with attributes.
     """
-    # Keep track of the resource type.
-    __type = None
-    # Keep track of the resource id.
-    __id = None
-    # The Resource attributes.
-    __attributes = {}
-
-    # The relationships for this resource.
-    __relationships = {}
 
     def __init__(self, attributes, id=None, relationships=None):
+        # Keep track of the resource type.
         self.__type = underscore(self.__class__.__name__)
+        # The Resource attributes.
         self.__attributes = attributes
+        # Keep track of the resource id.
         self.__id = id
 
+        # The relationships for this resource.
         if relationships:
             self.__relationships = relationships
+        else :
+            self.__relationships = {}
 
     def attribute(self, item):
         """Get Resource attributes if available.
