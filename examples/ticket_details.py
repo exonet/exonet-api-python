@@ -17,16 +17,13 @@ print(
     '\nTicket id:\t\t{id}\n'
     'Ticket subject:\t\t{subject}\n'
     'Created at:\t\t{ticket_date}\n'
-    'Last message date:\t{last_message_date}\n'
-    'Department:\t\t{department}\n'.format(
+    'Last message date:\t{last_message_date}\n'.format(
         subject=ticket.attribute('last_message_subject'),
         ticket_date=ticket.attribute('created_date'),
         last_message_date=ticket.attribute('last_message_date'),
-        department=ticket.attribute('department'),
         id=ticket.id()
     )
 )
-
 
 # Get the emails in the ticket.
 emails = client.resource('tickets/{id}/emails'.format(id=ticket.id())).get()
