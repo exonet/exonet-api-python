@@ -39,14 +39,14 @@ Example to get the user details of the authorised user::
      name=user_details.attribute('name')
  ))
 
-See the `/docs` dir for complete documentation and additional code snippets.
+See the `/docs` directory for complete documentation and additional code snippets.
 
 Examples
 --------
 
-The `/examples` dir contains ready to use scripts to help you get started. These examples can be executed with your personal access token. One of them gets a ticket with it's emails and prints the details::
+The `/examples` directory contains ready to use scripts to help you get started. These examples can be executed with your personal access token. One of them gets a ticket with it's emails and prints the details::
 
- $ python example/ticket_detail.py
+ $ python example/ticket_detail.py <YOUR-TOKEN>
 
 This should make two API calls and print the ticket and email details for one of your tickets.
 

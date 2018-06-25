@@ -10,8 +10,8 @@ client.authenticator.set_token(sys.argv[1])
 
 print('\nID and subject of all tickets (limit 5):\n')
 # Get 5 tickets.
-all_tickets = client.resource('tickets').size(5).get()
-for ticket in all_tickets:
+tickets = client.resource('tickets').size(5).get()
+for ticket in tickets:
     # For all the tickets, print the ticket ID with the subject.
     print('{id} - {subject}'.format(
         id=ticket.id(),

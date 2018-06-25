@@ -11,7 +11,14 @@ client.authenticator.set_token(sys.argv[1])
 # Get a single ticket resource. Because depending on who is authorized, the ticket IDs change, all tickets are
 # retrieved with a limit of 1. From this result, the first ticket is used. In a real world scenario you would
 # call something like `ticket = client.resource('tickets').get('VX09kwR3KxNo')` to get a single ticket by it's ID.
-ticket = client.resource('tickets').size(1).get()[0]
+tickets = client.resource('tickets').size(1).get()
+
+# Show this message when there are no tickets available.
+if len(tickets) == 0:
+    print('There are no tickets available')
+    sys.exit()
+
+ticket = tickets[0]
 
 print(
     '\nTicket id:\t\t{id}\n'
