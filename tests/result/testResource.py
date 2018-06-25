@@ -134,6 +134,60 @@ class testResource(unittest.TestCase):
             )
         )
 
+    def test_get_relationship_single(self):
+        resource = create_resource.create_resource('fake')
+        resource.set_relationship(
+            'thing',
+            create_resource.create_resource('things', id='thingID')
+        )
+
+        self.assertEqual(
+            resource.get_relationship('thing').to_json_resource_identifier(),
+            {
+                'type': 'things',
+                'id': 'thingID'
+            }
+        )
+
+    def test_get_relationship_multi(self):
+        resource = create_resource.create_resource('fake')
+        resource.set_relationship(
+            'thingies',
+            [
+                create_resource.create_resource('things', id='thingOneID'),
+                create_resource.create_resource('things', id='thingTwoID')
+            ]
+        )
+
+        relations = resource.get_relationship('thingies')
+
+        relationlist = []
+        for relation in relations:
+            relationlist.append(relation.to_json_resource_identifier())
+
+
+        self.assertEqual(
+            relationlist,
+            [
+                {
+                    'type': 'things',
+                    'id': 'thingOneID'
+                },
+                {
+                    'type': 'things',
+                    'id': 'thingTwoID'
+                }
+            ]
+        )
+
+    def test_relationship_none(self):
+        resource = create_resource.create_resource('dummy')
+
+        self.assertEqual(
+            resource.relationship('invalid'),
+            None
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
