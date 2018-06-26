@@ -7,7 +7,6 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ## [Unreleased]
 [Compare 0.0.3 - Unreleased](https://github.com/exonet/exonet-api-python/compare/0.0.3...master)
 
-
 ## [0.0.3](https://github.com/exonet/exonet-api-python/releases/tag/0.0.3) - 2018-06-26
 [Compare 0.0.2 - 0.0.3](https://github.com/exonet/exonet-api-python/compare/0.0.2...0.0.3)
 ### Added
