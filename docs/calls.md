@@ -17,6 +17,10 @@ certificates_request.size(10)
 
 # Set the page to get:
 certificates_request.page(2)
+
+# Order by domain, desc:
+certificates_request.sort('-domain')
+
 ```
 
 After setting the options you can call the `get()` method to retrieve the resource:

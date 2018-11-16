@@ -74,6 +74,14 @@ class RequestBuilder:
         self.__query_params['page[size]'] = page_size
         return self
 
+    def sort(self, sort_field):
+        """Prepare this RequestBuilder to sort by a field.
+        :param sort_field: The field name to sort on.
+        :return: self
+        """
+        self.__query_params['sort'] = sort_field
+        return self
+
     def related(self, related):
         """Prepare this RequestBuilder to query related resources on the API.
 
