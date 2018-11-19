@@ -90,9 +90,17 @@ class RequestBuilder:
         return self
 
     def sortAsc(self, sort_field):
+        """Prepare this RequestBuilder to sort by a field in ascending order.
+        :param sort_field: The field name to sort on.
+        :return: self
+        """
         return self.sort(sort_field, 'asc')
 
     def sortDesc(self, sort_field):
+        """Prepare this RequestBuilder to sort by a field in descending order.
+        :param sort_field: The field name to sort on.
+        :return: self
+        """
         return self.sort(sort_field, 'desc')
 
     def related(self, related):
