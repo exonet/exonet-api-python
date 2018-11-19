@@ -54,12 +54,12 @@ class testRequestBuilder(unittest.TestCase):
         self.request_builder.sort('domain')
         self.assertEqual(self.request_builder._RequestBuilder__query_params['sort'], 'domain')
 
-    def test_sort_asc(self):
-        self.request_builder.sort('domain', 'asc')
+    def test_sortAsc(self):
+        self.request_builder.sortAsc('domain')
         self.assertEqual(self.request_builder._RequestBuilder__query_params['sort'], 'domain')
 
-    def test_sort_desc(self):
-        self.request_builder.sort('domain', 'desc')
+    def test_sortDesc(self):
+        self.request_builder.sortDesc('domain')
         self.assertEqual(self.request_builder._RequestBuilder__query_params['sort'], '-domain')
 
     def test_related(self):

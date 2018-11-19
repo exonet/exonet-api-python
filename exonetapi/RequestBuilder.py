@@ -89,6 +89,12 @@ class RequestBuilder:
         )
         return self
 
+    def sortAsc(self, sort_field):
+        return self.sort(sort_field, 'asc')
+
+    def sortDesc(self, sort_field):
+        return self.sort(sort_field, 'desc')
+
     def related(self, related):
         """Prepare this RequestBuilder to query related resources on the API.
 

@@ -20,7 +20,6 @@ certificates_request.page(2)
 
 # Order by domain, desc:
 certificates_request.sort('domain', 'desc')
-
 ```
 
 After setting the options you can call the `get()` method to retrieve the resource:
