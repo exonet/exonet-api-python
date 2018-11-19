@@ -74,12 +74,19 @@ class RequestBuilder:
         self.__query_params['page[size]'] = page_size
         return self
 
-    def sort(self, sort_field):
+    def sort(self, sort_field, sort_order='asc'):
         """Prepare this RequestBuilder to sort by a field.
         :param sort_field: The field name to sort on.
+        :param sort_order: The order for sorting (asc/desc), default: asc.
         :return: self
         """
-        self.__query_params['sort'] = sort_field
+        if sort_order not in ['asc', 'desc']:
+            raise ValueError('Sort order can only be "asc" or "desc".')
+
+        self.__query_params['sort'] = '{sort}{field}'.format(
+            sort='-' if sort_order == 'desc' else '',
+            field=sort_field,
+        )
         return self
 
     def related(self, related):

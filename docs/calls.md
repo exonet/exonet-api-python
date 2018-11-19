@@ -1,5 +1,5 @@
 # Making API calls
-After the client has been initialised, use the `resource` method to define which type of resource you want to get from 
+After the client has been initialised, use the `resource` method to define which type of resource you want to get from
 the API:
 
 ```python
@@ -19,7 +19,7 @@ certificates_request.size(10)
 certificates_request.page(2)
 
 # Order by domain, desc:
-certificates_request.sort('-domain')
+certificates_request.sort('domain', 'desc')
 
 ```
 

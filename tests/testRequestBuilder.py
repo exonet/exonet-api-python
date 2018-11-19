@@ -50,8 +50,16 @@ class testRequestBuilder(unittest.TestCase):
         self.request_builder.size(30)
         self.assertEqual(self.request_builder._RequestBuilder__query_params['page[size]'], 30)
 
-    def test_sort(self):
-        self.request_builder.sort('-domain')
+    def test_sort_default(self):
+        self.request_builder.sort('domain')
+        self.assertEqual(self.request_builder._RequestBuilder__query_params['sort'], 'domain')
+
+    def test_sort_asc(self):
+        self.request_builder.sort('domain', 'asc')
+        self.assertEqual(self.request_builder._RequestBuilder__query_params['sort'], 'domain')
+
+    def test_sort_desc(self):
+        self.request_builder.sort('domain', 'desc')
         self.assertEqual(self.request_builder._RequestBuilder__query_params['sort'], '-domain')
 
     def test_related(self):
