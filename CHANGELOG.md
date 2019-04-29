@@ -5,7 +5,10 @@ All notable changes to `exonet-api-python` will be documented in this file.
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 ## [Unreleased]
-[Compare 0.0.4 - Unreleased](https://github.com/exonet/exonet-api-python/compare/0.0.4...master)
+[Compare 0.0.5 - Unreleased](https://github.com/exonet/exonet-api-python/compare/0.0.5...master)
+
+## [0.0.5](https://github.com/exonet/exonet-api-python/releases/tag/0.0.5) - 2019-04-29
+[Compare 0.0.4 - 0.0.5](https://github.com/exonet/exonet-api-python/compare/0.0.4...0.0.5)
 ### Added
 - Examples to use the DNS endpoints.
 
