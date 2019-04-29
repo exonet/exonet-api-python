@@ -6,6 +6,8 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ## [Unreleased]
 [Compare 0.0.4 - Unreleased](https://github.com/exonet/exonet-api-python/compare/0.0.4...master)
+### Added
+- Examples to use the DNS endpoints.
 
 ## [0.0.4](https://github.com/exonet/exonet-api-python/releases/tag/0.0.4) - 2018-11-19
 [Compare 0.0.3 - 0.0.4](https://github.com/exonet/exonet-api-python/compare/0.0.3...0.0.4)
