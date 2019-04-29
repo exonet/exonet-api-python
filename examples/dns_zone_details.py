@@ -38,3 +38,5 @@ for record in records:
         ttl=record.attribute('ttl'),
         content=record.attribute('content')
     ))
+
+print('\n')
