@@ -20,5 +20,4 @@ for zone in zones:
         record_count=len(zone.relationship('records')['data'])
     ))
 
-
 print('\n')
