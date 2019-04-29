@@ -32,7 +32,7 @@ records = client.resource('dns_zones/{id}/records'.format(id=zone.id())).get()
 
 # Show records.
 for record in records:
-    print('{type}  {fqdn}   {ttl}   {content}'.format(
+    print('{type}\t{fqdn}\t{ttl}\t{content}'.format(
         type=record.attribute('type'),
         fqdn=record.attribute('fqdn'),
         ttl=record.attribute('ttl'),
