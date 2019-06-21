@@ -5,14 +5,21 @@ from .auth import Authenticator
 from .RequestBuilder import RequestBuilder
 from urllib.parse import urlparse
 
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
 
-class Client:
+
+class Client(metaclass=Singleton):
     """The client to interact with the API.
 
     Manages connection details.
     """
-    # The API hostname.
-    __host = None
+    # The API host.
+    __host = 'https://api.exonet.nl'
 
     # The URL to use for authentication.
     authentication_endpoint = '/oauth/token'
@@ -20,8 +27,11 @@ class Client:
     # An instance of the Authenticator that keeps track of the token.
     authenticator = None
 
-    def __init__(self, host):
-        self.set_host(host)
+    def __init__(self, host=None):
+
+        if host:
+            self.set_host(host)
+
         self.authenticator = Authenticator(self.__host, self.authentication_endpoint)
 
     def set_host(self, host):
@@ -40,10 +50,13 @@ class Client:
 
         self.__host = parsed_host.geturl()
 
+    def get_host(self):
+        return self.__host
+
     def resource(self, resource):
         """Prepare a new request to a resource endpoint.
 
         :param resource: The type of resource.
         :return: A RequestBuilder to make API calls.
         """
-        return RequestBuilder(self.__host, self.authenticator).set_resource(resource)
+        return RequestBuilder(resource, self)

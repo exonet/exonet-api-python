@@ -3,8 +3,16 @@ Obtain tokens and keep track of authentication details.
 """
 import requests
 
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
 
-class Authenticator:
+
+
+class Authenticator(metaclass=Singleton):
     """
     Manage the authentication and keep track of (valid) tokens.
     """
@@ -27,7 +35,7 @@ class Authenticator:
         :return: The token if available.
         """
         if self.__auth_details:
-            return self.__auth_details['access_token']
+            return self.__auth_details['access_token'].strip()
 
     def password_auth(self, username, password, client_id, client_secret):
         """Authorize using the password grant.

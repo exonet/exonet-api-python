@@ -1,5 +1,5 @@
 from inflection import camelize
-from .result.Resource import Resource
+from .structures.Resource import Resource
 
 class create_resource:
     def create_resource(resource_type, attributes=(), id=None, relationships=None):
@@ -11,4 +11,4 @@ class create_resource:
         :param relationships: The initial relationships for the resource.
         :return: A Resource instance.
         """
-        return type(camelize(resource_type), (Resource,), {})(attributes=attributes, id=id, relationships=relationships)
+        return type(camelize(resource_type), (Resource,), {})(attributes=attributes, id=id)

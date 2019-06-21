@@ -4,41 +4,34 @@ Build requests to send to the API.
 import requests
 from urllib.parse import urlencode
 
+from exonetapi.auth import Authenticator
 from .result import Parser
 from exonetapi.exceptions.ValidationException import ValidationException
 
-
-class RequestBuilder:
+class RequestBuilder():
+# class RequestBuilder():
     """Create and make requests to the API.
 
     Takes care of Authentication, accessing resources and related data.
     """
-    # The API host.
-    __host = None
+
+    # The url to access the resource.
+    __resource = None
     # An Authenticator instance to use when making requests to the API.
-    __authenticator = None
+    __client = None
 
-    def __init__(self, host, authenticator):
-        self.__host = host
-        self.__authenticator = authenticator
+    # The query params that will be used in the GET requests. Can contain filters and page options.
+    __query_params = {}
 
-        # The resource name to access.
-        self.__resource_name = None
-        # Optional resource ID.
-        self.__id = None
-        # Optional related resources name.
-        self.__related = None
-        # The query params that will be used in the GET requests. Can contain filters and page options.
-        self.__query_params = {}
+    def __init__(self, resource, client=None):
+        self.__resource = resource
 
-    def set_resource(self, resource_name):
-        """Prepare this RequestBuilder to query a specific resource.
+        if client:
+            self.__client = client
+        else:
+            from exonetapi import Client
+            self.__client = Client()
 
-        :param resource_name: The resource type name.
-        :return: self
-        """
-        self.__resource_name = resource_name
-        return self
 
     def id(self, identifier):
         """Prepare this RequestBuilder to query an individual resource on the API.
@@ -46,7 +39,10 @@ class RequestBuilder:
         :param identifier: The ID of the resource to access.
         :return: self
         """
-        self.__id = identifier
+
+
+        # Make ResourceIdentifier
+
         return self
 
     def filter(self, filter_name, filter_value):
@@ -103,31 +99,19 @@ class RequestBuilder:
         """
         return self.sort(sort_field, 'desc')
 
-    def related(self, related):
-        """Prepare this RequestBuilder to query related resources on the API.
-
-        :param related: The name of the relationship to get resources for.
-        :return: self
-        """
-        self.__related = related
-        return self
 
     def get(self, identifier = None):
         """Make a call to the API using the previously set options.
 
         :return: A Resource or a Collection of Resources.
         """
-        if not self.__resource_name:
+        if not self.__resource:
             raise ValueError('Setting a resource is required before making a call.')
-
-        # Set the resource ID if an identifier was provided.
-        if identifier:
-            self.id(identifier)
 
         response = requests.get(
             self.__build_url(),
             headers=self.__get_headers(),
-            params=self.__query_params if not self.__id else None
+            params=self.__query_params if not identifier else None
         )
 
         # Raise exception on failed request.
@@ -141,7 +125,7 @@ class RequestBuilder:
         :param resource: The Resource to use as POST data.
         :return: A Resource or a Collection of Resources.
         """
-        if not self.__resource_name:
+        if not self.__resource:
             raise ValueError('Setting a resource is required before making a call.')
 
         response = requests.post(
@@ -159,18 +143,15 @@ class RequestBuilder:
 
         return Parser(response.content).parse()
 
-    def __build_url(self):
+    def __build_url(self, id=None):
         """Get the URL to call, based on all previously called setter methods.
 
         :return: A URL.
         """
-        url = self.__host + '/' + self.__resource_name
+        url = self.__client.get_host() + '/' + self.__resource
 
-        if self.__id:
-            url += '/' + self.__id
-
-        if self.__related:
-            url += '/' + self.__related
+        if id:
+            url += '/' + id
 
         return url
 
@@ -182,5 +163,5 @@ class RequestBuilder:
         return {
             'Accept': 'application/vnd.Exonet.v1+json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer %s' % (self.__authenticator.get_token())
+            'Authorization': 'Bearer %s' % (self.__client.authenticator.get_token())
         }

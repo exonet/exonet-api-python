@@ -33,7 +33,7 @@ print(
 )
 
 # Get the emails in the ticket.
-emails = client.resource('tickets/{id}/emails'.format(id=ticket.id())).get()
+emails =  ticket.related('emails').get()
 
 print('This ticket has {mailCount} emails'.format(
     mailCount=len(emails)
