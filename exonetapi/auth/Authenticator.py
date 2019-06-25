@@ -3,31 +3,15 @@ Obtain tokens and keep track of authentication details.
 """
 import requests
 
-class Singleton(type):
-    _instances = {}
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
-
-
-
-class Authenticator(metaclass=Singleton):
+class Authenticator():
     """
     Manage the authentication and keep track of (valid) tokens.
     """
-    # The host to connect to when authenticating.
-    __host = None
-
-    # The endpoint on the Host to use when authenticating.
-    __authentication_endpoint = None
-
-    # The obtained authentication details.
-    __auth_details = None
 
     def __init__(self, host, authentication_endpoint):
         self.__host = host
         self.__authentication_endpoint = authentication_endpoint
+        self.__auth_details = None
 
     def get_token(self):
         """Get the obtained authentication token.

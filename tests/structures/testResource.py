@@ -4,9 +4,9 @@ from unittest import mock
 
 from exonetapi.RequestBuilder import RequestBuilder
 from exonetapi.auth.Authenticator import Authenticator
-from exonetapi.result.Resource import Resource
+from exonetapi.structures.Resource import Resource
 from exonetapi.exceptions.ValidationException import ValidationException
-from exonetapi.create_resource import create_resource
+from exonetapi import create_resource
 
 import json
 

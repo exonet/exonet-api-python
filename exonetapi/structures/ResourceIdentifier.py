@@ -1,22 +1,21 @@
 """
 Work with API resources.
 """
-from inflection import underscore
-
 from exonetapi.structures.Relation import Relation
+from exonetapi.structures.Relationship import Relationship
 
 
-class ResourceIdentifier():
-    """Basic Resource with attributes.
+class ResourceIdentifier(object):
+    """Basic Resource identifier.
     """
-
-    __relationships = {}
-
     def __init__(self, type, id=None):
         # Keep track of the resource type.
         self.__type = type
         # Keep track of the resource id.
         self.__id = id
+
+        self.__relationships = {}
+
 
     def type(self):
         """Get the resource type of this Resource instance.
@@ -56,11 +55,10 @@ class ResourceIdentifier():
         :param name: The name of the relation to get.
         :return: The defined relation or None
         """
+        if not name in self.__relationships.keys():
+            self.__relationships[name] = Relationship(name, self.type(), self.id())
 
-        if name in self.__relationships:
-            return self.__relationships[name]
-
-        return None
+        return self.__relationships[name]
 
     def set_relationship(self, name, data):
         """Define a new relationship for this resource or replace an existing one.
@@ -82,7 +80,7 @@ class ResourceIdentifier():
         """
         return {
             'type': self.type(),
-            'id': self.__id,
+            'id': self.id(),
         }
 
     def get_json_relationships(self):

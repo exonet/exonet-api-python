@@ -28,11 +28,10 @@ class Client(metaclass=Singleton):
     authenticator = None
 
     def __init__(self, host=None):
-
         if host:
             self.set_host(host)
 
-        self.authenticator = Authenticator(self.__host, self.authentication_endpoint)
+        self.authenticator = Authenticator(self.get_host(), self.authentication_endpoint)
 
     def set_host(self, host):
         """

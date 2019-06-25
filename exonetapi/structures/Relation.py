@@ -1,23 +1,7 @@
 
-
-
-class Relation():
-
+class Relation(object):
     # string Pattern to create the relation url.
     __urlPattern = '/%s/%s/%s'
-
-    # string The url for the relation data.
-    __url = None
-
-    # string The name of the relation.
-    __name = None
-
-    # Request The prepared request to get the relation data.
-    __request = None
-
-    # ApiResourceSet|ApiResourceIdentifier The related resource identifier or a ApiResourceSet.
-    __resourceIdentifiers = None;
-
 
     def __init__(self, relation_name, origin_type, origin_id):
         """Relation constructor.
@@ -27,31 +11,25 @@ class Relation():
         :param: string $originId     The resource ID of the origin resource.
         """
         self.__name = relation_name
-
         self.__url = self.__urlPattern % (origin_type, origin_id, relation_name)
+
+        # ApiResourceSet|ApiResourceIdentifier The related resource identifier or a ApiResourceSet.
+        __resourceIdentifiers = None
 
         from exonetapi import RequestBuilder
         self.__request = RequestBuilder(self.__url)
 
+    def __len__(self):
+        if self.__resourceIdentifiers:
+            return len(self.__resourceIdentifiers)
+
+        return 0
 
     def __getattr__(self, name):
         def method(*args):
             return getattr(self.__request,name)()
 
         return method
-
-    # /**
-    #  * Pass unknown calls to the Request instance.
-    #  *
-    #  * @param string $methodName The method to call.
-    #  * @param array  $arguments  The method arguments.
-    #  *
-    #  * @return Request|ApiResource|ApiResourceSet The request instance or retrieved resource (set).
-    #  */
-    # public function __call($methodName, $arguments)
-    # {
-    #     return call_user_func_array([$this->request, $methodName], $arguments);
-    # }
 
     def get_resource_identifiers(self):
         """
@@ -69,6 +47,6 @@ class Relation():
         :param ApiResourceSet|ApiResourceIdentifier $newRelationship A new resource identifier or a new resource set.
         :return self
         """
-        self.__resourceIdentifiersresourceIdentifiers = newRelationship
+        self.__resourceIdentifiers = newRelationship
 
         return  self

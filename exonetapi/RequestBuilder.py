@@ -2,48 +2,28 @@
 Build requests to send to the API.
 """
 import requests
-from urllib.parse import urlencode
 
-from exonetapi.auth import Authenticator
 from .result import Parser
 from exonetapi.exceptions.ValidationException import ValidationException
 
-class RequestBuilder():
-# class RequestBuilder():
+
+class RequestBuilder(object):
     """Create and make requests to the API.
-
-    Takes care of Authentication, accessing resources and related data.
     """
-
-    # The url to access the resource.
-    __resource = None
-    # An Authenticator instance to use when making requests to the API.
     __client = None
-
-    # The query params that will be used in the GET requests. Can contain filters and page options.
-    __query_params = {}
-
     def __init__(self, resource, client=None):
+        if not resource.startswith('/'):
+            resource = '/' + resource
+
         self.__resource = resource
+        # The query params that will be used in the GET requests. Can contain filters and page options.
+        self.__query_params = {}
 
         if client:
             self.__client = client
-        else:
+        elif not self.__client:
             from exonetapi import Client
             self.__client = Client()
-
-
-    def id(self, identifier):
-        """Prepare this RequestBuilder to query an individual resource on the API.
-
-        :param identifier: The ID of the resource to access.
-        :return: self
-        """
-
-
-        # Make ResourceIdentifier
-
-        return self
 
     def filter(self, filter_name, filter_value):
         """Prepare this RequestBuilder to apply a filter on the next get request.
@@ -51,7 +31,7 @@ class RequestBuilder():
         :param filter_value: The value of the applied filter.
         :return: self
         """
-        self.__query_params['filter['+filter_name+']'] = filter_value
+        self.__query_params['filter[' + filter_name + ']'] = filter_value
         return self
 
     def page(self, page_number):
@@ -85,22 +65,21 @@ class RequestBuilder():
         )
         return self
 
-    def sortAsc(self, sort_field):
+    def sort_asc(self, sort_field):
         """Prepare this RequestBuilder to sort by a field in ascending order.
         :param sort_field: The field name to sort on.
         :return: self
         """
         return self.sort(sort_field, 'asc')
 
-    def sortDesc(self, sort_field):
+    def sort_desc(self, sort_field):
         """Prepare this RequestBuilder to sort by a field in descending order.
         :param sort_field: The field name to sort on.
         :return: self
         """
         return self.sort(sort_field, 'desc')
 
-
-    def get(self, identifier = None):
+    def get(self, identifier=None):
         """Make a call to the API using the previously set options.
 
         :return: A Resource or a Collection of Resources.
@@ -143,15 +122,15 @@ class RequestBuilder():
 
         return Parser(response.content).parse()
 
-    def __build_url(self, id=None):
+    def __build_url(self, identifier=None):
         """Get the URL to call, based on all previously called setter methods.
 
         :return: A URL.
         """
-        url = self.__client.get_host() + '/' + self.__resource
+        url = self.__client.get_host() + self.__resource
 
-        if id:
-            url += '/' + id
+        if identifier:
+            url += '/' + identifier
 
         return url
 

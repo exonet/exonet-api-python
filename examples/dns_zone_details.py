@@ -28,7 +28,7 @@ print('DNS zone:\t{zone_name}'.format(
 ))
 
 # Get the records for this zone.
-records = client.resource('dns_zones/{id}/records'.format(id=zone.id())).get()
+records = zone.related('records').get()
 
 # Show records.
 for record in records:
