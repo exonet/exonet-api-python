@@ -10,7 +10,10 @@ class Resource(ResourceIdentifier):
     """
     def __init__(self, data):
         # Call parent init method.
-        super().__init__(data['type'], data['id'])
+        super().__init__(
+            data['type'],
+            data['id'] if 'id' in data else None
+        )
 
         self.__attributes = {}
 
