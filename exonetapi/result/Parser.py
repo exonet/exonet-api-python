@@ -67,8 +67,9 @@ class Parser:
                             ResourceIdentifier(relation['data']['type'], relation['data']['id'])
                         )
 
+                    # Multi.
                     elif isinstance(relation['data'], list):
-                        # Multi.
+
                         relationships = []
                         for relationItem in relation['data'] :
                             if 'attributes' in relationItem:
@@ -80,6 +81,6 @@ class Parser:
 
                         relationship.set_resource_identifiers(relationships)
 
-                parsedRelations[relationName] = relationship
+                    parsedRelations[relationName] = relationship
 
         return parsedRelations

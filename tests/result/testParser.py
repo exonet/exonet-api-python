@@ -2,12 +2,11 @@ import unittest
 from unittest import mock
 from unittest.mock import call
 
-from exonetapi.result.Parser import Parser
+from exonetapi.result import Parser
 
 
 class testParser(unittest.TestCase):
-    @mock.patch('exonetapi.create_resource.create_resource', create=True)
-    def test_parse_list(self, mock_create_resource):
+    def test_parse_list(self):
         json_data_list = """ 
         {
           "data": [
@@ -53,21 +52,15 @@ class testParser(unittest.TestCase):
         }
         """
 
-        Parser(json_data_list).parse()
+        result = Parser(json_data_list).parse()
 
-        mock_create_resource.assert_has_calls([
-            call('comments', {'subject': 'Can you help me?'}, 'DV6axK4GwNEb', {'author': {
-                'links': {'self': 'https://api.exonet.nl/comments/DV6axK4GwNEb/relationships/author',
-                          'related': 'https://api.exonet.nl/comments/DV6axK4GwNEb/author'},
-                'data': {'type': 'employees', 'id': 'ypPe9wqp7gxb'}}}),
-            call('comments', {'subject': 'Yes I can!'}, 'zWX9r7exA28G', {'author': {
-                'links': {'self': 'https://api.exonet.nl/comments/zWX9r7exA28G/relationships/author',
-                          'related': 'https://api.exonet.nl/comments/zWX9r7exA28G/author'},
-                'data': {'type': 'employees', 'id': 'dbJEx7go7WN0'}}})
-        ])
+        self.assertEqual(result[0].id(), 'DV6axK4GwNEb')
+        self.assertEqual(result[0].type(), 'comments')
 
-    @mock.patch('exonetapi.create_resource.create_resource', create=True)
-    def test_parse_single(self, mock_create_resource):
+        self.assertEqual(result[1].id(), 'zWX9r7exA28G')
+        self.assertEqual(result[1].type(), 'comments')
+
+    def test_parse_single(self):
         json_data_list = """ 
         {
           "data":
@@ -93,14 +86,48 @@ class testParser(unittest.TestCase):
         }
         """
 
-        Parser(json_data_list).parse()
+        result = Parser(json_data_list).parse()
 
-        mock_create_resource.assert_has_calls([
-            call('comments', {'subject': 'Can you help me?'}, 'DV6axK4GwNEb', {'author': {
-                'links': {'self': 'https://api.exonet.nl/comments/DV6axK4GwNEb/relationships/author',
-                          'related': 'https://api.exonet.nl/comments/DV6axK4GwNEb/author'},
-                'data': {'type': 'employees', 'id': 'ypPe9wqp7gxb'}}}),
-        ])
+        self.assertEqual(result.id(), 'DV6axK4GwNEb')
+        self.assertEqual(result.type(), 'comments')
+
+    def test_parse_single_with_multi_relation(self):
+        json_data_list = """ 
+        {
+          "data":
+            {
+              "type": "comments",
+              "id": "DV6axK4GwNEb",
+              "attributes": {
+                "subject": "Can you help me?"
+              },
+              "relationships": {
+                "tags": {
+                  "links": {
+                    "self": "https://api.exonet.nl/comments/DV6axK4GwNEb/relationships/tags",
+                    "related": "https://api.exonet.nl/comments/DV6axK4GwNEb/tags"
+                  },
+                  "data": [
+                      {
+                        "type": "tags",
+                        "id": "ABC"
+                      },
+                      {
+                        "type": "tags",
+                        "id": "XYZ"
+                      }
+                  
+                  ]
+                }
+              }
+            }
+        }
+        """
+
+        result = Parser(json_data_list).parse().relationship('tags').get_resource_identifiers()
+
+        self.assertEqual(len(result), 2)
+
 
 
 if __name__ == '__main__':
