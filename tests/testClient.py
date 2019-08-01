@@ -11,13 +11,13 @@ class testClient(unittest.TestCase):
     def test_init_arguments(self, mock_authenticator):
         client = Client('https://test.url')
 
-        self.assertEqual(client._Client__host, 'https://test.url')
+        self.assertEqual(client.get_host(), 'https://test.url')
         mock_authenticator.assert_called_with('https://test.url', '/oauth/token')
 
     def test_set_host(self):
         client = Client('https://test.url')
         client.set_host('http://new.host')
-        self.assertEqual(client._Client__host, 'http://new.host')
+        self.assertEqual(client.get_host(), 'http://new.host')
 
     def test_set_host_invalid_protocol(self):
         client = Client('https://test.url')

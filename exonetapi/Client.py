@@ -18,16 +18,13 @@ class Client(metaclass=Singleton):
 
     Manages connection details.
     """
-    # The API host.
-    __host = 'https://api.exonet.nl'
 
     # The URL to use for authentication.
     authentication_endpoint = '/oauth/token'
 
-    # An instance of the Authenticator that keeps track of the token.
-    authenticator = None
-
     def __init__(self, host=None):
+        self.__host = 'https://api.exonet.nl'
+
         if host:
             self.set_host(host)
 
