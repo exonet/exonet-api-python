@@ -10,7 +10,7 @@ from exonetapi.exceptions.ValidationException import ValidationException
 class RequestBuilder(object):
     """Create and make requests to the API.
     """
-    __client = None
+
     def __init__(self, resource, client=None):
         if not resource.startswith('/'):
             resource = '/' + resource
@@ -21,7 +21,7 @@ class RequestBuilder(object):
 
         if client:
             self.__client = client
-        elif not self.__client:
+        elif not hasattr(self, '__client'):
             from exonetapi import Client
             self.__client = Client()
 
@@ -88,7 +88,7 @@ class RequestBuilder(object):
             raise ValueError('Setting a resource is required before making a call.')
 
         response = requests.get(
-            self.__build_url(),
+            self.__build_url(identifier),
             headers=self.__get_headers(),
             params=self.__query_params if not identifier else None
         )
@@ -104,9 +104,6 @@ class RequestBuilder(object):
         :param resource: The Resource to use as POST data.
         :return: A Resource or a Collection of Resources.
         """
-        if not self.__resource:
-            raise ValueError('Setting a resource is required before making a call.')
-
         response = requests.post(
             self.__build_url(),
             headers=self.__get_headers(),

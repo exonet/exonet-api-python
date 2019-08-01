@@ -2,17 +2,21 @@ import unittest
 from unittest.mock import MagicMock
 from unittest import mock
 
+from exonetapi import Client
 from exonetapi.RequestBuilder import RequestBuilder
 from exonetapi.auth.Authenticator import Authenticator
-from exonetapi.result.Resource import Resource
+from exonetapi.structures.Resource import Resource
 from exonetapi.exceptions.ValidationException import ValidationException
 
 
 class testRequestBuilder(unittest.TestCase):
-    authenticator = Authenticator('https://test.url', '/auth/token')
-    authenticator.get_token = MagicMock(return_value='test_token')
+    def setUp(self):
+        client = Client('https://test.url')
+        self.request_builder = RequestBuilder('things', client)
 
-    request_builder = RequestBuilder('https://test.url', authenticator)
+    def tearDown(self):
+        self.request_builder = None
+
 
     class MockResponse:
         def __init__(self, content, status_code=200):
@@ -23,16 +27,7 @@ class testRequestBuilder(unittest.TestCase):
             return None
 
     def test_init_arguments(self):
-        self.assertEqual(self.request_builder._RequestBuilder__host, 'https://test.url')
-        self.assertEqual(self.request_builder._RequestBuilder__authenticator, self.authenticator)
-
-    def test_set_resource(self):
-        self.request_builder.set_resource('/test')
-        self.assertEqual(self.request_builder._RequestBuilder__resource_name, '/test')
-
-    def test_id(self):
-        self.request_builder.id('testId')
-        self.assertEqual(self.request_builder._RequestBuilder__id, 'testId')
+        self.assertEqual(self.request_builder._RequestBuilder__resource, '/things')
 
     def test_filter(self):
         self.request_builder.filter('firstFilterName', 'firstFilterValue')
@@ -55,26 +50,17 @@ class testRequestBuilder(unittest.TestCase):
         self.assertEqual(self.request_builder._RequestBuilder__query_params['sort'], 'domain')
 
     def test_sortAsc(self):
-        self.request_builder.sortAsc('domain')
+        self.request_builder.sort_asc('domain')
         self.assertEqual(self.request_builder._RequestBuilder__query_params['sort'], 'domain')
 
     def test_sortDesc(self):
-        self.request_builder.sortDesc('domain')
+        self.request_builder.sort_desc('domain')
         self.assertEqual(self.request_builder._RequestBuilder__query_params['sort'], '-domain')
 
-    def test_related(self):
-        self.request_builder.related('relatedResource')
-        self.assertEqual(self.request_builder._RequestBuilder__related, 'relatedResource')
+    @mock.patch('exonetapi.auth.Authenticator.get_token')
+    def test_get_headers(self, mock_authenticator_get_token):
+        mock_authenticator_get_token.return_value = 'test_token'
 
-    def test_build_url(self):
-        self.request_builder.set_resource('testResource')
-        self.request_builder.id('testId')
-        self.request_builder.related('relatedResource')
-
-        url = self.request_builder._RequestBuilder__build_url()
-        self.assertEqual(url, 'https://test.url/testResource/testId/relatedResource')
-
-    def test_get_headers(self):
         headers = self.request_builder._RequestBuilder__get_headers()
         self.assertEqual(headers, {
             'Accept': 'application/vnd.Exonet.v1+json',
@@ -90,14 +76,14 @@ class testRequestBuilder(unittest.TestCase):
         mock_parser_init.return_value = None
         mock_requests_get.return_value = self.MockResponse('{"data": "getReturnData"}')
 
-        result = self.request_builder.set_resource('test').related(None).id(None).get('testId')
+        result = self.request_builder.get('testId')
 
         mock_requests_get.assert_called_with(
-            'https://test.url/test/testId',
+            'https://test.url/things/testId',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer test_token'
+                'Authorization': 'Bearer None'
             },
             params=None)
 
@@ -107,59 +93,53 @@ class testRequestBuilder(unittest.TestCase):
         self.assertEqual('parsedReturnValue', result)
 
     def test_get_without_resource_name(self):
-        self.request_builder.set_resource(None).related(None).id(None)
         self.assertRaises(ValueError, self.request_builder.get)
 
     @mock.patch('exonetapi.result.Parser.parse')
     @mock.patch('exonetapi.result.Parser.__init__')
     @mock.patch('requests.post')
     def test_store(self, mock_requests_get, mock_parser_init, mock_parser_parse):
-        resource = Resource('{"name": "test"}')
-        resource.to_json = MagicMock(return_value={"name": "test"})
+        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource.to_json = MagicMock(return_value={'name': 'my_name'})
 
         mock_parser_parse.return_value = 'parsedReturnValue'
         mock_parser_init.return_value = None
         mock_requests_get.return_value = self.MockResponse('{"data": "getReturnData"}')
 
-        result = self.request_builder.set_resource('test').related(None).id(None).store(resource)
+        result = self.request_builder.store(resource)
 
         mock_requests_get.assert_called_with(
-            'https://test.url/test',
+            'https://test.url/things',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer test_token'
+                'Authorization': 'Bearer None'
             },
-            json={'data': {'name': 'test'}})
+            json={'data': {'name': 'my_name'}})
 
         mock_parser_init.assert_called_with('{"data": "getReturnData"}')
 
         self.assertTrue(mock_parser_parse.called)
         self.assertEqual('parsedReturnValue', result)
 
-    def test_store_without_resource_name(self):
-        resource = Resource('{"name": "test"}')
-        self.request_builder.set_resource(None).related(None).id(None)
-        self.assertRaises(ValueError, self.request_builder.store, resource)
-
     @mock.patch('requests.post')
     @mock.patch('exonetapi.exceptions.ValidationException.__init__', return_value=None)
     def test_store_validation_error(self, mock_validation_exception, mock_requests_get):
-        resource = Resource('{"name": "test"}')
-        resource.to_json = MagicMock(return_value={"name": "test"})
+        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource.to_json = MagicMock(return_value={'name': 'my_name'})
 
         mock_requests_get.return_value = self.MockResponse('{"data": "getReturnData"}', 422)
 
         self.assertRaises(ValidationException, self.request_builder.store, resource)
 
         mock_requests_get.assert_called_with(
-            'https://test.url/test',
+            'https://test.url/things',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer test_token'
+                'Authorization': 'Bearer None'
             },
-            json={'data': {'name': 'test'}})
+            json={'data': {'name': 'my_name'}})
 
 
 if __name__ == '__main__':
