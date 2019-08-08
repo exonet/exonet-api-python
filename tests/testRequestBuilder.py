@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import MagicMock
 from unittest import mock
 
+from testCase import testCase
 from exonetapi import Client
 from exonetapi.RequestBuilder import RequestBuilder
 from exonetapi.auth.Authenticator import Authenticator
@@ -9,12 +10,14 @@ from exonetapi.structures.Resource import Resource
 from exonetapi.exceptions.ValidationException import ValidationException
 
 
-class testRequestBuilder(unittest.TestCase):
+class testRequestBuilder(testCase):
     def setUp(self):
+        super().setUp()
         client = Client('https://test.url')
         self.request_builder = RequestBuilder('things', client)
 
     def tearDown(self):
+        super().tearDown()
         self.request_builder = None
 
 
@@ -91,9 +94,6 @@ class testRequestBuilder(unittest.TestCase):
 
         self.assertTrue(mock_parser_parse.called)
         self.assertEqual('parsedReturnValue', result)
-
-    def test_get_without_resource_name(self):
-        self.assertRaises(ValueError, self.request_builder.get)
 
     @mock.patch('exonetapi.result.Parser.parse')
     @mock.patch('exonetapi.result.Parser.__init__')

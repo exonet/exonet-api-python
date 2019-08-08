@@ -1,9 +1,11 @@
 import unittest
 
+from testCase import testCase
+
 from exonetapi.create_resource import create_resource
 
 
-class test_create_resource(unittest.TestCase):
+class test_create_resource(testCase):
     def test_create_resource(self):
         resource_data = {
             'type': 'test_resource'

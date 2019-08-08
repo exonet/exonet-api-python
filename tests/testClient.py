@@ -1,11 +1,12 @@
 import unittest
 from unittest import mock
 
+from testCase import testCase
 from exonetapi.Client import Client
 from exonetapi.RequestBuilder import RequestBuilder
 
 
-class testClient(unittest.TestCase):
+class testClient(testCase):
 
     @mock.patch('exonetapi.auth.Authenticator.__init__', return_value=None)
     def test_init_arguments(self, mock_authenticator):

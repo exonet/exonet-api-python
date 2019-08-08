@@ -2,6 +2,8 @@ import unittest
 from unittest.mock import MagicMock
 from unittest import mock
 
+from testCase import testCase
+
 from exonetapi.RequestBuilder import RequestBuilder
 from exonetapi.auth.Authenticator import Authenticator
 from exonetapi.structures.Resource import Resource
@@ -11,19 +13,7 @@ from exonetapi import create_resource
 import json
 
 
-class testResource(unittest.TestCase):
-    # authenticator = Authenticator('https://test.url', '/auth/token')
-    # authenticator.get_token = MagicMock(return_value='test_token')
-    #
-    # request_builder = RequestBuilder('https://test.url', authenticator)
-    #
-    # class MockResponse:
-    #     def __init__(self, content, status_code=200):
-    #         self.content = content
-    #         self.status_code = status_code
-    #
-    #     def raise_for_status(self):
-    #         return None
+class testResource(testCase):
 
     def test_init(self):
         resource = create_resource.create_resource(

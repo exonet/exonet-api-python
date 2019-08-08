@@ -3,10 +3,11 @@ from unittest.mock import Mock, create_autospec
 
 from requests import Response
 
+from testCase import testCase
 from exonetapi.exceptions import ValidationException
 
 
-class testValidationException(unittest.TestCase):
+class testValidationException(testCase):
     def test_no_errors(self):
         # Construct the request response.
         response = create_autospec(Response, spec_set=True)

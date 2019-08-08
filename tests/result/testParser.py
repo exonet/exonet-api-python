@@ -2,10 +2,11 @@ import unittest
 from unittest import mock
 from unittest.mock import call
 
+from testCase import testCase
 from exonetapi.result import Parser
 
 
-class testParser(unittest.TestCase):
+class testParser(testCase):
     def test_parse_list(self):
         json_data_list = """ 
         {

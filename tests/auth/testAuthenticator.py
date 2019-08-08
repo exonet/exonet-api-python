@@ -2,10 +2,11 @@ import unittest
 from unittest import mock
 from unittest.mock import MagicMock
 
+from testCase import testCase
 from exonetapi.auth import Authenticator
 
 
-class testAuthenticator(unittest.TestCase):
+class testAuthenticator(testCase):
     class MockResponse:
         def __init__(self, content, status_code=200):
             self.content = content
