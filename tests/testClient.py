@@ -1,7 +1,7 @@
 import unittest
 from unittest import mock
 
-from testCase import testCase
+from tests.testCase import testCase
 from exonetapi.Client import Client
 from exonetapi.RequestBuilder import RequestBuilder
 

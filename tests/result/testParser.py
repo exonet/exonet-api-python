@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 from unittest.mock import call
 
-from testCase import testCase
+from tests.testCase import testCase
 from exonetapi.result import Parser
 
 

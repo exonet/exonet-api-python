@@ -3,7 +3,7 @@ from unittest.mock import Mock, create_autospec
 
 from requests import Response
 
-from testCase import testCase
+from tests.testCase import testCase
 from exonetapi.exceptions import ValidationException
 
 

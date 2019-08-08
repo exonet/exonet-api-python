@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import MagicMock
 from unittest import mock
 
-from testCase import testCase
+from tests.testCase import testCase
 from exonetapi import Client
 from exonetapi.RequestBuilder import RequestBuilder
 from exonetapi.auth.Authenticator import Authenticator

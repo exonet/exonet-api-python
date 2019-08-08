@@ -1,6 +1,6 @@
 import unittest
 
-from testCase import testCase
+from tests.testCase import testCase
 
 from exonetapi.create_resource import create_resource
 

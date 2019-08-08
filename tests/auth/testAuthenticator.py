@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 from unittest.mock import MagicMock
 
-from testCase import testCase
+from tests.testCase import testCase
 from exonetapi.auth import Authenticator
 
 
