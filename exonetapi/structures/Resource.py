@@ -49,8 +49,10 @@ class Resource(ResourceIdentifier):
         if self.id():
             json['id'] = self.id()
 
-        if self.__relationships:
-            json['relationships'] = self.get_json_relationships()
+
+        relationships = self.get_json_relationships()
+        if relationships:
+            json['relationships'] = relationships
 
         return json
 

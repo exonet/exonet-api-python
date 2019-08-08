@@ -129,6 +129,43 @@ class testParser(testCase):
 
         self.assertEqual(len(result), 2)
 
+        def test_parse_single_with_multi_relation(self):
+            json_data_list = """ 
+            {
+              "data":
+                {
+                  "type": "comments",
+                  "id": "DV6axK4GwNEb",
+                  "attributes": {
+                    "subject": "Can you help me?"
+                  },
+                  "relationships": {
+                    "tags": {
+                      "links": {
+                        "self": "https://api.exonet.nl/comments/DV6axK4GwNEb/relationships/tags",
+                        "related": "https://api.exonet.nl/comments/DV6axK4GwNEb/tags"
+                      },
+                      "data": [
+                          {
+                            "type": "tags",
+                            "id": "ABC"
+                          },
+                          {
+                            "type": "tags",
+                            "id": "XYZ"
+                          }
+
+                      ]
+                    }
+                  }
+                }
+            }
+            """
+
+            result = Parser(json_data_list).parse().relationship('tags').get_resource_identifiers()
+
+            self.assertEqual(len(result), 2)
+
 
 
 if __name__ == '__main__':

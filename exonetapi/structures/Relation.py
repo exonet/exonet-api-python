@@ -14,7 +14,7 @@ class Relation(object):
         self.__url = self.__urlPattern % (origin_type, origin_id, relation_name)
 
         # ApiResourceSet|ApiResourceIdentifier The related resource identifier or a ApiResourceSet.
-        __resourceIdentifiers = None
+        self.__resourceIdentifiers = None
 
         from exonetapi import RequestBuilder
         self.__request = RequestBuilder(self.__url)

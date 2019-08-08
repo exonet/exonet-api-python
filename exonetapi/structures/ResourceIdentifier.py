@@ -33,6 +33,12 @@ class ResourceIdentifier(object):
 
 
     def related(self, name):
+        """Define a new relation for the resource. Can be used to make new requests to the API.
+
+
+        :param name: The name of the relation.
+        :return: Relation The new relation.
+        """
         return Relation(name, self.type(), self.id())
 
 

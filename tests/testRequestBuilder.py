@@ -52,6 +52,9 @@ class testRequestBuilder(testCase):
         self.request_builder.sort('domain')
         self.assertEqual(self.request_builder._RequestBuilder__query_params['sort'], 'domain')
 
+    def test_sort_invalid(self):
+        self.assertRaises(ValueError, self.request_builder.sort, 'domain', 'topdown')
+
     def test_sortAsc(self):
         self.request_builder.sort_asc('domain')
         self.assertEqual(self.request_builder._RequestBuilder__query_params['sort'], 'domain')

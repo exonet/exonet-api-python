@@ -84,8 +84,6 @@ class RequestBuilder(object):
 
         :return: A Resource or a Collection of Resources.
         """
-        if not self.__resource:
-            raise ValueError('Setting a resource is required before making a call.')
 
         response = requests.get(
             self.__build_url(identifier),

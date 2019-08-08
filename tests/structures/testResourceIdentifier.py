@@ -7,13 +7,15 @@ from tests.testCase import testCase
 from exonetapi.RequestBuilder import RequestBuilder
 from exonetapi.auth.Authenticator import Authenticator
 from exonetapi.structures.Resource import Resource
+from exonetapi.structures.Relationship import Relationship
+from exonetapi.structures.Relation import Relation
 from exonetapi.exceptions.ValidationException import ValidationException
 from exonetapi import create_resource
 
 import json
 
 
-class testResource(testCase):
+class testResourceIdentifier(testCase):
 
     def test_init(self):
         resource = create_resource({
@@ -27,22 +29,13 @@ class testResource(testCase):
         self.assertIsNone(resource.id())
         self.assertEqual(resource.attributes(), {'first_name': 'John', 'last_name': 'Doe', })
 
-    def test_init_relationship(self):
+    def test_get_relationship_create(self):
         resource = create_resource({
             'type': 'fake',
         })
 
-        resource.set_relationship(
-            'account',
-            create_resource({
-                'type': 'account',
-                'id': 'someAccountID',
-            })
-        )
-
-        self.assertEqual(resource.get_json_relationships(), {
-            'account': {'data': {'type': 'account', 'id': 'someAccountID'}}
-        })
+        relationship = resource.get_relationship('something')
+        self.assertIsInstance(relationship, Relationship)
 
     def test_set_relationship(self):
         resource = create_resource({
@@ -66,6 +59,31 @@ class testResource(testCase):
                 {'id': 'messageTwo', 'type': 'message'}
             ]}
         })
+
+    def test_get_json_relationships(self):
+        resource = create_resource({
+            'type': 'fake'
+        })
+
+        resource.relationship('messages', {
+            'data' : {
+                'type': 'this',
+                'id': 'that',
+            }
+        })
+
+        self.assertEqual(
+            resource.get_json_relationships(),
+            {
+                'messages': {
+                    'data': {
+                        'id': 'that',
+                        'type': 'this'
+                    }
+                }
+            }
+        )
+
 
     def test_to_json(self):
         resource = Resource({
@@ -97,6 +115,15 @@ class testResource(testCase):
                 }
             })
         )
+
+    def test_related(self):
+        resource = create_resource({
+            'type': 'fake',
+        })
+
+        relation = resource.related('something')
+        self.assertIsInstance(relation, Relation)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -72,11 +72,6 @@ class Parser:
 
                         relationships = []
                         for relationItem in relation['data'] :
-                            if 'attributes' in relationItem:
-                                relationships.append(
-                                    create_resource(relationItem)
-                                )
-                            else:
                                 relationships.append(ResourceIdentifier(relationItem['type'], relationItem['id']))
 
                         relationship.set_resource_identifiers(relationships)
