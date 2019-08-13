@@ -3,7 +3,7 @@ import sys
 from exonetapi import Client
 
 # Create a new Client.
-client = Client('https://api.exonet.nl')
+client = Client()
 
 # Authorize with a personal access token.
 client.authenticator.set_token(sys.argv[1])
