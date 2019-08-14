@@ -3,7 +3,7 @@ import sys
 from exonetapi import Client
 
 # Create a new Client.
-client = Client('https://api.exonet.nl')
+client = Client()
 
 # Authorize with a personal access token.
 client.authenticator.set_token(sys.argv[1])
@@ -17,7 +17,7 @@ for zone in zones:
     # Print zone name and record count.
     print('{zone_name} - {record_count} records'.format(
         zone_name=zone.attribute('name'),
-        record_count=len(zone.relationship('records')['data'])
+        record_count=len(zone.relationship('records'))
     ))
 
 print('\n')

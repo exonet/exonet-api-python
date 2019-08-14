@@ -1,40 +1,20 @@
 """
 Work with API resources.
 """
-from inflection import underscore
+from exonetapi.structures.Relation import Relation
+from exonetapi.structures.Relationship import Relationship
 
 
-class Resource:
-    """Basic Resource with attributes.
+class ResourceIdentifier(object):
+    """Basic Resource identifier.
     """
-
-    def __init__(self, attributes, id=None, relationships=None):
+    def __init__(self, type, id=None):
         # Keep track of the resource type.
-        self.__type = underscore(self.__class__.__name__)
-        # The Resource attributes.
-        self.__attributes = attributes
+        self.__type = type
         # Keep track of the resource id.
         self.__id = id
 
-        # The relationships for this resource.
-        if relationships:
-            self.__relationships = relationships
-        else :
-            self.__relationships = {}
-
-    def attribute(self, item):
-        """Get Resource attributes if available.
-
-        :param item: The name of the Resource attribute.
-        :return: The attribute or None when attribute does not exist.
-        """
-        return self.__attributes.get(item)
-
-    def attributes(self):
-        """Get all resource attributes.
-        :return: All defined attributes in a dict.
-        """
-        return self.__attributes
+        self.__relationships = {}
 
     def type(self):
         """Get the resource type of this Resource instance.
@@ -50,13 +30,23 @@ class Resource:
         """
         return self.__id
 
+    def related(self, name):
+        """Define a new relation for the resource. Can be used to make new requests to the API.
+
+
+        :param name: The name of the relation.
+        :return Relation: The new relation.
+        """
+        return Relation(name, self.type(), self.id())
+
     def relationship(self, name, *data):
-        """Define a new relationship for this resource, replace an existing one or get an existing one.
-        When data is provided the relationship is set, without data the relationship is returned.
+        """Define a new relationship for this resource, replace an existing one or get an
+        existing one. When data is provided the relationship is set, without data the relationship
+        is returned.
 
         :param name: The name of the relation to set.
         :param data: The value of the relation, can be a Resource or a dict of Resources.
-        :return: self when setting a relationship, or the actual relationship when getting it
+        :return self: when setting a relationship, or the actual relationship when getting it
         """
         if len(data) is 1:
             return self.set_relationship(name, data[0])
@@ -69,11 +59,10 @@ class Resource:
         :param name: The name of the relation to get.
         :return: The defined relation or None
         """
+        if not name in self.__relationships.keys():
+            self.__relationships[name] = Relationship(name, self.type(), self.id())
 
-        if name in self.__relationships:
-            return self.__relationships[name]
-
-        return None
+        return self.__relationships[name]
 
     def set_relationship(self, name, data):
         """Define a new relationship for this resource or replace an existing one.
@@ -89,32 +78,13 @@ class Resource:
         return self
 
     def to_json(self):
-        """Convert a Resource to a dict according to the JSON-API format.
+        """Convert a ResourceIdentifier to JSON.
 
-        :return: The dict with attributes according to JSON-API spec.
-        """
-        json = {
-            'type': self.type(),
-            'attributes': self.attributes(),
-
-        }
-
-        if self.__id:
-            json['id'] = self.__id
-
-        if self.__relationships:
-            json['relationships'] = self.get_json_relationships()
-
-        return json
-
-    def to_json_resource_identifier(self):
-        """Convert a Resource to JSON, including only the type and ID.
-
-        :return: A dict with the Resources type and ID.
+        :return: A dict with the resource type and ID.
         """
         return {
             'type': self.type(),
-            'id': self.__id,
+            'id': self.id(),
         }
 
     def get_json_relationships(self):

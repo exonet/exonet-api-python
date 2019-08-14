@@ -3,7 +3,7 @@ import sys
 from exonetapi import Client
 
 # Create a new Client.
-client = Client('https://api.exonet.nl')
+client = Client()
 
 # Authorize with a personal access token.
 client.authenticator.set_token(sys.argv[1])
@@ -28,7 +28,7 @@ print('DNS zone:\t{zone_name}'.format(
 ))
 
 # Get the records for this zone.
-records = client.resource('dns_zones/{id}/records'.format(id=zone.id())).get()
+records = zone.related('records').get()
 
 # Show records.
 for record in records:

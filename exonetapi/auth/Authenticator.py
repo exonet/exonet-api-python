@@ -8,18 +8,11 @@ class Authenticator:
     """
     Manage the authentication and keep track of (valid) tokens.
     """
-    # The host to connect to when authenticating.
-    __host = None
-
-    # The endpoint on the Host to use when authenticating.
-    __authentication_endpoint = None
-
-    # The obtained authentication details.
-    __auth_details = None
 
     def __init__(self, host, authentication_endpoint):
         self.__host = host
         self.__authentication_endpoint = authentication_endpoint
+        self.__auth_details = None
 
     def get_token(self):
         """Get the obtained authentication token.
@@ -27,7 +20,7 @@ class Authenticator:
         :return: The token if available.
         """
         if self.__auth_details:
-            return self.__auth_details['access_token']
+            return self.__auth_details['access_token'].strip()
 
     def password_auth(self, username, password, client_id, client_secret):
         """Authorize using the password grant.

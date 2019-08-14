@@ -3,10 +3,11 @@ from unittest.mock import Mock, create_autospec
 
 from requests import Response
 
+from tests.testCase import testCase
 from exonetapi.exceptions import ValidationException
 
 
-class testValidationException(unittest.TestCase):
+class testValidationException(testCase):
     def test_no_errors(self):
         # Construct the request response.
         response = create_autospec(Response, spec_set=True)
@@ -48,7 +49,10 @@ class testValidationException(unittest.TestCase):
 
         response.json.assert_called_once()
         # Make sure the right message is set.
-        self.assertEqual(v.args[0], 'Field: start_date, failed rule: iso8601-date(Date must be in iso8601 format).')
+        self.assertEqual(
+            v.args[0],
+            'Field: start_date, failed rule: iso8601-date(Date must be in iso8601 format).'
+        )
 
     def test_twoErrors(self):
         # Construct the request response.
@@ -85,7 +89,10 @@ class testValidationException(unittest.TestCase):
 
         response.json.assert_called_once()
         # Make sure the right message is set.
-        self.assertEqual(v.args[0], 'Field: data.end_date, failed rule: Required(). The provided data is invalid.')
+        self.assertEqual(
+            v.args[0],
+            'Field: data.end_date, failed rule: Required(). The provided data is invalid.'
+        )
 
     def test_otherErrors(self):
         # Construct the request response.
