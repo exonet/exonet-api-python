@@ -6,9 +6,9 @@ class Relation(object):
     def __init__(self, relation_name, origin_type, origin_id):
         """Relation constructor.
 
-        :param: str relation_name The name of the relation.
-        :param: str origin_type   The resource type of the origin resource.
-        :param: str origin_id     The resource ID of the origin resource.
+        :param str relation_name: The name of the relation.
+        :param str origin_type: The resource type of the origin resource.
+        :param str origin_id: The resource ID of the origin resource.
         """
         self.__name = relation_name
         self.__url = self.__urlPattern % (origin_type, origin_id, relation_name)
@@ -35,7 +35,7 @@ class Relation(object):
         """
         Get the resource identifiers for this relation.
 
-        :return ApiResourceSet|ApiResourceIdentifier The resource identifier or a resource set.
+        :return ApiResourceSet|ApiResourceIdentifier: The resource identifier or a resource set.
         """
         return self.__resourceIdentifiers
 
@@ -43,8 +43,8 @@ class Relation(object):
         """
         Replace the related resource identifiers with new data.
 
-        :param ApiResourceSet|ApiResourceIdentifier new_relationship A new resource identifier or a new resource set.
-        :return self
+        :param ApiResourceSet|ApiResourceIdentifier new_relationship: A new resource identifier or a new resource set.
+        :return self:
         """
         self.__resourceIdentifiers = new_relationship
 

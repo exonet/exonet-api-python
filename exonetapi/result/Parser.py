@@ -19,7 +19,7 @@ class Parser:
     def parse(self):
         """Parse JSON string into a Resource or a list of Resources.
 
-        :return: list|Resource: List with Resources or a single Resource.
+        :return list|Resource: List with Resources or a single Resource.
         """
         if type(self.__json_data) is list:
             resources = []

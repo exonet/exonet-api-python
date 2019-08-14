@@ -63,4 +63,3 @@ class Resource(ResourceIdentifier):
 
         return super().to_json()
 
-

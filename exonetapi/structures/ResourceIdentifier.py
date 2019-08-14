@@ -35,7 +35,7 @@ class ResourceIdentifier(object):
 
 
         :param name: The name of the relation.
-        :return: Relation The new relation.
+        :return Relation: The new relation.
         """
         return Relation(name, self.type(), self.id())
 
@@ -46,7 +46,7 @@ class ResourceIdentifier(object):
 
         :param name: The name of the relation to set.
         :param data: The value of the relation, can be a Resource or a dict of Resources.
-        :return: self when setting a relationship, or the actual relationship when getting it
+        :return self: when setting a relationship, or the actual relationship when getting it
         """
         if len(data) is 1:
             return self.set_relationship(name, data[0])
