@@ -1,15 +1,10 @@
 import unittest
-from unittest.mock import MagicMock
-from unittest import mock
 
 from tests.testCase import testCase
 
-from exonetapi.RequestBuilder import RequestBuilder
-from exonetapi.auth.Authenticator import Authenticator
 from exonetapi.structures.Resource import Resource
 from exonetapi.structures.Relationship import Relationship
 from exonetapi.structures.Relation import Relation
-from exonetapi.exceptions.ValidationException import ValidationException
 from exonetapi import create_resource
 
 import json
@@ -84,7 +79,6 @@ class testResourceIdentifier(testCase):
             }
         )
 
-
     def test_to_json(self):
         resource = Resource({
             'type': 'fake',
@@ -97,7 +91,6 @@ class testResourceIdentifier(testCase):
                 'id': 'thingID',
             })
         )
-
 
         self.assertEqual(
             json.dumps(resource.to_json()),

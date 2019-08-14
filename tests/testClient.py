@@ -30,5 +30,6 @@ class testClient(testCase):
 
         self.assertIsInstance(resource, RequestBuilder)
 
+
 if __name__ == '__main__':
     unittest.main()

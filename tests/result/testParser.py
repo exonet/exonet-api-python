@@ -1,6 +1,4 @@
 import unittest
-from unittest import mock
-from unittest.mock import call
 
 from tests.testCase import testCase
 from exonetapi.result import Parser
@@ -95,33 +93,31 @@ class testParser(testCase):
     def test_parse_single_with_multi_relation(self):
         json_data_list = """ 
         {
-          "data":
-            {
-              "type": "comments",
-              "id": "DV6axK4GwNEb",
-              "attributes": {
-                "subject": "Can you help me?"
-              },
-              "relationships": {
-                "tags": {
-                  "links": {
-                    "self": "https://api.exonet.nl/comments/DV6axK4GwNEb/relationships/tags",
-                    "related": "https://api.exonet.nl/comments/DV6axK4GwNEb/tags"
+          "data": {
+            "type": "comments",
+            "id": "DV6axK4GwNEb",
+            "attributes": {
+              "subject": "Can you help me?"
+            },
+            "relationships": {
+              "tags": {
+                "links": {
+                  "self": "https://api.exonet.nl/comments/DV6axK4GwNEb/relationships/tags",
+                  "related": "https://api.exonet.nl/comments/DV6axK4GwNEb/tags"
+                },
+                "data": [
+                  {
+                    "type": "tags",
+                    "id": "ABC"
                   },
-                  "data": [
-                      {
-                        "type": "tags",
-                        "id": "ABC"
-                      },
-                      {
-                        "type": "tags",
-                        "id": "XYZ"
-                      }
-                  
-                  ]
-                }
+                  {
+                    "type": "tags",
+                    "id": "XYZ"
+                  }  
+                ]
               }
             }
+          }
         }
         """
 
@@ -165,7 +161,6 @@ class testParser(testCase):
             result = Parser(json_data_list).parse().relationship('tags').get_resource_identifiers()
 
             self.assertEqual(len(result), 2)
-
 
 
 if __name__ == '__main__':

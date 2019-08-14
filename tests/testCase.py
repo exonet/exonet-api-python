@@ -1,6 +1,7 @@
 import unittest
 from exonetapi.Client import Singleton
 
+
 class testCase(unittest.TestCase):
 
     def setUp(self):

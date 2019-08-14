@@ -5,7 +5,6 @@ from unittest import mock
 from tests.testCase import testCase
 from exonetapi import Client
 from exonetapi.RequestBuilder import RequestBuilder
-from exonetapi.auth.Authenticator import Authenticator
 from exonetapi.structures.Resource import Resource
 from exonetapi.exceptions.ValidationException import ValidationException
 

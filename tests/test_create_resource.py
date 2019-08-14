@@ -15,5 +15,6 @@ class test_create_resource(testCase):
 
         self.assertEqual(resource.__class__.__name__, 'TestResource')
 
+
 if __name__ == '__main__':
     unittest.main()

@@ -49,7 +49,10 @@ class testValidationException(testCase):
 
         response.json.assert_called_once()
         # Make sure the right message is set.
-        self.assertEqual(v.args[0], 'Field: start_date, failed rule: iso8601-date(Date must be in iso8601 format).')
+        self.assertEqual(
+            v.args[0],
+            'Field: start_date, failed rule: iso8601-date(Date must be in iso8601 format).'
+        )
 
     def test_twoErrors(self):
         # Construct the request response.
@@ -86,7 +89,10 @@ class testValidationException(testCase):
 
         response.json.assert_called_once()
         # Make sure the right message is set.
-        self.assertEqual(v.args[0], 'Field: data.end_date, failed rule: Required(). The provided data is invalid.')
+        self.assertEqual(
+            v.args[0],
+            'Field: data.end_date, failed rule: Required(). The provided data is invalid.'
+        )
 
     def test_otherErrors(self):
         # Construct the request response.
