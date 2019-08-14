@@ -16,7 +16,10 @@ class RequestBuilder(object):
             resource = '/' + resource
 
         self.__resource = resource
-        # The query params that will be used in the GET requests. Can contain filters and page options.
+        """
+        The query params that will be used in the GET requests.
+        Can contain filters and page options.
+        """
         self.__query_params = {}
 
         if client:
@@ -81,7 +84,7 @@ class RequestBuilder(object):
 
     def get(self, identifier=None):
         """Make a call to the API using the previously set options.
-
+        :param: identifier The optional identifier to get.
         :return: A Resource or a Collection of Resources.
         """
 
@@ -97,10 +100,10 @@ class RequestBuilder(object):
         return Parser(response.content).parse()
 
     def store(self, resource):
-        """Make a POST request to the API with the provided Resource as data.
+        """Make a POST request to the API with the provided resource as data.
 
-        :param resource: The Resource to use as POST data.
-        :return: A Resource or a Collection of Resources.
+        :param resource: The resource to use as POST data.
+        :return: A resource or a collection of resources.
         """
         response = requests.post(
             self.__build_url(),

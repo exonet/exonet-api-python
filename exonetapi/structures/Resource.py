@@ -21,6 +21,7 @@ class Resource(ResourceIdentifier):
         """Get Resource attributes if available.
 
         :param item: The name of the Resource attribute.
+        :param value: The new value of the attribute.
         :return: The attribute or None when attribute does not exist.
         """
         if value:
@@ -33,7 +34,6 @@ class Resource(ResourceIdentifier):
         :return: All defined attributes in a dict.
         """
         return self.__attributes
-
 
     def to_json(self):
         """Convert a Resource to a dict according to the JSON-API format.
@@ -48,7 +48,6 @@ class Resource(ResourceIdentifier):
 
         if self.id():
             json['id'] = self.id()
-
 
         relationships = self.get_json_relationships()
         if relationships:

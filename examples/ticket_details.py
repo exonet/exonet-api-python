@@ -35,7 +35,7 @@ print(
 )
 
 # Get the emails in the ticket.
-emails =  ticket.related('emails').get()
+emails = ticket.related('emails').get()
 
 print('This ticket has {mailCount} emails'.format(
     mailCount=len(emails)

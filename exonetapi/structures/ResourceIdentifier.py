@@ -16,7 +16,6 @@ class ResourceIdentifier(object):
 
         self.__relationships = {}
 
-
     def type(self):
         """Get the resource type of this Resource instance.
 
@@ -31,7 +30,6 @@ class ResourceIdentifier(object):
         """
         return self.__id
 
-
     def related(self, name):
         """Define a new relation for the resource. Can be used to make new requests to the API.
 
@@ -41,10 +39,10 @@ class ResourceIdentifier(object):
         """
         return Relation(name, self.type(), self.id())
 
-
     def relationship(self, name, *data):
-        """Define a new relationship for this resource, replace an existing one or get an existing one.
-        When data is provided the relationship is set, without data the relationship is returned.
+        """Define a new relationship for this resource, replace an existing one or get an
+        existing one. When data is provided the relationship is set, without data the relationship
+        is returned.
 
         :param name: The name of the relation to set.
         :param data: The value of the relation, can be a Resource or a dict of Resources.
@@ -82,7 +80,7 @@ class ResourceIdentifier(object):
     def to_json(self):
         """Convert a ResourceIdentifier to JSON.
 
-        :return: A dict with the Resources type and ID.
+        :return: A dict with the resource type and ID.
         """
         return {
             'type': self.type(),

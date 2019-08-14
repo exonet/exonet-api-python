@@ -3,7 +3,8 @@ Obtain tokens and keep track of authentication details.
 """
 import requests
 
-class Authenticator():
+
+class Authenticator:
     """
     Manage the authentication and keep track of (valid) tokens.
     """

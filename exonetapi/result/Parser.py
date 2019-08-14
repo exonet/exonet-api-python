@@ -19,7 +19,7 @@ class Parser:
     def parse(self):
         """Parse JSON string into a Resource or a list of Resources.
 
-        :return list|Resource: List with Resources or a single Resource.
+        :return: list|Resource: List with Resources or a single Resource.
         """
         if type(self.__json_data) is list:
             resources = []
@@ -29,7 +29,6 @@ class Parser:
             return resources
         else:
             return self.make_resource(self.__json_data)
-
 
     def make_resource(self, resource_data):
         resource = create_resource({
@@ -44,35 +43,40 @@ class Parser:
 
         # Extract and parse all included relations.
         if 'relationships' in resource_data.keys():
-            parsedRelations = self.parse_relations(resource_data['relationships'], resource.type(), resource.id())
+            parsed_relations = self.parse_relations(
+                resource_data['relationships'],
+                resource.type(),
+                resource.id()
+            )
 
-            for k, r in parsedRelations.items():
+            for k, r in parsed_relations.items():
                 resource.set_relationship(k, r)
 
         return resource
-
 
     def parse_relations(self, relationships, origin_type, origin_id):
         parsedRelations = {}
 
         if relationships:
             for relationName, relation in relationships.items():
-                # set a relation
+                # Set a relation
                 if ('data' in relation.keys()) and relation['data']:
                     relationship = Relationship(relationName, origin_type, origin_id)
 
-                    # Single.
+                    # Set a single relationship.
                     if 'type' in relation['data']:
                         relationship.set_resource_identifiers(
                             ResourceIdentifier(relation['data']['type'], relation['data']['id'])
                         )
 
-                    # Multi.
+                    # Set a multi relationship.
                     elif isinstance(relation['data'], list):
-
                         relationships = []
-                        for relationItem in relation['data'] :
-                                relationships.append(ResourceIdentifier(relationItem['type'], relationItem['id']))
+                        for relationItem in relation['data']:
+                            relationships.append(ResourceIdentifier(
+                                relationItem['type'],
+                                relationItem['id'])
+                            )
 
                         relationship.set_resource_identifiers(relationships)
 
