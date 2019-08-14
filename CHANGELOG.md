@@ -5,7 +5,12 @@ All notable changes to `exonet-api-python` will be documented in this file.
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 ## [Unreleased]
-[Compare 0.0.5 - Unreleased](https://github.com/exonet/exonet-api-python/compare/0.0.5...master)
+[Compare 1.0.0 - Unreleased](https://github.com/exonet/exonet-api-python/compare/1.0.0...master)
+
+## [1.0.0](https://github.com/exonet/exonet-api-python/releases/tag/1.0.0) - 2019-08-14
+[Compare 0.0.5 - 1.0.0](https://github.com/exonet/exonet-api-python/compare/0.0.5...1.0.0)
+## Breaking
+- The Client has been refactored to keep consistency between packages in different programming languages. See the updated documentation and examples.
 
 ## [0.0.5](https://github.com/exonet/exonet-api-python/releases/tag/0.0.5) - 2019-04-29
 [Compare 0.0.4 - 0.0.5](https://github.com/exonet/exonet-api-python/compare/0.0.4...0.0.5)
