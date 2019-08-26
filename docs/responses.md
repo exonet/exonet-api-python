@@ -1,9 +1,9 @@
 # Working with API Responses
-There are two types of API responses upon a successful request. If a single resource is requested then a `Resource` instance is
+There are two types of API responses upon a successful request. If a single resource is requested then a [`Resource`](resources.md) instance is
 returned, if multiple resources are requested then an `list` of `Resource`'s is returned.
 
-## The `Resource` class
-Each resource returned by the API is transformed to an `Resource` instance. This makes it possible to have easy access
+## The [`Resource`](resources.md) class
+Each resource returned by the API is transformed to an [`Resource`](resources.md) instance. This makes it possible to have easy access
 to the attributes, type and ID of the resource.
 
 ```python
@@ -28,7 +28,7 @@ This list contains the requested resources. Iterate over the list to handle the 
 ```python
 
 # Get all certificates
-certificates = CLIENT.resource('certificates').size(10).get()
+certificates = client.resource('certificates').size(10).get()
 
 for certificate in certificates:
     print(
