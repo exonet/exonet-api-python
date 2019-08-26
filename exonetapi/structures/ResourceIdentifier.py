@@ -1,6 +1,7 @@
 """
 Work with API resources.
 """
+import exonetapi.RequestBuilder
 from exonetapi.structures.Relation import Relation
 from exonetapi.structures.Relationship import Relationship
 
@@ -9,11 +10,17 @@ class ResourceIdentifier(object):
     """Basic Resource identifier.
     """
     def __init__(self, type, id=None):
+        """Initialize the resource.
+        :param type: The type of the resource.
+        :param id: The ID of the resource (optional).
+        """
+
         # Keep track of the resource type.
         self.__type = type
         # Keep track of the resource id.
         self.__id = id
 
+        self.__changed_relations = []
         self.__relationships = {}
 
     def type(self):
@@ -30,9 +37,14 @@ class ResourceIdentifier(object):
         """
         return self.__id
 
+    def get(self):
+        """Try to get the defined resource from the API.
+        :return: A resource or a collection of resources.
+        """
+        return exonetapi.RequestBuilder(self.type()).get(self.id())
+
     def related(self, name):
         """Define a new relation for the resource. Can be used to make new requests to the API.
-
 
         :param name: The name of the relation.
         :return Relation: The new relation.
@@ -74,6 +86,7 @@ class ResourceIdentifier(object):
         """
 
         self.__relationships[name] = data
+        self.__changed_relations.append(name)
 
         return self
 
@@ -87,7 +100,7 @@ class ResourceIdentifier(object):
             'id': self.id(),
         }
 
-    def get_json_relationships(self):
+    def get_json_relationships(self, only_changed_relations=False):
         """Get a dict representing the relations for the resource in JSON-API format.
 
         :return: A dict with the relationships.
@@ -95,6 +108,9 @@ class ResourceIdentifier(object):
         relationships = {}
 
         for relation_name, relation in self.__relationships.items():
+            if only_changed_relations is True and relation_name not in self.__changed_relations:
+                continue
+
             relationships[relation_name] = {}
             if type(relation) is list:
                 relation_list = []
@@ -107,3 +123,16 @@ class ResourceIdentifier(object):
                 relationships[relation_name]['data'] = relation.to_json_resource_identifier()
 
         return relationships
+
+    def get_json_changed_relationships(self):
+        """Get the relationships that are changed.
+        :return: A dict with the changed relationships.
+        """
+        return self.get_json_relationships(True)
+
+    def reset_changed_relations(self):
+        """Empty the list of changed relations.
+        :return self
+        """
+        self.__changed_relations = []
+        return self

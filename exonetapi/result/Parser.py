@@ -41,6 +41,8 @@ class Parser:
             for attribute_name, attribute_value in resource_data['attributes'].items():
                 resource.attribute(attribute_name, attribute_value)
 
+        resource.reset_changed_attributes()
+
         # Extract and parse all included relations.
         if 'relationships' in resource_data.keys():
             parsed_relations = self.parse_relations(
@@ -52,10 +54,12 @@ class Parser:
             for k, r in parsed_relations.items():
                 resource.set_relationship(k, r)
 
+        resource.reset_changed_relations()
+
         return resource
 
     def parse_relations(self, relationships, origin_type, origin_id):
-        parsedRelations = {}
+        parsed_relations = {}
 
         if relationships:
             for relationName, relation in relationships.items():
@@ -80,6 +84,6 @@ class Parser:
 
                         relationship.set_resource_identifiers(relationships)
 
-                    parsedRelations[relationName] = relationship
+                    parsed_relations[relationName] = relationship
 
-        return parsedRelations
+        return parsed_relations
