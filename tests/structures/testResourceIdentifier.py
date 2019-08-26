@@ -1,4 +1,6 @@
 import unittest
+from unittest import mock
+from unittest.mock import MagicMock
 
 from tests.testCase import testCase
 
@@ -59,6 +61,13 @@ class testResourceIdentifier(testCase):
         resource = create_resource({
             'type': 'fake'
         })
+        resource.relationship('ignored', {
+            'data' : {
+                'type': 'this',
+                'id': 'that',
+            }
+        })
+        resource.reset_changed_relations()
 
         resource.relationship('messages', {
             'data' : {
@@ -68,7 +77,31 @@ class testResourceIdentifier(testCase):
         })
 
         self.assertEqual(
-            resource.get_json_relationships(),
+            resource.get_json_changed_relationships(),
+            {
+                'messages': {
+                    'data': {
+                        'id': 'that',
+                        'type': 'this'
+                    }
+                }
+            }
+        )
+
+    def test_get_json_changed_relationships(self):
+        resource = create_resource({
+            'type': 'fake'
+        })
+
+        resource.relationship('messages', {
+            'data' : {
+                'type': 'this',
+                'id': 'that',
+            }
+        })
+
+        self.assertEqual(
+            resource.get_json_changed_relationships(),
             {
                 'messages': {
                     'data': {
@@ -117,6 +150,13 @@ class testResourceIdentifier(testCase):
         relation = resource.related('something')
         self.assertIsInstance(relation, Relation)
 
+    @mock.patch('exonetapi.RequestBuilder.__init__', return_value=None)
+    @mock.patch('exonetapi.RequestBuilder.get')
+    def test_store(self, mock_requestbuilder_get, mock_requestbuilder_init):
+        mock_requestbuilder_get.get = MagicMock(return_value=None)
+        Resource({'type': 'fake', 'id': 'FakeID'}).get()
+        mock_requestbuilder_get.assert_called_with('FakeID')
+        mock_requestbuilder_init.assert_called_with('fake')
 
 if __name__ == '__main__':
     unittest.main()

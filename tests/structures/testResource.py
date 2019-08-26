@@ -1,4 +1,6 @@
 import unittest
+from unittest.mock import MagicMock
+from unittest import mock
 
 from tests.testCase import testCase
 
@@ -21,6 +23,20 @@ class testResource(testCase):
         self.assertEqual(resource.type(), 'fake')
         self.assertIsNone(resource.id())
         self.assertEqual(resource.attributes(), {'first_name': 'John', 'last_name': 'Doe', })
+
+    def test_init_string(self):
+        resource = Resource('fake', 'abc')
+        resource.attribute('first_name', 'John')
+        resource.attribute('last_name', 'Doe')
+
+        self.assertEqual(resource.attribute('first_name'), 'John')
+        self.assertEqual(resource.type(), 'fake')
+        self.assertEqual(resource.id(), 'abc')
+        self.assertEqual(resource.attributes(), {'first_name': 'John', 'last_name': 'Doe', })
+
+    def test_init_invalid(self):
+        with self.assertRaises(ValueError):
+            Resource(1234)
 
     def test_init_relationship(self):
         resource = create_resource({
@@ -91,6 +107,65 @@ class testResource(testCase):
                 }
             })
         )
+
+    def test_to_json_changed_attributes(self):
+        resource = Resource({
+            'type': 'fake',
+            'id': 'FakeID',
+        })
+        self.assertEqual({}, resource.to_json_changed_attributes())
+
+        resource.attribute('test', 'Hello World')
+        resource.set_relationship(
+            'thing',
+            create_resource({
+                'type': 'things',
+                'id': 'thingID',
+            })
+        )
+
+        self.assertEqual(
+            json.dumps({"type": "fake", "attributes": {"test": "Hello World"}, "id": "FakeID"}),
+            json.dumps(resource.to_json_changed_attributes())
+        )
+
+    @mock.patch('exonetapi.RequestBuilder.__init__', return_value=None)
+    @mock.patch('exonetapi.RequestBuilder.patch')
+    def test_patch(self, mock_requestbuilder_patch, mock_requestbuilder_init):
+        mock_requestbuilder_patch.patch = MagicMock(return_value=None)
+        Resource({'type': 'fake', 'id': 'FakeID'}).patch()
+        mock_requestbuilder_init.assert_called_with('fake')
+
+    @mock.patch('exonetapi.RequestBuilder.__init__', return_value=None)
+    @mock.patch('exonetapi.RequestBuilder.delete')
+    def test_delete(self, mock_requestbuilder_delete, mock_requestbuilder_init):
+        mock_requestbuilder_delete.delete = MagicMock(return_value=None)
+        Resource({'type': 'fake', 'id': 'FakeID'}).delete()
+        mock_requestbuilder_init.assert_called_with('fake')
+
+    @mock.patch('exonetapi.RequestBuilder.__init__', return_value=None)
+    @mock.patch('exonetapi.RequestBuilder.store')
+    def test_store(self, mock_requestbuilder_store, mock_requestbuilder_init):
+        mock_requestbuilder_store.store = MagicMock(return_value=None)
+        Resource({'type': 'fake', 'id': 'FakeID'}).store()
+        mock_requestbuilder_init.assert_called_with('fake')
+
+
+    def test_reset_changed_attributes(self):
+        resource = Resource({
+            'type': 'fake',
+            'id': 'FakeID',
+        })
+        resource.attribute('test', 'Hello World')
+
+        self.assertEqual(
+            {'attributes': {'test': 'Hello World'}, 'id': 'FakeID', 'type': 'fake'},
+            resource.to_json_changed_attributes()
+        )
+
+        resource.reset_changed_attributes()
+        self.assertEqual({}, resource.to_json_changed_attributes())
+
 
 
 if __name__ == '__main__':

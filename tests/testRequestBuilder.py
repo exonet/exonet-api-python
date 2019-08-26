@@ -19,7 +19,6 @@ class testRequestBuilder(testCase):
         super().tearDown()
         self.request_builder = None
 
-
     class MockResponse:
         def __init__(self, content, status_code=200):
             self.content = content
@@ -75,21 +74,53 @@ class testRequestBuilder(testCase):
 
     @mock.patch('exonetapi.result.Parser.parse')
     @mock.patch('exonetapi.result.Parser.__init__')
-    @mock.patch('requests.get')
-    def test_get(self, mock_requests_get, mock_parser_init, mock_parser_parse):
+    @mock.patch('requests.request')
+    def test_get(self, mock_requests_request, mock_parser_init, mock_parser_parse):
         mock_parser_parse.return_value = 'parsedReturnValue'
         mock_parser_init.return_value = None
-        mock_requests_get.return_value = self.MockResponse('{"data": "getReturnData"}')
+        mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}')
 
         result = self.request_builder.get('testId')
 
-        mock_requests_get.assert_called_with(
+        mock_requests_request.assert_called_with(
+            'GET',
             'https://test.url/things/testId',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer None'
             },
+            params=None,
+            json=None)
+
+        mock_parser_init.assert_called_with('{"data": "getReturnData"}')
+
+        self.assertTrue(mock_parser_parse.called)
+        self.assertEqual('parsedReturnValue', result)
+
+    @mock.patch('exonetapi.result.Parser.parse')
+    @mock.patch('exonetapi.result.Parser.__init__')
+    @mock.patch('requests.request')
+    def test_store(self, mock_requests_request, mock_parser_init, mock_parser_parse):
+        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource.to_json = MagicMock(return_value={'name': 'my_name'})
+        resource.to_json_changed_attributes = MagicMock(return_value={'name': 'my_name'})
+
+        mock_parser_parse.return_value = 'parsedReturnValue'
+        mock_parser_init.return_value = None
+        mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}')
+
+        result = self.request_builder.store(resource)
+
+        mock_requests_request.assert_called_with(
+            'POST',
+            'https://test.url/things',
+            headers={
+                'Accept': 'application/vnd.Exonet.v1+json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer None'
+            },
+            json={'data': {'name': 'my_name'}},
             params=None)
 
         mock_parser_init.assert_called_with('{"data": "getReturnData"}')
@@ -99,49 +130,145 @@ class testRequestBuilder(testCase):
 
     @mock.patch('exonetapi.result.Parser.parse')
     @mock.patch('exonetapi.result.Parser.__init__')
-    @mock.patch('requests.post')
-    def test_store(self, mock_requests_get, mock_parser_init, mock_parser_parse):
+    @mock.patch('requests.request')
+    def test_store_relation(self, mock_requests_request, mock_parser_init, mock_parser_parse):
         resource = Resource({'type': 'things', 'id': 'someId'})
-        resource.to_json = MagicMock(return_value={'name': 'my_name'})
+        resource.get_json_changed_relationships = MagicMock(return_value={'name': {'data': {'type': 'test', 'id': 1}}})
 
         mock_parser_parse.return_value = 'parsedReturnValue'
         mock_parser_init.return_value = None
-        mock_requests_get.return_value = self.MockResponse('{"data": "getReturnData"}')
+        mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}')
 
         result = self.request_builder.store(resource)
 
-        mock_requests_get.assert_called_with(
-            'https://test.url/things',
+        mock_requests_request.assert_called_with(
+            'POST',
+            'https://test.url/things/someId/relationships/name',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer None'
             },
-            json={'data': {'name': 'my_name'}})
+            json={'data': {'type': 'test', 'id': 1}},
+            params=None)
 
         mock_parser_init.assert_called_with('{"data": "getReturnData"}')
 
         self.assertTrue(mock_parser_parse.called)
-        self.assertEqual('parsedReturnValue', result)
+        self.assertEqual(['parsedReturnValue'], result)
 
-    @mock.patch('requests.post')
-    @mock.patch('exonetapi.exceptions.ValidationException.__init__', return_value=None)
-    def test_store_validation_error(self, mock_validation_exception, mock_requests_get):
+    @mock.patch('requests.request')
+    def test_patch(self, mock_requests_request):
         resource = Resource({'type': 'things', 'id': 'someId'})
         resource.to_json = MagicMock(return_value={'name': 'my_name'})
+        resource.to_json_changed_attributes = MagicMock(return_value={'name': 'my_name'})
 
-        mock_requests_get.return_value = self.MockResponse('{"data": "getReturnData"}', 422)
+        mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}')
+
+        result = self.request_builder.patch(resource)
+
+        mock_requests_request.assert_called_with(
+            'PATCH',
+            'https://test.url/things/someId',
+            headers={
+                'Accept': 'application/vnd.Exonet.v1+json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer None'
+            },
+            json={'data': {'name': 'my_name'}},
+            params=None)
+
+        self.assertTrue(result)
+
+    @mock.patch('requests.request')
+    def test_patch_relation(self, mock_requests_request):
+        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource.get_json_changed_relationships = MagicMock(return_value={'name': {'data': {'type': 'test', 'id': 1}}})
+
+        mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}')
+
+        result = self.request_builder.patch(resource)
+
+        mock_requests_request.assert_called_with(
+            'PATCH',
+            'https://test.url/things/someId/relationships/name',
+            headers={
+                'Accept': 'application/vnd.Exonet.v1+json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer None'
+            },
+            json={'data': {'type': 'test', 'id': 1}},
+            params=None)
+
+        self.assertTrue(result)
+
+    @mock.patch('requests.request')
+    def test_delete(self, mock_requests_request):
+        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource.to_json = MagicMock(return_value={'name': 'my_name'})
+        resource.to_json_changed_attributes = MagicMock(return_value={'name': 'my_name'})
+
+        mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}')
+
+        result = self.request_builder.delete(resource)
+
+        mock_requests_request.assert_called_with(
+            'DELETE',
+            'https://test.url/things/someId',
+            headers={
+                'Accept': 'application/vnd.Exonet.v1+json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer None'
+            },
+            json=None,
+            params=None)
+
+        self.assertTrue(result)
+
+    @mock.patch('requests.request')
+    def test_delete_relation(self, mock_requests_request):
+        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource.get_json_changed_relationships = MagicMock(
+            return_value={'name': {'data': {'type': 'test', 'id': 1}}})
+
+        mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}')
+
+        result = self.request_builder.delete(resource)
+
+        mock_requests_request.assert_called_with(
+            'DELETE',
+            'https://test.url/things/someId/relationships/name',
+            headers={
+                'Accept': 'application/vnd.Exonet.v1+json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer None'
+            },
+            json={'data': {'type': 'test', 'id': 1}},
+            params=None)
+
+        self.assertTrue(result)
+
+    @mock.patch('requests.request')
+    @mock.patch('exonetapi.exceptions.ValidationException.__init__', return_value=None)
+    def test_store_validation_error(self, mock_validation_exception, mock_requests_request):
+        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource.to_json = MagicMock(return_value={'name': 'my_name'})
+        resource.to_json_changed_attributes = MagicMock(return_value={'name': 'my_name'})
+
+        mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}', 422)
 
         self.assertRaises(ValidationException, self.request_builder.store, resource)
 
-        mock_requests_get.assert_called_with(
+        mock_requests_request.assert_called_with(
+            'POST',
             'https://test.url/things',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer None'
             },
-            json={'data': {'name': 'my_name'}})
+            json={'data': {'name': 'my_name'}},
+            params=None)
 
 
 if __name__ == '__main__':
