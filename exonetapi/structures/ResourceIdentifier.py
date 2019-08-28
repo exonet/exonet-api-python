@@ -115,12 +115,19 @@ class ResourceIdentifier(object):
             if type(relation) is list:
                 relation_list = []
                 for relation_resource in relation:
-                    relation_list.append(relation_resource.to_json_resource_identifier())
+                    try:
+                        identifier = relation_resource.to_json_resource_identifier()
+                    except AttributeError:
+                        identifier = relation_resource.to_json()
+                    relation_list.append(identifier)
                 relationships[relation_name]['data'] = relation_list
             elif type(relation) is dict:
                 relationships[relation_name]['data'] = relation['data']
             else:
-                relationships[relation_name]['data'] = relation.to_json_resource_identifier()
+                try:
+                    relationships[relation_name]['data'] = relation.to_json_resource_identifier()
+                except AttributeError:
+                    relationships[relation_name]['data'] = relation.to_json()
 
         return relationships
 

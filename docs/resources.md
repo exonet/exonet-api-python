@@ -23,8 +23,8 @@ record.attribute('name', 'www')
 record.attribute('type', 'A')
 record.attribute('content', '192.168.1.100')
 record.attribute('ttl', 3600)
-# The value of a relationship must be defined as a resource.
-record.relationship('zone', Resource('dns_zones', 'VX09kwR3KxNo'))
+# The value of a relationship must be defined as a resource identifier.
+record.relationship('zone', ResourceIdentifier('dns_zones', 'VX09kwR3KxNo'))
 result = record.store()
 print(result)
 ```
@@ -40,8 +40,8 @@ dns_record = client.resource('dns_records').get('VX09kwR3KxNo')
 # Change the 'name' attribute to 'changed-name'.
 dns_record.attribute('name', 'changed-name')
 
-# The value of a relationship must be defined as a resource.
-dns_record.relationship('dns_zone', Resource('dns_zones', 'X09kwRdbbAxN'))
+# The value of a relationship must be defined as a resource identifier.
+dns_record.relationship('dns_zone', ResourceIdentifier('dns_zones', 'X09kwRdbbAxN'))
 
 # Patch the changed data to the API.
 dns_record.patch()

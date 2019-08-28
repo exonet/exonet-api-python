@@ -4,6 +4,7 @@ from unittest.mock import MagicMock
 
 from tests.testCase import testCase
 
+from exonetapi.structures import ResourceIdentifier
 from exonetapi.structures.Resource import Resource
 from exonetapi.structures.Relationship import Relationship
 from exonetapi.structures.Relation import Relation
@@ -62,29 +63,25 @@ class testResourceIdentifier(testCase):
             'type': 'fake'
         })
         resource.relationship('ignored', {
-            'data' : {
+            'data': {
                 'type': 'this',
                 'id': 'that',
             }
         })
         resource.reset_changed_relations()
 
-        resource.relationship('messages', {
-            'data' : {
-                'type': 'this',
-                'id': 'that',
-            }
-        })
+        resource.relationship('object', {'data': {'type': 'this', 'id': 'that'}})
+        resource.relationship('resource', Resource('this', 'that'))
+        resource.relationship('resource_identifier', ResourceIdentifier('this', 'that'))
+        resource.relationship('list', [ResourceIdentifier('this', 'that')])
 
         self.assertEqual(
             resource.get_json_changed_relationships(),
             {
-                'messages': {
-                    'data': {
-                        'id': 'that',
-                        'type': 'this'
-                    }
-                }
+                'object': {'data': {'id': 'that', 'type': 'this'}},
+                'resource': {'data': {'id': 'that', 'type': 'this'}},
+                'resource_identifier': {'data': {'id': 'that', 'type': 'this'}},
+                'list': {'data': [{'id': 'that', 'type': 'this'}]},
             }
         )
 
