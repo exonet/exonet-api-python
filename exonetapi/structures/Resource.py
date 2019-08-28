@@ -1,6 +1,8 @@
 """
 Work with API resources.
 """
+import warnings
+
 import exonetapi.RequestBuilder
 from exonetapi.structures.ResourceIdentifier import ResourceIdentifier
 
@@ -103,7 +105,11 @@ class Resource(ResourceIdentifier):
         return exonetapi.RequestBuilder(self.type()).patch(self)
 
     def store(self):
-        return exonetapi.RequestBuilder(self.type()).store(self)
+        warnings.warn("store() is deprecated; use post().", DeprecationWarning)
+        return self.post()
+
+    def post(self):
+        return exonetapi.RequestBuilder(self.type()).post(self)
 
     def delete(self):
         return exonetapi.RequestBuilder(self.type()).delete(self)

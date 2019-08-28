@@ -149,7 +149,7 @@ class testResourceIdentifier(testCase):
 
     @mock.patch('exonetapi.RequestBuilder.__init__', return_value=None)
     @mock.patch('exonetapi.RequestBuilder.get')
-    def test_store(self, mock_requestbuilder_get, mock_requestbuilder_init):
+    def test_post(self, mock_requestbuilder_get, mock_requestbuilder_init):
         mock_requestbuilder_get.get = MagicMock(return_value=None)
         Resource({'type': 'fake', 'id': 'FakeID'}).get()
         mock_requestbuilder_get.assert_called_with('FakeID')

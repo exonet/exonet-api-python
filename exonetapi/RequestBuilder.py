@@ -1,6 +1,8 @@
 """
 Build requests to send to the API.
 """
+import warnings
+
 import requests
 
 from .result import Parser
@@ -97,6 +99,10 @@ class RequestBuilder(object):
         return Parser(response.content).parse()
 
     def store(self, resource):
+        warnings.warn("store() is deprecated; use post().", DeprecationWarning)
+        self.post(resource)
+
+    def post(self, resource):
         """Make a POST request to the API with the provided resource as data.
 
         :param resource: The resource to use as POST data.

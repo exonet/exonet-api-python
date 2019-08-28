@@ -15,7 +15,7 @@ print(dns_record.related('zone').get().attribute('name'))
 ```
 
 ## Creating a new resource
-Store a new resource to the API by setting its attributes and relationships:
+Post a new resource to the API by setting its attributes and relationships:
 
 ```python
 record = Resource('dns_records')
@@ -25,7 +25,7 @@ record.attribute('content', '192.168.1.100')
 record.attribute('ttl', 3600)
 # The value of a relationship must be defined as a resource identifier.
 record.relationship('zone', ResourceIdentifier('dns_zones', 'VX09kwR3KxNo'))
-result = record.store()
+result = record.post()
 print(result)
 ```
 

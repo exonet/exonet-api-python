@@ -19,7 +19,7 @@ zone.attribute('dnssec', True)
 # Replace the customer ID with your own customer ID.
 zone.relationship('customer', ResourceIdentifier('customers', 'X09kwRdbbAxN'))
 # Send the new resource to the API.
-zone_result = zone.store()
+zone_result = zone.post()
 
 # Add some records.
 record1 = Resource('dns_records')
@@ -28,7 +28,7 @@ record1.attribute('type', 'A')
 record1.attribute('content', '192.168.1.100')
 record1.attribute('ttl', 3600)
 record1.relationship('zone', ResourceIdentifier('dns_zones', zone_result.id()))
-record_result_1 = record1.store()
+record_result_1 = record1.post()
 
 record2 = Resource('dns_records')
 record2.attribute('name', 'test')
@@ -36,7 +36,7 @@ record2.attribute('type', 'A')
 record2.attribute('content', '192.168.1.200')
 record2.attribute('ttl', 3600)
 record2.relationship('zone', ResourceIdentifier('dns_zones', zone_result.id()))
-record_result_2 = record2.store()
+record_result_2 = record2.post()
 
 # Change the the 'www' record to an AAAA record.
 record_result_1.attribute('type', 'AAAA')

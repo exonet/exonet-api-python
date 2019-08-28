@@ -101,7 +101,7 @@ class testRequestBuilder(testCase):
     @mock.patch('exonetapi.result.Parser.parse')
     @mock.patch('exonetapi.result.Parser.__init__')
     @mock.patch('requests.request')
-    def test_store(self, mock_requests_request, mock_parser_init, mock_parser_parse):
+    def test_post(self, mock_requests_request, mock_parser_init, mock_parser_parse):
         resource = Resource({'type': 'things', 'id': 'someId'})
         resource.to_json = MagicMock(return_value={'name': 'my_name'})
         resource.to_json_changed_attributes = MagicMock(return_value={'name': 'my_name'})
@@ -110,7 +110,7 @@ class testRequestBuilder(testCase):
         mock_parser_init.return_value = None
         mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}')
 
-        result = self.request_builder.store(resource)
+        result = self.request_builder.post(resource)
 
         mock_requests_request.assert_called_with(
             'POST',
@@ -131,7 +131,7 @@ class testRequestBuilder(testCase):
     @mock.patch('exonetapi.result.Parser.parse')
     @mock.patch('exonetapi.result.Parser.__init__')
     @mock.patch('requests.request')
-    def test_store_relation(self, mock_requests_request, mock_parser_init, mock_parser_parse):
+    def test_post_relation(self, mock_requests_request, mock_parser_init, mock_parser_parse):
         resource = Resource({'type': 'things', 'id': 'someId'})
         resource.get_json_changed_relationships = MagicMock(return_value={'name': {'data': {'type': 'test', 'id': 1}}})
 
@@ -139,7 +139,7 @@ class testRequestBuilder(testCase):
         mock_parser_init.return_value = None
         mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}')
 
-        result = self.request_builder.store(resource)
+        result = self.request_builder.post(resource)
 
         mock_requests_request.assert_called_with(
             'POST',
@@ -250,14 +250,14 @@ class testRequestBuilder(testCase):
 
     @mock.patch('requests.request')
     @mock.patch('exonetapi.exceptions.ValidationException.__init__', return_value=None)
-    def test_store_validation_error(self, mock_validation_exception, mock_requests_request):
+    def test_post_validation_error(self, mock_validation_exception, mock_requests_request):
         resource = Resource({'type': 'things', 'id': 'someId'})
         resource.to_json = MagicMock(return_value={'name': 'my_name'})
         resource.to_json_changed_attributes = MagicMock(return_value={'name': 'my_name'})
 
         mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}', 422)
 
-        self.assertRaises(ValidationException, self.request_builder.store, resource)
+        self.assertRaises(ValidationException, self.request_builder.post, resource)
 
         mock_requests_request.assert_called_with(
             'POST',
