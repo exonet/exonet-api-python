@@ -6,6 +6,11 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ## [Unreleased]
 [Compare 1.0.0 - Unreleased](https://github.com/exonet/exonet-api-python/compare/1.0.0...master)
+### Added
+- Support for `PATCH` and `DELETE` requests.
+
+### Deprecated
+- The `store` method for creating `POST` requests is now deprecated. Use `post` instead.
 
 ## [1.0.0](https://github.com/exonet/exonet-api-python/releases/tag/1.0.0) - 2019-08-14
 [Compare 0.0.5 - 1.0.0](https://github.com/exonet/exonet-api-python/compare/0.0.5...1.0.0)
