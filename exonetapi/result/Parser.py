@@ -3,7 +3,7 @@ Create object from json resource.
 """
 import json
 from exonetapi.create_resource import create_resource
-from exonetapi.structures import ResourceIdentifier
+from exonetapi.structures import ApiResourceIdentifier
 from exonetapi.structures.Relationship import Relationship
 
 
@@ -17,9 +17,9 @@ class Parser:
         self.__json_data = json.loads(self.__data).get('data')
 
     def parse(self):
-        """Parse JSON string into a Resource or a list of Resources.
+        """Parse JSON string into a ApiResource or a list of Resources.
 
-        :return list|Resource: List with Resources or a single Resource.
+        :return list|ApiResource: List with ApiResources or a single ApiResource.
         """
         if type(self.__json_data) is list:
             resources = []
@@ -70,14 +70,14 @@ class Parser:
                     # Set a single relationship.
                     if 'type' in relation['data']:
                         relationship.set_resource_identifiers(
-                            ResourceIdentifier(relation['data']['type'], relation['data']['id'])
+                            ApiResourceIdentifier(relation['data']['type'], relation['data']['id'])
                         )
 
                     # Set a multi relationship.
                     elif isinstance(relation['data'], list):
                         relationships = []
                         for relationItem in relation['data']:
-                            relationships.append(ResourceIdentifier(
+                            relationships.append(ApiResourceIdentifier(
                                 relationItem['type'],
                                 relationItem['id'])
                             )

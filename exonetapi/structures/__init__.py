@@ -1,2 +1,2 @@
-from .Resource import Resource
-from .ResourceIdentifier import ResourceIdentifier
+from .ApiResource import ApiResource
+from .ApiResourceIdentifier import ApiResourceIdentifier

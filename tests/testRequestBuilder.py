@@ -5,7 +5,7 @@ from unittest import mock
 from tests.testCase import testCase
 from exonetapi import Client
 from exonetapi.RequestBuilder import RequestBuilder
-from exonetapi.structures.Resource import Resource
+from exonetapi.structures.ApiResource import ApiResource
 from exonetapi.exceptions.ValidationException import ValidationException
 
 
@@ -102,7 +102,7 @@ class testRequestBuilder(testCase):
     @mock.patch('exonetapi.result.Parser.__init__')
     @mock.patch('requests.request')
     def test_post(self, mock_requests_request, mock_parser_init, mock_parser_parse):
-        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource = ApiResource({'type': 'things', 'id': 'someId'})
         resource.to_json = MagicMock(return_value={'name': 'my_name'})
         resource.to_json_changed_attributes = MagicMock(return_value={'name': 'my_name'})
 
@@ -132,7 +132,7 @@ class testRequestBuilder(testCase):
     @mock.patch('exonetapi.result.Parser.__init__')
     @mock.patch('requests.request')
     def test_post_relation(self, mock_requests_request, mock_parser_init, mock_parser_parse):
-        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource = ApiResource({'type': 'things', 'id': 'someId'})
         resource.get_json_changed_relationships = MagicMock(return_value={'name': {'data': {'type': 'test', 'id': 1}}})
 
         mock_parser_parse.return_value = 'parsedReturnValue'
@@ -159,7 +159,7 @@ class testRequestBuilder(testCase):
 
     @mock.patch('requests.request')
     def test_patch(self, mock_requests_request):
-        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource = ApiResource({'type': 'things', 'id': 'someId'})
         resource.to_json = MagicMock(return_value={'name': 'my_name'})
         resource.to_json_changed_attributes = MagicMock(return_value={'name': 'my_name'})
 
@@ -182,7 +182,7 @@ class testRequestBuilder(testCase):
 
     @mock.patch('requests.request')
     def test_patch_relation(self, mock_requests_request):
-        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource = ApiResource({'type': 'things', 'id': 'someId'})
         resource.get_json_changed_relationships = MagicMock(return_value={'name': {'data': {'type': 'test', 'id': 1}}})
 
         mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}')
@@ -204,7 +204,7 @@ class testRequestBuilder(testCase):
 
     @mock.patch('requests.request')
     def test_delete(self, mock_requests_request):
-        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource = ApiResource({'type': 'things', 'id': 'someId'})
         resource.to_json = MagicMock(return_value={'name': 'my_name'})
         resource.to_json_changed_attributes = MagicMock(return_value={'name': 'my_name'})
 
@@ -227,7 +227,7 @@ class testRequestBuilder(testCase):
 
     @mock.patch('requests.request')
     def test_delete_relation(self, mock_requests_request):
-        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource = ApiResource({'type': 'things', 'id': 'someId'})
         resource.get_json_changed_relationships = MagicMock(
             return_value={'name': {'data': {'type': 'test', 'id': 1}}})
 
@@ -251,7 +251,7 @@ class testRequestBuilder(testCase):
     @mock.patch('requests.request')
     @mock.patch('exonetapi.exceptions.ValidationException.__init__', return_value=None)
     def test_post_validation_error(self, mock_validation_exception, mock_requests_request):
-        resource = Resource({'type': 'things', 'id': 'someId'})
+        resource = ApiResource({'type': 'things', 'id': 'someId'})
         resource.to_json = MagicMock(return_value={'name': 'my_name'})
         resource.to_json_changed_attributes = MagicMock(return_value={'name': 'my_name'})
 

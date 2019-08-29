@@ -24,7 +24,7 @@ record.attribute('type', 'A')
 record.attribute('content', '192.168.1.100')
 record.attribute('ttl', 3600)
 # The value of a relationship must be defined as a resource identifier.
-record.relationship('zone', ResourceIdentifier('dns_zones', 'VX09kwR3KxNo'))
+record.relationship('zone', ApiResourceIdentifier('dns_zones', 'VX09kwR3KxNo'))
 result = record.post()
 print(result)
 ```
@@ -35,13 +35,13 @@ Modify a resource by changing its attributes and/or relationships:
 ```python
 dns_record = client.resource('dns_records').get('VX09kwR3KxNo')
 # Or, if there is no need to retrieve the resource from the API first you can use the following:
-# dns_record = Resource('dns_records', 'VX09kwR3KxNo')
+# dns_record = ApiResource('dns_records', 'VX09kwR3KxNo')
 
 # Change the 'name' attribute to 'changed-name'.
 dns_record.attribute('name', 'changed-name')
 
 # The value of a relationship must be defined as a resource identifier.
-dns_record.relationship('dns_zone', ResourceIdentifier('dns_zones', 'X09kwRdbbAxN'))
+dns_record.relationship('dns_zone', ApiResourceIdentifier('dns_zones', 'X09kwRdbbAxN'))
 
 # Patch the changed data to the API.
 dns_record.patch()
@@ -53,7 +53,7 @@ Delete a resource with a given ID:
 ```python
 dns_record = client.resource('dns_records').get('VX09kwR3KxNo')
 # Or, if there is no need to retrieve the resource from the API first you can use the following:
-# dns_record = Resource('dns_records', 'VX09kwR3KxNo')
+# dns_record = ApiResource('dns_records', 'VX09kwR3KxNo')
 
 dns_record.delete()
 ```

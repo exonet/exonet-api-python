@@ -4,10 +4,10 @@ Work with API resources.
 import warnings
 
 import exonetapi.RequestBuilder
-from exonetapi.structures.ResourceIdentifier import ResourceIdentifier
+from exonetapi.structures.ApiResourceIdentifier import ApiResourceIdentifier
 
 
-class Resource(ResourceIdentifier):
+class ApiResource(ApiResourceIdentifier):
     """Basic Resource with attributes.
     """
     def __init__(self, data_or_type, resource_id=None):

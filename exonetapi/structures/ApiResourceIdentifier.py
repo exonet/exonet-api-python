@@ -6,8 +6,8 @@ from exonetapi.structures.Relation import Relation
 from exonetapi.structures.Relationship import Relationship
 
 
-class ResourceIdentifier(object):
-    """Basic Resource identifier.
+class ApiResourceIdentifier(object):
+    """Basic ApiResource identifier.
     """
     def __init__(self, type, id=None):
         """Initialize the resource.
@@ -24,14 +24,14 @@ class ResourceIdentifier(object):
         self.__relationships = {}
 
     def type(self):
-        """Get the resource type of this Resource instance.
+        """Get the resource type of this ApiResource instance.
 
         :return: The resource type.
         """
         return self.__type
 
     def id(self):
-        """Get the resource id of this Resource instance.
+        """Get the resource id of this ApiResource instance.
 
         :return: The resource id.
         """
@@ -57,7 +57,7 @@ class ResourceIdentifier(object):
         is returned.
 
         :param name: The name of the relation to set.
-        :param data: The value of the relation, can be a Resource or a dict of Resources.
+        :param data: The value of the relation, can be a ApiResource or a dict of Resources.
         :return self: when setting a relationship, or the actual relationship when getting it
         """
         if len(data) is 1:
@@ -78,10 +78,10 @@ class ResourceIdentifier(object):
 
     def set_relationship(self, name, data):
         """Define a new relationship for this resource or replace an existing one.
-        Can be a relation to a single Resource or a dict of Resources.
+        Can be a relation to a single ApiResource or a dict of Resources.
 
         :param name: The name of the relation to set.
-        :param data: The value of the relation, can be a Resource or a dict of Resources.
+        :param data: The value of the relation, can be a ApiResource or a dict of Resources.
         :return: self
         """
 
@@ -91,7 +91,7 @@ class ResourceIdentifier(object):
         return self
 
     def to_json(self):
-        """Convert a ResourceIdentifier to JSON.
+        """Convert a ApiResourceIdentifier to JSON.
 
         :return: A dict with the resource type and ID.
         """

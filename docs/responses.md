@@ -1,9 +1,9 @@
 # Working with API Responses
-There are two types of API responses upon a successful request. If a single resource is requested then a [`Resource`](resources.md) instance is
-returned, if multiple resources are requested then an `list` of `Resource`'s is returned.
+There are two types of API responses upon a successful request. If a single resource is requested then a [`ApiResource`](resources.md) instance is
+returned, if multiple resources are requested then an `list` of `ApiResource`'s is returned.
 
-## The [`Resource`](resources.md) class
-Each resource returned by the API is transformed to an [`Resource`](resources.md) instance. This makes it possible to have easy access
+## The [`ApiResource`](resources.md) class
+Each resource returned by the API is transformed to an [`ApiResource`](resources.md) instance. This makes it possible to have easy access
 to the attributes, type and ID of the resource.
 
 ```python

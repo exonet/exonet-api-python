@@ -6,6 +6,11 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ## [Unreleased]
 [Compare 1.0.0 - Unreleased](https://github.com/exonet/exonet-api-python/compare/1.0.0...master)
+### Breaking
+- The `Api` prefix has been added from the following classes for consistency:
+  - `Resource` --> `ApiResource`
+  - `ResourceIdentifier` --> `ApiResourceIdentifier`
+  
 ### Added
 - Support for `PATCH` and `DELETE` requests.
 
