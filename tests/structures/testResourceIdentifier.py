@@ -1,8 +1,11 @@
 import unittest
+from unittest import mock
+from unittest.mock import MagicMock
 
 from tests.testCase import testCase
 
-from exonetapi.structures.Resource import Resource
+from exonetapi.structures import ApiResourceIdentifier
+from exonetapi.structures.ApiResource import ApiResource
 from exonetapi.structures.Relationship import Relationship
 from exonetapi.structures.Relation import Relation
 from exonetapi import create_resource
@@ -59,6 +62,33 @@ class testResourceIdentifier(testCase):
         resource = create_resource({
             'type': 'fake'
         })
+        resource.relationship('ignored', {
+            'data': {
+                'type': 'this',
+                'id': 'that',
+            }
+        })
+        resource.reset_changed_relations()
+
+        resource.relationship('object', {'data': {'type': 'this', 'id': 'that'}})
+        resource.relationship('resource', ApiResource('this', 'that'))
+        resource.relationship('resource_identifier', ApiResourceIdentifier('this', 'that'))
+        resource.relationship('list', [ApiResourceIdentifier('this', 'that')])
+
+        self.assertEqual(
+            resource.get_json_changed_relationships(),
+            {
+                'object': {'data': {'id': 'that', 'type': 'this'}},
+                'resource': {'data': {'id': 'that', 'type': 'this'}},
+                'resource_identifier': {'data': {'id': 'that', 'type': 'this'}},
+                'list': {'data': [{'id': 'that', 'type': 'this'}]},
+            }
+        )
+
+    def test_get_json_changed_relationships(self):
+        resource = create_resource({
+            'type': 'fake'
+        })
 
         resource.relationship('messages', {
             'data' : {
@@ -68,7 +98,7 @@ class testResourceIdentifier(testCase):
         })
 
         self.assertEqual(
-            resource.get_json_relationships(),
+            resource.get_json_changed_relationships(),
             {
                 'messages': {
                     'data': {
@@ -80,7 +110,7 @@ class testResourceIdentifier(testCase):
         )
 
     def test_to_json(self):
-        resource = Resource({
+        resource = ApiResource({
             'type': 'fake',
             'id': 'FakeID',
         })
@@ -117,6 +147,13 @@ class testResourceIdentifier(testCase):
         relation = resource.related('something')
         self.assertIsInstance(relation, Relation)
 
+    @mock.patch('exonetapi.RequestBuilder.__init__', return_value=None)
+    @mock.patch('exonetapi.RequestBuilder.get')
+    def test_post(self, mock_requestbuilder_get, mock_requestbuilder_init):
+        mock_requestbuilder_get.get = MagicMock(return_value=None)
+        ApiResource({'type': 'fake', 'id': 'FakeID'}).get()
+        mock_requestbuilder_get.assert_called_with('FakeID')
+        mock_requestbuilder_init.assert_called_with('fake')
 
 if __name__ == '__main__':
     unittest.main()

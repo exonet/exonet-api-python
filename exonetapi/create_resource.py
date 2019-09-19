@@ -1,5 +1,5 @@
 from inflection import camelize
-from .structures.Resource import Resource
+from .structures.ApiResource import ApiResource
 
 
 def create_resource(resource):
@@ -10,4 +10,4 @@ def create_resource(resource):
     """
     resource_type = resource['type']
 
-    return type(camelize(resource_type), (Resource,), {})(resource)
+    return type(camelize(resource_type), (ApiResource,), {})(resource)

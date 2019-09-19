@@ -1,6 +1,8 @@
 """
 Build requests to send to the API.
 """
+import warnings
+
 import requests
 
 from .result import Parser
@@ -88,37 +90,86 @@ class RequestBuilder(object):
         :return: A Resource or a Collection of Resources.
         """
 
-        response = requests.get(
+        response = self.__make_call(
+            'GET',
             self.__build_url(identifier),
-            headers=self.__get_headers(),
             params=self.__query_params if not identifier else None
         )
-
-        # Raise exception on failed request.
-        response.raise_for_status()
 
         return Parser(response.content).parse()
 
     def store(self, resource):
+        warnings.warn("store() is deprecated; use post().", DeprecationWarning)
+        self.post(resource)
+
+    def post(self, resource):
         """Make a POST request to the API with the provided resource as data.
 
         :param resource: The resource to use as POST data.
         :return: A resource or a collection of resources.
         """
-        response = requests.post(
-            self.__build_url(),
-            headers=self.__get_headers(),
-            json={'data': resource.to_json()}
-        )
+        changed_attributes = resource.to_json_changed_attributes()
+        changed_relations = resource.get_json_changed_relationships()
 
-        # Handle validation errors.
-        if response.status_code == 422:
-            raise ValidationException(response)
+        # If there are changed attributes, assume it s a new resource.
+        if len(changed_attributes) > 0:
+            response = self.__make_call('POST', self.__build_url(), {'data': resource.to_json()})
 
-        # Raise exception on failed request.
-        response.raise_for_status()
+            return Parser(response.content).parse()
 
-        return Parser(response.content).parse()
+        # If there are changed relations and no changed attributes, assume a POST to the relation.
+        if len(changed_relations) > 0:
+            responses = []
+            for relation_name in changed_relations:
+                response = self.__make_call(
+                    'POST',
+                    '{}/relationships/{}'.format(self.__build_url(resource.id()), relation_name),
+                    changed_relations[relation_name]
+                )
+                responses.append(Parser(response.content).parse())
+
+            return responses
+
+    def patch(self, resource):
+        changed_attributes = resource.to_json_changed_attributes()
+        changed_relations = resource.get_json_changed_relationships()
+
+        # Patch changed attributes.
+        if len(changed_attributes) > 0:
+            self.__make_call(
+                'PATCH',
+                self.__build_url(resource.id()),
+                {'data': changed_attributes}
+            )
+
+        # Patch changed relations.
+        if len(changed_relations) > 0:
+            for relation_name in changed_relations:
+                self.__make_call(
+                    'PATCH',
+                    '{}/relationships/{}'.format(self.__build_url(resource.id()), relation_name),
+                    changed_relations[relation_name]
+                )
+
+        return True
+
+    def delete(self, resource):
+        changed_relations = resource.get_json_changed_relationships()
+
+        # If no relations are changed, DELETE the whole resource.
+        if len(changed_relations) == 0:
+            self.__make_call('DELETE', self.__build_url(resource.id()))
+
+            return True
+
+        for relation_name in changed_relations:
+            self.__make_call(
+                'DELETE',
+                '{}/relationships/{}'.format(self.__build_url(resource.id()), relation_name),
+                changed_relations[relation_name]
+            )
+
+        return True
 
     def __build_url(self, identifier=None):
         """Get the URL to call, based on all previously called setter methods.
@@ -142,3 +193,21 @@ class RequestBuilder(object):
             'Content-Type': 'application/json',
             'Authorization': 'Bearer %s' % (self.__client.authenticator.get_token())
         }
+
+    def __make_call(self, method, url, json_data=None, params=None):
+        response = requests.request(
+            method,
+            url,
+            headers=self.__get_headers(),
+            json=json_data,
+            params=params
+        )
+
+        # Handle validation errors.
+        if response.status_code == 422:
+            raise ValidationException(response)
+
+        # Raise exception on failed request.
+        response.raise_for_status()
+
+        return response
