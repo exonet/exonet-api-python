@@ -5,7 +5,10 @@ All notable changes to `exonet-api-python` will be documented in this file.
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 ## [Unreleased]
-[Compare 1.0.0 - Unreleased](https://github.com/exonet/exonet-api-python/compare/1.0.0...master)
+[Compare 2.0.0 - Unreleased](https://github.com/exonet/exonet-api-python/compare/2.0.0...master)
+
+## [2.0.0](https://github.com/exonet/exonet-api-python/releases/tag/2.0.0) - 2019-09-19
+[Compare 1.0.0 - 2.0.0](https://github.com/exonet/exonet-api-python/compare/1.0.0...2.0.0)
 ### Breaking
 - The `Api` prefix has been added from the following classes for consistency:
   - `Resource` --> `ApiResource`
