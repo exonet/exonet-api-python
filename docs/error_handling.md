@@ -50,6 +50,28 @@ This will output the request body where the details of the error can be found:
 requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: https://api.exonet.nl/certificates/invalidID
 ```
 
+## Handling validation errors
+When there are validation errors, an extended version of the HTTPError as describe above is returned. It contains the
+validation errors grouped per field, accessible with the `get_failed_validations` method:
+
+```python
+# Assuming 'record' is an already constructed variable.
+try:
+    created_item = record.post()
+except ValidationException as err:
+    # Print validation errors.
+    print('{}'.format(err))
+    validation_errors = err.get_failed_validations()
+    for field in validation_errors:
+        for error in validation_errors[field]:
+            print('{}: {}'.format(field, error))
+except HTTPError as err:
+    # Print all other errors.
+    print('HTTP Error: {}'.format(err))
+``` 
+
+Validation errors that are not related to a field are keyed with `generic`.
+
 ---
 
 [Back to the index](index.md)

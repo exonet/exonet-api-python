@@ -21,8 +21,7 @@ class testValidationException(testCase):
         v = ValidationException(response)
         response.json.assert_called_once()
 
-        # Assert no validation exception message is set.
-        self.assertEqual(v.args[0], '')
+        self.assertEqual(v.args[0], 'There are 0 validation errors.')
 
     def test_one_error(self):
         # Construct the request response.
@@ -49,10 +48,8 @@ class testValidationException(testCase):
 
         response.json.assert_called_once()
         # Make sure the right message is set.
-        self.assertEqual(
-            v.args[0],
-            'Field: start_date, failed rule: iso8601-date(Date must be in iso8601 format).'
-        )
+        self.assertEqual(v.args[0], 'There is 1 validation error.')
+        self.assertEqual(v.get_failed_validations()['start_date'][0], 'Detailed error message')
 
     def test_twoErrors(self):
         # Construct the request response.
@@ -88,11 +85,11 @@ class testValidationException(testCase):
         v = ValidationException(response)
 
         response.json.assert_called_once()
+        failed = v.get_failed_validations()
         # Make sure the right message is set.
-        self.assertEqual(
-            v.args[0],
-            'Field: data.end_date, failed rule: Required(). The provided data is invalid.'
-        )
+        self.assertEqual(v.args[0], 'There are 2 validation errors.')
+        self.assertEqual(failed['data.end_date'][0], 'The data.end_date field is required.')
+        self.assertEqual(failed['generic'][0], 'The provided data is invalid.')
 
     def test_otherErrors(self):
         # Construct the request response.
@@ -113,7 +110,7 @@ class testValidationException(testCase):
 
         response.json.assert_called_once()
         # Make sure there is no validation exception message.
-        self.assertEqual(v.args[0], '')
+        self.assertEqual(v.args[0], 'There are 0 validation errors.')
 
 
 if __name__ == '__main__':

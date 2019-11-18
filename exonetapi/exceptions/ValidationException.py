@@ -1,27 +1,35 @@
 from requests.exceptions import HTTPError
+
 """
 Http validation exception.
 """
+
+
 class ValidationException(HTTPError):
     def __init__(self, response):
         # Collect validation errors as list of strings.
-        validationErrors = []
+        self.validation_errors = {}
 
         # Loop errors.
         for error in response.json()['errors']:
             # Handle only validation errors.
             if error['status'] == 422:
-                # Use the error details as error message.
-                errorMessage = error['detail']
+                field = 'generic'
+                if 'field' in error['variables']:
+                    field = error['variables']['field'] or error['detail']
 
-                # If the error has variables available, use those.
-                if len(error['variables']) >= 3:
-                    errorMessage = "Field: %s, failed rule: %s(%s)." % (
-                        error['variables']['field'],
-                        error['variables']['rule'],
-                        error['variables']['rule_requirement']
-                    )
-                # Add this error message to the list of errors.
-                validationErrors.append(errorMessage)
+                if field not in self.validation_errors:
+                    self.validation_errors[field] = []
 
-        HTTPError.__init__(self, ' '.join(validationErrors), response=response)
+                self.validation_errors[field].append(error['detail'])
+
+        if self.validation_errors.__len__() == 1:
+            validation_error = 'There is {} validation error.'
+        else:
+            validation_error = 'There are {} validation errors.'
+
+        HTTPError.__init__(self, validation_error.format(self.validation_errors.__len__()),
+                           response=response)
+
+    def get_failed_validations(self):
+        return self.validation_errors
