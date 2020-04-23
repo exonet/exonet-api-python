@@ -5,7 +5,7 @@ All notable changes to `exonet-api-python` will be documented in this file.
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 ## [Unreleased]
-[Compare 2.0.0 - Unreleased](https://github.com/exonet/exonet-api-python/compare/2.0.0...master)
+[Compare 2.1.0 - Unreleased](https://github.com/exonet/exonet-api-python/compare/2.1.0...master)
 ### Breaking
 - Return None when a relation which doesn't exists is retrieved.
 
