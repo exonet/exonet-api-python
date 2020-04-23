@@ -72,7 +72,7 @@ class ApiResourceIdentifier(object):
         :return: The defined relation or None
         """
         if not name in self.__relationships.keys():
-            self.__relationships[name] = Relationship(name, self.type(), self.id())
+            return None
 
         return self.__relationships[name]
 
