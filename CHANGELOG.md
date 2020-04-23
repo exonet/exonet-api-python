@@ -6,6 +6,8 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ## [Unreleased]
 [Compare 2.0.0 - Unreleased](https://github.com/exonet/exonet-api-python/compare/2.0.0...master)
+### Breaking
+- Return None when a relation which doesn't exists is retrieved.
 
 ## [2.1.0](https://github.com/exonet/exonet-api-python/releases/tag/2.1.0) - 2019-11-19
 [Compare 2.0.0 - 2.1.0](https://github.com/exonet/exonet-api-python/compare/2.0.0...2.1.0)
