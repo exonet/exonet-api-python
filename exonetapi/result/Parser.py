@@ -3,7 +3,7 @@ Create object from json resource.
 """
 import json
 from exonetapi.create_resource import create_resource
-from exonetapi.structures import ApiResourceIdentifier
+from exonetapi.structures import ApiResourceIdentifier, ApiResourceSet
 from exonetapi.structures.Relationship import Relationship
 
 
@@ -14,17 +14,23 @@ class Parser:
 
     def __init__(self, data):
         self.__data = data
-        self.__json_data = json.loads(self.__data).get('data')
+        self.__json = json.loads(self.__data)
+        self.__json_data = self.__json.get('data')
 
     def parse(self):
         """Parse JSON string into a ApiResource or a list of Resources.
 
-        :return list|ApiResource: List with ApiResources or a single ApiResource.
+        :return ApiResourceSet|ApiResource: An ApiResourceSet or a single ApiResource.
         """
         if type(self.__json_data) is list:
-            resources = []
+            resources = ApiResourceSet()
+            resources \
+                .set_meta(self.__json.get('meta')) \
+                .set_links(self.__json.get('links'))
+
             for resource_data in self.__json_data:
-                resources.append(self.make_resource(resource_data))
+                resource = self.make_resource(resource_data)
+                resources.add_resource(resource)
 
             return resources
         else:
