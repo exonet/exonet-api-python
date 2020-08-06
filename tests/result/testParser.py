@@ -6,7 +6,7 @@ from exonetapi.result import Parser
 
 class testParser(testCase):
     def test_parse_list(self):
-        json_data_list = """ 
+        json_data_list = """
         {
           "data": [
             {
@@ -60,7 +60,7 @@ class testParser(testCase):
         self.assertEqual(result[1].type(), 'comments')
 
     def test_parse_single(self):
-        json_data_list = """ 
+        json_data_list = """
         {
           "data":
             {
@@ -91,7 +91,7 @@ class testParser(testCase):
         self.assertEqual(result.type(), 'comments')
 
     def test_parse_single_with_multi_relation(self):
-        json_data_list = """ 
+        json_data_list = """
         {
           "data": {
             "type": "comments",
@@ -113,7 +113,7 @@ class testParser(testCase):
                   {
                     "type": "tags",
                     "id": "XYZ"
-                  }  
+                  }
                 ]
               }
             }
@@ -126,7 +126,7 @@ class testParser(testCase):
         self.assertEqual(len(result), 2)
 
         def test_parse_single_with_multi_relation(self):
-            json_data_list = """ 
+            json_data_list = """
             {
               "data":
                 {

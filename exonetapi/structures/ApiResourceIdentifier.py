@@ -9,6 +9,7 @@ from exonetapi.structures.Relationship import Relationship
 class ApiResourceIdentifier(object):
     """Basic ApiResource identifier.
     """
+
     def __init__(self, type, id=None):
         """Initialize the resource.
         :param type: The type of the resource.
@@ -71,7 +72,7 @@ class ApiResourceIdentifier(object):
         :param name: The name of the relation to get.
         :return: The defined relation or None
         """
-        if not name in self.__relationships.keys():
+        if name not in self.__relationships.keys():
             self.__relationships[name] = Relationship(name, self.type(), self.id())
 
         return self.__relationships[name]

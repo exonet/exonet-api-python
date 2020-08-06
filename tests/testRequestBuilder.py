@@ -33,10 +33,14 @@ class testRequestBuilder(testCase):
     def test_filter(self):
         self.request_builder.filter('firstFilterName', 'firstFilterValue')
         self.request_builder.filter('secondFilterName', 'secondFilterValue')
-        self.assertEqual(self.request_builder._RequestBuilder__query_params['filter[firstFilterName]'],
-                         'firstFilterValue')
-        self.assertEqual(self.request_builder._RequestBuilder__query_params['filter[secondFilterName]'],
-                         'secondFilterValue')
+        self.assertEqual(
+            self.request_builder._RequestBuilder__query_params['filter[firstFilterName]'],
+            'firstFilterValue'
+        )
+        self.assertEqual(
+            self.request_builder._RequestBuilder__query_params['filter[secondFilterName]'],
+            'secondFilterValue'
+        )
 
     def test_page(self):
         self.request_builder.page(3)
@@ -133,7 +137,9 @@ class testRequestBuilder(testCase):
     @mock.patch('requests.request')
     def test_post_relation(self, mock_requests_request, mock_parser_init, mock_parser_parse):
         resource = ApiResource({'type': 'things', 'id': 'someId'})
-        resource.get_json_changed_relationships = MagicMock(return_value={'name': {'data': {'type': 'test', 'id': 1}}})
+        resource.get_json_changed_relationships = MagicMock(
+            return_value={'name': {'data': {'type': 'test', 'id': 1}}}
+        )
 
         mock_parser_parse.return_value = 'parsedReturnValue'
         mock_parser_init.return_value = None
@@ -183,7 +189,9 @@ class testRequestBuilder(testCase):
     @mock.patch('requests.request')
     def test_patch_relation(self, mock_requests_request):
         resource = ApiResource({'type': 'things', 'id': 'someId'})
-        resource.get_json_changed_relationships = MagicMock(return_value={'name': {'data': {'type': 'test', 'id': 1}}})
+        resource.get_json_changed_relationships = MagicMock(
+            return_value={'name': {'data': {'type': 'test', 'id': 1}}}
+        )
 
         mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}')
 
