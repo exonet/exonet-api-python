@@ -2,6 +2,8 @@ import unittest
 from unittest.mock import MagicMock
 from unittest import mock
 
+from requests import Response
+
 from tests.testCase import testCase
 from exonetapi import Client
 from exonetapi.RequestBuilder import RequestBuilder
@@ -12,7 +14,7 @@ from exonetapi.exceptions.ValidationException import ValidationException
 class testRequestBuilder(testCase):
     def setUp(self):
         super().setUp()
-        client = Client('https://test.url')
+        client = Client('https://api.exonet.nl')
         self.request_builder = RequestBuilder('things', client)
 
     def tearDown(self):
@@ -84,11 +86,11 @@ class testRequestBuilder(testCase):
         mock_parser_init.return_value = None
         mock_requests_request.return_value = self.MockResponse('{"data": "getReturnData"}')
 
-        result = self.request_builder.get('testId')
+        result = self.request_builder.get('testIad')
 
         mock_requests_request.assert_called_with(
             'GET',
-            'https://test.url/things/testId',
+            'https://api.exonet.nl/things/testIad',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
@@ -118,7 +120,7 @@ class testRequestBuilder(testCase):
 
         mock_requests_request.assert_called_with(
             'POST',
-            'https://test.url/things',
+            'https://api.exonet.nl/things',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
@@ -149,7 +151,7 @@ class testRequestBuilder(testCase):
 
         mock_requests_request.assert_called_with(
             'POST',
-            'https://test.url/things/someId/relationships/name',
+            'https://api.exonet.nl/things/someId/relationships/name',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
@@ -175,7 +177,7 @@ class testRequestBuilder(testCase):
 
         mock_requests_request.assert_called_with(
             'PATCH',
-            'https://test.url/things/someId',
+            'https://api.exonet.nl/things/someId',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
@@ -199,7 +201,7 @@ class testRequestBuilder(testCase):
 
         mock_requests_request.assert_called_with(
             'PATCH',
-            'https://test.url/things/someId/relationships/name',
+            'https://api.exonet.nl/things/someId/relationships/name',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
@@ -222,7 +224,7 @@ class testRequestBuilder(testCase):
 
         mock_requests_request.assert_called_with(
             'DELETE',
-            'https://test.url/things/someId',
+            'https://api.exonet.nl/things/someId',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
@@ -245,7 +247,7 @@ class testRequestBuilder(testCase):
 
         mock_requests_request.assert_called_with(
             'DELETE',
-            'https://test.url/things/someId/relationships/name',
+            'https://api.exonet.nl/things/someId/relationships/name',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
@@ -269,7 +271,7 @@ class testRequestBuilder(testCase):
 
         mock_requests_request.assert_called_with(
             'POST',
-            'https://test.url/things',
+            'https://api.exonet.nl/things',
             headers={
                 'Accept': 'application/vnd.Exonet.v1+json',
                 'Content-Type': 'application/json',
@@ -277,6 +279,39 @@ class testRequestBuilder(testCase):
             },
             json={'data': {'name': 'my_name'}},
             params=None)
+
+    @mock.patch('requests.request')
+    def test_get_recursive(self, mock_requests_request):
+        result_one = Response()
+        result_one.status_code = 200
+        result_one._content = '{"data": ' \
+                              '[{"type": "test", "id": "abc"}], ' \
+                              '"meta": {"total": 2}, ' \
+                              '"links": {"next": "https://api.exonet.nl/next_page"}' \
+                              '}'
+
+        result_two = Response()
+        result_two.status_code = 200
+        result_two._content = '{"data": ' \
+                              '[{"type": "test", "id": "def"}], ' \
+                              '"meta": {"total": 2}, ' \
+                              '"links": {"next": null}' \
+                              '}'
+
+        request_result = [result_one, result_two]
+        mock_requests_request.side_effect = request_result
+
+        self.request_builder.get_recursive()
+        mock_requests_request.assert_any_call('GET', 'https://api.exonet.nl/things',
+                                              headers={'Accept': 'application/vnd.Exonet.v1+json',
+                                                       'Content-Type': 'application/json',
+                                                       'Authorization': 'Bearer None'}, json=None,
+                                              params={})
+        mock_requests_request.assert_any_call('GET', 'https://api.exonet.nl/next_page',
+                                              headers={'Accept': 'application/vnd.Exonet.v1+json',
+                                                       'Content-Type': 'application/json',
+                                                       'Authorization': 'Bearer None'}, json=None,
+                                              params=None)
 
 
 if __name__ == '__main__':

@@ -51,7 +51,7 @@ class testParser(testCase):
         }
         """
 
-        result = Parser(json_data_list).parse()
+        result = Parser(json_data_list).parse().resources()
 
         self.assertEqual(result[0].id(), 'DV6axK4GwNEb')
         self.assertEqual(result[0].type(), 'comments')
