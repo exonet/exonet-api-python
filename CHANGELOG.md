@@ -28,7 +28,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - The `Api` prefix has been added from the following classes for consistency:
   - `Resource` --> `ApiResource`
   - `ResourceIdentifier` --> `ApiResourceIdentifier`
-  
+
 ### Added
 - Support for `PATCH` and `DELETE` requests.
 
