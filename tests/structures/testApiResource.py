@@ -10,7 +10,7 @@ from exonetapi import create_resource
 import json
 
 
-class testResource(testCase):
+class testApiResource(testCase):
 
     def test_init(self):
         resource = create_resource({
