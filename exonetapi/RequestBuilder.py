@@ -103,10 +103,6 @@ class RequestBuilder(object):
     def get_recursive(self):
         return self.__get_recursive()
 
-    def store(self, resource):
-        warnings.warn("store() is deprecated; use post().", DeprecationWarning)
-        self.post(resource)
-
     def post(self, resource):
         """Make a POST request to the API with the provided resource as data.
 
