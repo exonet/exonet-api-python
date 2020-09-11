@@ -5,7 +5,10 @@ All notable changes to `exonet-api-python` will be documented in this file.
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 ## [Unreleased]
-[Compare 2.0.0 - Unreleased](https://github.com/exonet/exonet-api-python/compare/2.0.0...master)
+[Compare 3.0.0 - Unreleased](https://github.com/exonet/exonet-api-python/compare/3.0.0...master)
+
+## [3.0.0](https://github.com/exonet/exonet-api-python/releases/tag/3.0.0) - 2020-09-11
+[Compare 2.1.0 - 3.0.0](https://github.com/exonet/exonet-api-python/compare/2.1.0...3.0.0)
 ### Breaking
 - When multiple resources are returned from the API, an instance of `ApiResourceSet` is returned instead of a list. This class is traversable so unless the code does specific `list` things or type checks, no changes are necessary.
 
