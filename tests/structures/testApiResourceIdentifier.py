@@ -13,7 +13,7 @@ from exonetapi import create_resource
 import json
 
 
-class testResourceIdentifier(testCase):
+class testApiResourceIdentifier(testCase):
 
     def test_init(self):
         resource = create_resource({
@@ -91,7 +91,7 @@ class testResourceIdentifier(testCase):
         })
 
         resource.relationship('messages', {
-            'data' : {
+            'data': {
                 'type': 'this',
                 'id': 'that',
             }
@@ -126,7 +126,7 @@ class testResourceIdentifier(testCase):
             json.dumps(resource.to_json()),
             json.dumps({
                 'type': 'fake',
-                'attributes': { },
+                'attributes': {},
                 'id': 'FakeID',
                 'relationships': {
                     'thing': {
@@ -154,6 +154,7 @@ class testResourceIdentifier(testCase):
         ApiResource({'type': 'fake', 'id': 'FakeID'}).get()
         mock_requestbuilder_get.assert_called_with('FakeID')
         mock_requestbuilder_init.assert_called_with('fake')
+
 
 if __name__ == '__main__':
     unittest.main()

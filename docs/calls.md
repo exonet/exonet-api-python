@@ -27,6 +27,19 @@ After setting the options you can call the `get()` method to retrieve the resour
 certificates = certificates_request.get()
 ```
 
+It is also possible to get all resource sets recursively. The package will check the URL defined in `links.next` and as
+long as the value is not `null` it will make an additional request and merge the results:
+
+```python
+certificates = certificates_request.get_recursive()
+```
+
+Please note that the `get_recursive` method respects pagination and filters. So the following example will get all
+non-expired certificates, starting from page two in batches of ten:
+```python
+certificates = certificates_request.filter('expired', False).page(2).size.get_recursive()
+```
+
 ## Getting a single resource by ID
 If you want to get a specific resource by its ID, you can pass it as an argument to the `get` method:
 ```python

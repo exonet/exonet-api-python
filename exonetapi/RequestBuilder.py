@@ -1,20 +1,22 @@
 """
 Build requests to send to the API.
 """
+import json
 import warnings
 
 import requests
 
-from .result import Parser
+from exonetapi.structures import ApiResourceSet
 from exonetapi.exceptions.ValidationException import ValidationException
+from .result import Parser
 
 
 class RequestBuilder(object):
     """Create and make requests to the API.
     """
 
-    def __init__(self, resource, client=None):
-        if not resource.startswith('/'):
+    def __init__(self, resource=None, client=None):
+        if resource is not None and not resource.startswith('/'):
             resource = '/' + resource
 
         self.__resource = resource
@@ -98,9 +100,8 @@ class RequestBuilder(object):
 
         return Parser(response.content).parse()
 
-    def store(self, resource):
-        warnings.warn("store() is deprecated; use post().", DeprecationWarning)
-        self.post(resource)
+    def get_recursive(self):
+        return self.__get_recursive()
 
     def post(self, resource):
         """Make a POST request to the API with the provided resource as data.
@@ -176,7 +177,10 @@ class RequestBuilder(object):
 
         :return: A URL.
         """
-        url = self.__client.get_host() + self.__resource
+        url = self.__client.get_host()
+
+        if self.__resource is not None:
+            url += self.__resource
 
         if identifier:
             url += '/' + identifier
@@ -211,3 +215,32 @@ class RequestBuilder(object):
         response.raise_for_status()
 
         return response
+
+    def __get_recursive(self, data=None, url=None):
+        """
+        Get the URL and call this method recursivly as long as there is an URL in the 'next' field
+        of the 'links' data.
+
+        :param data: The ApiResourceSet to append the resources to.
+        :param url: The URL to call.
+        :return: The ApiResourceSet containing all requested resources.
+        """
+        response = self.__make_call(
+            'GET',
+            url or self.__build_url(),
+            params=self.__query_params if not url else None
+        )
+
+        content = Parser(response.content).parse()
+
+        if data is None:
+            data = ApiResourceSet()
+            data.set_meta(content.meta().copy())
+
+        data.add_resource(content.resources())
+
+        next_link = content.links().get('next')
+        if next_link is not None:
+            return self.__get_recursive(data, next_link)
+
+        return data

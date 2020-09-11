@@ -104,10 +104,6 @@ class ApiResource(ApiResourceIdentifier):
     def patch(self):
         return exonetapi.RequestBuilder(self.type()).patch(self)
 
-    def store(self):
-        warnings.warn("store() is deprecated; use post().", DeprecationWarning)
-        return self.post()
-
     def post(self):
         return exonetapi.RequestBuilder(self.type()).post(self)
 

@@ -9,3 +9,4 @@ dist/*
 .coverage.*
 .pytest_cache/*
 /htmlcov/
+/dev

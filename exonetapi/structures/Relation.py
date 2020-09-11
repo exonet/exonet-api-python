@@ -1,4 +1,3 @@
-
 class Relation(object):
     # string Pattern to create the relation url.
     __urlPattern = '/%s/%s/%s'
@@ -27,7 +26,7 @@ class Relation(object):
 
     def __getattr__(self, name):
         def method():
-            return getattr(self.__request,name)()
+            return getattr(self.__request, name)()
 
         return method
 
@@ -43,7 +42,8 @@ class Relation(object):
         """
         Replace the related resource identifiers with new data.
 
-        :param ApiResourceSet|ApiResourceIdentifier new_relationship: A new resource identifier or a new resource set.
+        :param ApiResourceSet|ApiResourceIdentifier new_relationship: A new resource identifier or a
+        new resource set.
         :return self:
         """
         self.__resourceIdentifiers = new_relationship

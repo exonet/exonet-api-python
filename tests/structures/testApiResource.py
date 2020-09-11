@@ -10,7 +10,7 @@ from exonetapi import create_resource
 import json
 
 
-class testResource(testCase):
+class testApiResource(testCase):
 
     def test_init(self):
         resource = create_resource({
@@ -95,7 +95,7 @@ class testResource(testCase):
             json.dumps(resource.to_json()),
             json.dumps({
                 'type': 'fake',
-                'attributes': { },
+                'attributes': {},
                 'id': 'FakeID',
                 'relationships': {
                     'thing': {
@@ -150,7 +150,6 @@ class testResource(testCase):
         ApiResource({'type': 'fake', 'id': 'FakeID'}).post()
         mock_requestbuilder_init.assert_called_with('fake')
 
-
     def test_reset_changed_attributes(self):
         resource = ApiResource({
             'type': 'fake',
@@ -165,7 +164,6 @@ class testResource(testCase):
 
         resource.reset_changed_attributes()
         self.assertEqual({}, resource.to_json_changed_attributes())
-
 
 
 if __name__ == '__main__':
