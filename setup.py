@@ -18,7 +18,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='exonetapi',
-    version='3.0.0',
+    version='3.0.1',
 
     description='Library to interact with the Exonet API.',
     long_description=long_description,
