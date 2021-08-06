@@ -5,7 +5,12 @@ All notable changes to `exonet-api-python` will be documented in this file.
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 ## [Unreleased]
-[Compare 3.0.1 - Unreleased](https://github.com/exonet/exonet-api-python/compare/3.0.1...master)
+[Compare 3.0.2 - Unreleased](https://github.com/exonet/exonet-api-python/compare/3.0.2...master)
+
+## [3.0.2](https://github.com/exonet/exonet-api-python/releases/tag/3.0.2) - 2020-08-06
+[Compare 3.0.1 - 3.0.2](https://github.com/exonet/exonet-api-python/compare/3.0.1...3.0.2)
+### Changed
+- Dependencies have been updated. The old `urllib3` version had a vulnerability that is now fixed.
 
 ## [3.0.1](https://github.com/exonet/exonet-api-python/releases/tag/3.0.1) - 2020-10-05
 [Compare 3.0.0 - 3.0.1](https://github.com/exonet/exonet-api-python/compare/3.0.0...3.0.1)
