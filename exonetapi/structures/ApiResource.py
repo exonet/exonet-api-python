@@ -1,8 +1,6 @@
 """
 Work with API resources.
 """
-import warnings
-
 import exonetapi.RequestBuilder
 from exonetapi.structures.ApiResourceIdentifier import ApiResourceIdentifier
 
