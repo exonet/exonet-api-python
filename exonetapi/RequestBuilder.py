@@ -1,9 +1,6 @@
 """
 Build requests to send to the API.
 """
-import json
-import warnings
-
 import requests
 
 from exonetapi.structures import ApiResourceSet
