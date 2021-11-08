@@ -4,6 +4,8 @@ Exonet API python package
 .. image:: https://img.shields.io/pypi/v/exonetapi.svg?style=flat-square
 .. image:: https://img.shields.io/pypi/pyversions/exonetapi.svg?style=flat-square
 .. image:: https://img.shields.io/pypi/l/exonetapi.svg?style=flat-square
+.. image:: https://img.shields.io/lgtm/grade/python/g/exonet/exonet-api-python.svg
+   :target: https://lgtm.com/projects/g/exonet/exonet-api-python/context:python
 
 Python 3 library for the Exonet API.
 
@@ -60,7 +62,7 @@ Run unit tests and coverage::
 Change log
 ----------
 
-Please see `CHANGELOG <https://github.com/exonet/exonet-api-python/blob/master/CHANGELOG.md>`_ for more information on what has changed recently.
+Please see `releases <https://github.com/exonet/exonet-api-python/releases>` for more information on what has changed recently.
 
 Security
 --------
