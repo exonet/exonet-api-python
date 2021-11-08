@@ -14,9 +14,15 @@ jobs:
   codeql:
     name: Scanning
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ["python"]
+
     steps:
-      - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v2.4.0
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v2
 
       - name: 🏗 Initialize CodeQL
         uses: github/codeql-action/init@v1
