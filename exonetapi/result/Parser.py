@@ -14,7 +14,7 @@ class Parser:
 
     def __init__(self, data):
         self.__data = data
-        self.__json = json.loads(self.__data)
+        self.__json = json.loads(self.__data.decode())
         self.__json_data = self.__json.get('data')
 
     def parse(self):
