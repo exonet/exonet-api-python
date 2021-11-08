@@ -284,19 +284,19 @@ class testRequestBuilder(testCase):
     def test_get_recursive(self, mock_requests_request):
         result_one = Response()
         result_one.status_code = 200
-        result_one._content = '{"data": ' \
+        result_one._content = str.encode('{"data": ' \
                               '[{"type": "test", "id": "abc"}], ' \
                               '"meta": {"total": 2}, ' \
                               '"links": {"next": "https://api.exonet.nl/next_page"}' \
-                              '}'
+                              '}')
 
         result_two = Response()
         result_two.status_code = 200
-        result_two._content = '{"data": ' \
+        result_two._content = str.encode('{"data": ' \
                               '[{"type": "test", "id": "def"}], ' \
                               '"meta": {"total": 2}, ' \
                               '"links": {"next": null}' \
-                              '}'
+                              '}')
 
         request_result = [result_one, result_two]
         mock_requests_request.side_effect = request_result
