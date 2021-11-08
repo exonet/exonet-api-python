@@ -3,9 +3,9 @@ Exonet API python package
 
 .. image:: https://img.shields.io/pypi/v/exonetapi.svg?style=flat-square
 .. image:: https://img.shields.io/pypi/pyversions/exonetapi.svg?style=flat-square
-.. image:: https://img.shields.io/pypi/l/exonetapi.svg?style=flat-square
 .. image:: https://img.shields.io/lgtm/grade/python/g/exonet/exonet-api-python.svg
    :target: https://lgtm.com/projects/g/exonet/exonet-api-python/context:python
+.. image:: https://img.shields.io/pypi/l/exonetapi.svg?style=flat-square
 
 Python 3 library for the Exonet API.
 
