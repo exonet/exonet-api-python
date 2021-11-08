@@ -23,6 +23,7 @@ categories:
     labels:
       - "maintenance"
       - "ci"
+      - "security"
   - title: "📚 Documentation"
     labels:
       - "documentation"
@@ -42,7 +43,6 @@ version-resolver:
   patch:
     labels:
       - "bugfix"
-      - "chore"
       - "ci"
       - "dependencies"
       - "documentation"
