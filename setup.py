@@ -27,7 +27,7 @@ setup(
     url='https://github.com/exonet/exonet-api-python',
 
     author='Exonet B.V.',
-    author_email='dev@exonet.nl',
+    author_email='development@exonet.nl',
 
     license='MIT',
 
@@ -40,6 +40,10 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
     ],
 

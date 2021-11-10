@@ -1,6 +1,7 @@
 ---
 name: CI
 
+# yamllint disable-line rule:truthy
 on:
   push:
     branches:
@@ -8,15 +9,13 @@ on:
   pull_request:
     branches:
       - master
+  release:
+    types: [released]
 
 jobs:
   run-tests:
-    name: 🪲 Run tests
+    name: 📦 Build & publish package
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
 
     steps:
       - name: 📥 Checkout repository
@@ -25,11 +24,23 @@ jobs:
       - name: 🛠 Set up Python all python version
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
-          architecture: x64
+          python-version: 3.9
 
-      - name: 📦 Install dependencies
-        run: pip install -r requirements.txt
+      - name: 📦 Install build, check-wheel-contents, and twine
+        run: python -m pip install build
 
-      - name: 🧰 Run unit tests
-        run: python -m unittest discover tests
+      - name: 🔨 Build package
+        run: python -m build --sdist --wheel .
+
+      - name: 🌏 Publish distribution to Test PyPI
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN_TEST }}
+          repository_url: https://test.pypi.org/legacy/
+
+      - name: 🌏 Publish distribution to PyPI
+        if: ${{ github.event_name == 'release' }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
