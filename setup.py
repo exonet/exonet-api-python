@@ -27,7 +27,7 @@ setup(
     url='https://github.com/exonet/exonet-api-python',
 
     author='Exonet B.V.',
-    author_email='dev@exonet.nl',
+    author_email='development@exonet.nl',
 
     license='MIT',
 
