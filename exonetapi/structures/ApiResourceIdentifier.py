@@ -7,8 +7,7 @@ from exonetapi.structures.Relationship import Relationship
 
 
 class ApiResourceIdentifier(object):
-    """Basic ApiResource identifier.
-    """
+    """Basic ApiResource identifier."""
 
     def __init__(self, type, id=None):
         """Initialize the resource.
@@ -97,8 +96,8 @@ class ApiResourceIdentifier(object):
         :return: A dict with the resource type and ID.
         """
         return {
-            'type': self.type(),
-            'id': self.id(),
+            "type": self.type(),
+            "id": self.id(),
         }
 
     def get_json_relationships(self, only_changed_relations=False):
@@ -109,7 +108,10 @@ class ApiResourceIdentifier(object):
         relationships = {}
 
         for relation_name, relation in self.__relationships.items():
-            if only_changed_relations is True and relation_name not in self.__changed_relations:
+            if (
+                only_changed_relations is True
+                and relation_name not in self.__changed_relations
+            ):
                 continue
 
             relationships[relation_name] = {}
@@ -121,14 +123,16 @@ class ApiResourceIdentifier(object):
                     except AttributeError:
                         identifier = relation_resource.to_json()
                     relation_list.append(identifier)
-                relationships[relation_name]['data'] = relation_list
+                relationships[relation_name]["data"] = relation_list
             elif type(relation) is dict:
-                relationships[relation_name]['data'] = relation['data']
+                relationships[relation_name]["data"] = relation["data"]
             else:
                 try:
-                    relationships[relation_name]['data'] = relation.to_json_resource_identifier()
+                    relationships[relation_name][
+                        "data"
+                    ] = relation.to_json_resource_identifier()
                 except AttributeError:
-                    relationships[relation_name]['data'] = relation.to_json()
+                    relationships[relation_name]["data"] = relation.to_json()
 
         return relationships
 

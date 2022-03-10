@@ -20,7 +20,7 @@ class Authenticator:
         :return: The token if available.
         """
         if self.__auth_details:
-            return self.__auth_details['access_token'].strip()
+            return self.__auth_details["access_token"].strip()
 
     def password_auth(self, username, password, client_id, client_secret):
         """Authorize using the password grant.
@@ -31,13 +31,15 @@ class Authenticator:
         :param client_secret: The OAuth client secret.
         :return: None
         """
-        self.get_new_token({
-            'grant_type': 'password',
-            'username': username,
-            'password': password,
-            'client_id': client_id,
-            'client_secret': client_secret
-        })
+        self.get_new_token(
+            {
+                "grant_type": "password",
+                "username": username,
+                "password": password,
+                "client_id": client_id,
+                "client_secret": client_secret,
+            }
+        )
 
     def set_token(self, token):
         """Set a token to use when authorizing.
@@ -47,9 +49,7 @@ class Authenticator:
         :param token: A previously obtained token.
         :return: None
         """
-        self.__auth_details = {
-            'access_token': token
-        }
+        self.__auth_details = {"access_token": token}
 
     def get_new_token(self, payload):
         """Get a new token via the authorization endpoint.
@@ -57,12 +57,10 @@ class Authenticator:
         :param payload:
         :return: A new access token.
         """
-        headers = {'Accept': 'application/vnd.Exonet.v1+json'}
+        headers = {"Accept": "application/vnd.Exonet.v1+json"}
 
         response = requests.post(
-            self.__host + self.__authentication_endpoint,
-            headers=headers,
-            data=payload
+            self.__host + self.__authentication_endpoint, headers=headers, data=payload
         )
 
         # Raise exception on failed request.
@@ -71,4 +69,4 @@ class Authenticator:
         # Set the auth details in the request for later use.
         self.__auth_details = response.json()
 
-        return response.json()['access_token']
+        return response.json()["access_token"]

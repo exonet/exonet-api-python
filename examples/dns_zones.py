@@ -8,16 +8,18 @@ client = Client()
 # Authorize with a personal access token.
 client.authenticator.set_token(sys.argv[1])
 
-print('\nDNS zones (max 20):\n')
+print("\nDNS zones (max 20):\n")
 # Get max 20  DNS zones.
-zones = client.resource('dns_zones').size(20).get()
+zones = client.resource("dns_zones").size(20).get()
 
 # Loop zones.
 for zone in zones:
     # Print zone name and record count.
-    print('{zone_name} - {record_count} records'.format(
-        zone_name=zone.attribute('name'),
-        record_count=len(zone.relationship('records'))
-    ))
+    print(
+        "{zone_name} - {record_count} records".format(
+            zone_name=zone.attribute("name"),
+            record_count=len(zone.relationship("records")),
+        )
+    )
 
-print('\n')
+print("\n")

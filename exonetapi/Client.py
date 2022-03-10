@@ -22,15 +22,17 @@ class Client(metaclass=Singleton):
     """
 
     # The URL to use for authentication.
-    authentication_endpoint = '/oauth/token'
+    authentication_endpoint = "/oauth/token"
 
     def __init__(self, host=None):
-        self.__host = 'https://api.exonet.nl'
+        self.__host = "https://api.exonet.nl"
 
         if host:
             self.set_host(host)
 
-        self.authenticator = Authenticator(self.get_host(), self.authentication_endpoint)
+        self.authenticator = Authenticator(
+            self.get_host(), self.authentication_endpoint
+        )
 
     def set_host(self, host):
         """
@@ -43,8 +45,8 @@ class Client(metaclass=Singleton):
         parsed_host = urlparse(host)
 
         # Make sure the host uses a valid scheme.
-        if parsed_host.scheme not in ('http', 'https'):
-            raise ConnectionAbortedError('Invalid protocol for host: %s' % host)
+        if parsed_host.scheme not in ("http", "https"):
+            raise ConnectionAbortedError("Invalid protocol for host: %s" % host)
 
         self.__host = parsed_host.geturl()
 

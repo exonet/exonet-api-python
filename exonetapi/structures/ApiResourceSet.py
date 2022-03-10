@@ -9,7 +9,7 @@ class ApiResourceSet:
         self.__iter_current = 0
 
     def total(self):
-        return self.__meta.get('resources', {"total": None}).get('total')
+        return self.__meta.get("resources", {"total": None}).get("total")
 
     def links(self):
         return self.__links
@@ -18,16 +18,16 @@ class ApiResourceSet:
         return self.__meta
 
     def next_page(self):
-        return self.__get_link('next')
+        return self.__get_link("next")
 
     def previous_page(self):
-        return self.__get_link('prev')
+        return self.__get_link("prev")
 
     def first_page(self):
-        return self.__get_link('first')
+        return self.__get_link("first")
 
     def last_page(self):
-        return self.__get_link('last')
+        return self.__get_link("last")
 
     def add_resource(self, resource):
         if isinstance(resource, list):
@@ -54,7 +54,7 @@ class ApiResourceSet:
         link_value = self.__links.get(link_name)
 
         if link_value is not None:
-            return request.get(link_value.replace('{}/'.format(host), ''))
+            return request.get(link_value.replace("{}/".format(host), ""))
         else:
             return None
 

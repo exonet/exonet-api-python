@@ -1,6 +1,6 @@
 class Relation(object):
     # string Pattern to create the relation url.
-    __urlPattern = '/%s/%s/%s'
+    __urlPattern = "/%s/%s/%s"
 
     def __init__(self, relation_name, origin_type, origin_id):
         """Relation constructor.
@@ -16,6 +16,7 @@ class Relation(object):
         self.__resourceIdentifiers = None
 
         from exonetapi import RequestBuilder
+
         self.__request = RequestBuilder(self.__url)
 
     def __len__(self):

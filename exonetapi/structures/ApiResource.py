@@ -6,22 +6,22 @@ from exonetapi.structures.ApiResourceIdentifier import ApiResourceIdentifier
 
 
 class ApiResource(ApiResourceIdentifier):
-    """Basic Resource with attributes.
-    """
+    """Basic Resource with attributes."""
+
     def __init__(self, data_or_type, resource_id=None):
         data = dict()
 
         if type(data_or_type) is str:
-            data['type'] = data_or_type
-            data['id'] = resource_id
+            data["type"] = data_or_type
+            data["id"] = resource_id
         elif type(data_or_type) is dict:
-            data['type'] = data_or_type['type']
-            data['id'] = data_or_type['id'] if 'id' in data_or_type else None
+            data["type"] = data_or_type["type"]
+            data["id"] = data_or_type["id"] if "id" in data_or_type else None
         else:
             raise ValueError("First argument must be a string or dict.")
 
         # Call parent init method.
-        super().__init__(data['type'], data['id'])
+        super().__init__(data["type"], data["id"])
 
         self.__changed_attributes = []
         self.__attributes = {}
@@ -53,17 +53,16 @@ class ApiResource(ApiResourceIdentifier):
         :return: The dict with attributes according to JSON-API spec.
         """
         json = {
-            'type': self.type(),
-            'attributes': self.attributes(),
-
+            "type": self.type(),
+            "attributes": self.attributes(),
         }
 
         if self.id():
-            json['id'] = self.id()
+            json["id"] = self.id()
 
         relationships = self.get_json_relationships()
         if relationships:
-            json['relationships'] = relationships
+            json["relationships"] = relationships
 
         return json
 
@@ -82,12 +81,12 @@ class ApiResource(ApiResourceIdentifier):
             attributes[changed_attribute] = self.attributes().get(changed_attribute)
 
         json = {
-            'type': self.type(),
-            'attributes': attributes,
+            "type": self.type(),
+            "attributes": attributes,
         }
 
         if self.id():
-            json['id'] = self.id()
+            json["id"] = self.id()
 
         return json
 
