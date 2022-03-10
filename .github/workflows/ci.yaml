@@ -21,18 +21,24 @@ jobs:
       - name: 📥 Checkout repository
         uses: actions/checkout@v3
 
-      - name: 🛠 Set up Python all python version
+      - name: 🛠 Set up Python 3.9
         uses: actions/setup-python@v3
         with:
           python-version: 3.9
 
-      - name: 📦 Install build, check-wheel-contents, and twine
-        run: python -m pip install build
+      - name: 📝  Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
 
-      - name: 🔨 Build package
-        run: python -m build --sdist --wheel .
+      - name: 🏗  Install dependencies
+        run: poetry install --no-interaction --no-root
 
-      - name: 🌏 Publish distribution to PyPI
+      - name: 🛠  Build package
+        run: poetry build
+
+      - name: 🌏  Publish distribution to PyPI
         if: ${{ github.event_name == 'release' }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
