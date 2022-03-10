@@ -49,7 +49,7 @@ class testParser(testCase):
             }
           ]
         }
-        """
+        """  # noqa: E501
 
         result = Parser(str.encode(json_data_list)).parse().resources()
 
@@ -83,7 +83,7 @@ class testParser(testCase):
               }
             }
         }
-        """
+        """  # noqa: E501
 
         result = Parser(str.encode(json_data_list)).parse()
 
@@ -119,7 +119,7 @@ class testParser(testCase):
             }
           }
         }
-        """
+        """  # noqa: E501
 
         result = (
             Parser(str.encode(json_data_list))
@@ -161,7 +161,7 @@ class testParser(testCase):
                   }
                 }
             }
-            """
+            """  # noqa: E501
 
             result = (
                 Parser(json_data_list)

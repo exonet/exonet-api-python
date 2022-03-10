@@ -12,7 +12,8 @@ class Relation(object):
         self.__name = relation_name
         self.__url = self.__urlPattern % (origin_type, origin_id, relation_name)
 
-        # ApiResourceSet|ApiResourceIdentifier The related resource identifier or a ApiResourceSet.
+        # ApiResourceSet|ApiResourceIdentifier The related resource identifier or a
+        # ApiResourceSet.
         self.__resourceIdentifiers = None
 
         from exonetapi import RequestBuilder
@@ -35,7 +36,8 @@ class Relation(object):
         """
         Get the resource identifiers for this relation.
 
-        :return ApiResourceSet|ApiResourceIdentifier: The resource identifier or a resource set.
+        :return ApiResourceSet|ApiResourceIdentifier: The resource identifier or a
+                                                      resource set.
         """
         return self.__resourceIdentifiers
 
@@ -43,7 +45,8 @@ class Relation(object):
         """
         Replace the related resource identifiers with new data.
 
-        :param ApiResourceSet|ApiResourceIdentifier new_relationship: A new resource identifier or a
+        :param ApiResourceSet|ApiResourceIdentifier new_relationship: A new resource
+                                                                      identifier or a
         new resource set.
         :return self:
         """

@@ -44,7 +44,8 @@ class Authenticator:
     def set_token(self, token):
         """Set a token to use when authorizing.
 
-        This bypasses any calls to the authorization endpoint, but instead uses the provided token.
+        This bypasses any calls to the authorization endpoint, but instead uses the
+        provided token.
 
         :param token: A previously obtained token.
         :return: None

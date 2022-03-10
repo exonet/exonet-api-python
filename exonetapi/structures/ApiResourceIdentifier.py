@@ -53,14 +53,16 @@ class ApiResourceIdentifier(object):
 
     def relationship(self, name, *data):
         """Define a new relationship for this resource, replace an existing one or get an
-        existing one. When data is provided the relationship is set, without data the relationship
-        is returned.
+        existing one. When data is provided the relationship is set, without data the
+        relationship is returned.
 
         :param name: The name of the relation to set.
-        :param data: The value of the relation, can be a ApiResource or a dict of Resources.
-        :return self: when setting a relationship, or the actual relationship when getting it
+        :param data: The value of the relation, can be a ApiResource or a dict
+                     of Resources.
+        :return self: when setting a relationship, or the actual relationship when
+                      getting it
         """
-        if len(data) is 1:
+        if len(data) == 1:
             return self.set_relationship(name, data[0])
 
         return self.get_relationship(name)
@@ -81,7 +83,8 @@ class ApiResourceIdentifier(object):
         Can be a relation to a single ApiResource or a dict of Resources.
 
         :param name: The name of the relation to set.
-        :param data: The value of the relation, can be a ApiResource or a dict of Resources.
+        :param data: The value of the relation, can be a ApiResource or a dict of
+                     Resources.
         :return: self
         """
 

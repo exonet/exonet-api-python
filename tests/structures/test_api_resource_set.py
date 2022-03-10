@@ -59,10 +59,10 @@ class testApiResourceSet(testCase):
         self.assertEqual(2, len(api_resource_set))
 
         for api_resource in api_resource_set:
-            self.assertTrue(api_resource.id() is "abc" or api_resource.id() is "def")
+            self.assertTrue(api_resource.id() == "abc" or api_resource.id() == "def")
 
         for api_resource in api_resource_set.resources():
-            self.assertTrue(api_resource.id() is "abc" or api_resource.id() is "def")
+            self.assertTrue(api_resource.id() == "abc" or api_resource.id() == "def")
 
 
 if __name__ == "__main__":

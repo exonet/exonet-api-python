@@ -117,7 +117,8 @@ class RequestBuilder(object):
 
             return Parser(response.content).parse()
 
-        # If there are changed relations and no changed attributes, assume a POST to the relation.
+        # If there are changed relations and no changed attributes, assume a POST to
+        # the relation.
         if len(changed_relations) > 0:
             responses = []
             for relation_name in changed_relations:
@@ -217,8 +218,8 @@ class RequestBuilder(object):
 
     def __get_recursive(self, data=None, url=None):
         """
-        Get the URL and call this method recursivly as long as there is an URL in the 'next' field
-        of the 'links' data.
+        Get the URL and call this method recursivly as long as there is an URL in the
+        'next' field of the 'links' data.
 
         :param data: The ApiResourceSet to append the resources to.
         :param url: The URL to call.
