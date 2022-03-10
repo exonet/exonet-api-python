@@ -53,11 +53,11 @@ class testParser(testCase):
 
         result = Parser(str.encode(json_data_list)).parse().resources()
 
-        self.assertEqual(result[0].id(), 'DV6axK4GwNEb')
-        self.assertEqual(result[0].type(), 'comments')
+        self.assertEqual(result[0].id(), "DV6axK4GwNEb")
+        self.assertEqual(result[0].type(), "comments")
 
-        self.assertEqual(result[1].id(), 'zWX9r7exA28G')
-        self.assertEqual(result[1].type(), 'comments')
+        self.assertEqual(result[1].id(), "zWX9r7exA28G")
+        self.assertEqual(result[1].type(), "comments")
 
     def test_parse_single(self):
         json_data_list = """
@@ -87,8 +87,8 @@ class testParser(testCase):
 
         result = Parser(str.encode(json_data_list)).parse()
 
-        self.assertEqual(result.id(), 'DV6axK4GwNEb')
-        self.assertEqual(result.type(), 'comments')
+        self.assertEqual(result.id(), "DV6axK4GwNEb")
+        self.assertEqual(result.type(), "comments")
 
     def test_parse_single_with_multi_relation(self):
         json_data_list = """
@@ -121,7 +121,12 @@ class testParser(testCase):
         }
         """
 
-        result = Parser(str.encode(json_data_list)).parse().relationship('tags').get_resource_identifiers()
+        result = (
+            Parser(str.encode(json_data_list))
+            .parse()
+            .relationship("tags")
+            .get_resource_identifiers()
+        )
 
         self.assertEqual(len(result), 2)
 
@@ -158,10 +163,15 @@ class testParser(testCase):
             }
             """
 
-            result = Parser(json_data_list).parse().relationship('tags').get_resource_identifiers()
+            result = (
+                Parser(json_data_list)
+                .parse()
+                .relationship("tags")
+                .get_resource_identifiers()
+            )
 
             self.assertEqual(len(result), 2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
