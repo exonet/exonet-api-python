@@ -1,8 +1,0 @@
-certifi==2020.6.20
-chardet==3.0.4
-coverage==5.3
-idna==2.10
-inflection==0.5.1
-requests==2.26.0
-urllib3==1.26.6
-pycodestyle==2.6.0
