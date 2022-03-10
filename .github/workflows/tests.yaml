@@ -11,25 +11,30 @@ on:
 
 jobs:
   run-tests:
-    name: 🪲 Run tests
+    name: 🪲 Run tests on Python ${{ matrix.python }}
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.7, 3.8, 3.9, 3.10]
 
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v3
 
-      - name: 🛠 Set up Python all python version
+      - name: 🛠 Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
-          architecture: x64
 
-      - name: 📦 Install dependencies
-        run: pip install -r requirements.txt
+      - name: 🏗 Install workflow dependencies
+        run: |
+          pip install -r .github/workflows/requirements.txt
+          poetry config virtualenvs.create true
+          poetry config virtualenvs.in-project true
 
-      - name: 🧰 Run unit tests
-        run: python -m unittest discover tests
+      - name: 🏗 Install dependencies
+        run: poetry install --no-interaction
+
+      - name: 🚀 Run pytest
+        run: poetry run pytest --cov exonetapi
