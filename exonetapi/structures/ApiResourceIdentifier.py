@@ -7,8 +7,7 @@ from exonetapi.structures.Relationship import Relationship
 
 
 class ApiResourceIdentifier(object):
-    """Basic ApiResource identifier.
-    """
+    """Basic ApiResource identifier."""
 
     def __init__(self, type, id=None):
         """Initialize the resource.
@@ -54,14 +53,16 @@ class ApiResourceIdentifier(object):
 
     def relationship(self, name, *data):
         """Define a new relationship for this resource, replace an existing one or get an
-        existing one. When data is provided the relationship is set, without data the relationship
-        is returned.
+        existing one. When data is provided the relationship is set, without data the
+        relationship is returned.
 
         :param name: The name of the relation to set.
-        :param data: The value of the relation, can be a ApiResource or a dict of Resources.
-        :return self: when setting a relationship, or the actual relationship when getting it
+        :param data: The value of the relation, can be a ApiResource or a dict
+                     of Resources.
+        :return self: when setting a relationship, or the actual relationship when
+                      getting it
         """
-        if len(data) is 1:
+        if len(data) == 1:
             return self.set_relationship(name, data[0])
 
         return self.get_relationship(name)
@@ -82,7 +83,8 @@ class ApiResourceIdentifier(object):
         Can be a relation to a single ApiResource or a dict of Resources.
 
         :param name: The name of the relation to set.
-        :param data: The value of the relation, can be a ApiResource or a dict of Resources.
+        :param data: The value of the relation, can be a ApiResource or a dict of
+                     Resources.
         :return: self
         """
 
@@ -97,8 +99,8 @@ class ApiResourceIdentifier(object):
         :return: A dict with the resource type and ID.
         """
         return {
-            'type': self.type(),
-            'id': self.id(),
+            "type": self.type(),
+            "id": self.id(),
         }
 
     def get_json_relationships(self, only_changed_relations=False):
@@ -109,7 +111,10 @@ class ApiResourceIdentifier(object):
         relationships = {}
 
         for relation_name, relation in self.__relationships.items():
-            if only_changed_relations is True and relation_name not in self.__changed_relations:
+            if (
+                only_changed_relations is True
+                and relation_name not in self.__changed_relations
+            ):
                 continue
 
             relationships[relation_name] = {}
@@ -121,14 +126,16 @@ class ApiResourceIdentifier(object):
                     except AttributeError:
                         identifier = relation_resource.to_json()
                     relation_list.append(identifier)
-                relationships[relation_name]['data'] = relation_list
+                relationships[relation_name]["data"] = relation_list
             elif type(relation) is dict:
-                relationships[relation_name]['data'] = relation['data']
+                relationships[relation_name]["data"] = relation["data"]
             else:
                 try:
-                    relationships[relation_name]['data'] = relation.to_json_resource_identifier()
+                    relationships[relation_name][
+                        "data"
+                    ] = relation.to_json_resource_identifier()
                 except AttributeError:
-                    relationships[relation_name]['data'] = relation.to_json()
+                    relationships[relation_name]["data"] = relation.to_json()
 
         return relationships
 

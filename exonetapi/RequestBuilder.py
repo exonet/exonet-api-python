@@ -9,12 +9,11 @@ from .result import Parser
 
 
 class RequestBuilder(object):
-    """Create and make requests to the API.
-    """
+    """Create and make requests to the API."""
 
     def __init__(self, resource=None, client=None):
-        if resource is not None and not resource.startswith('/'):
-            resource = '/' + resource
+        if resource is not None and not resource.startswith("/"):
+            resource = "/" + resource
 
         self.__resource = resource
         """
@@ -25,8 +24,9 @@ class RequestBuilder(object):
 
         if client:
             self.__client = client
-        elif not hasattr(self, '__client'):
+        elif not hasattr(self, "__client"):
             from exonetapi import Client
+
             self.__client = Client()
 
     def filter(self, filter_name, filter_value):
@@ -35,7 +35,7 @@ class RequestBuilder(object):
         :param filter_value: The value of the applied filter.
         :return: self
         """
-        self.__query_params['filter[' + filter_name + ']'] = filter_value
+        self.__query_params["filter[" + filter_name + "]"] = filter_value
         return self
 
     def page(self, page_number):
@@ -43,7 +43,7 @@ class RequestBuilder(object):
         :param page_number: The page number.
         :return: self
         """
-        self.__query_params['page[number]'] = page_number
+        self.__query_params["page[number]"] = page_number
         return self
 
     def size(self, page_size):
@@ -51,20 +51,20 @@ class RequestBuilder(object):
         :param page_size: The maximum number of returned resources.
         :return: self
         """
-        self.__query_params['page[size]'] = page_size
+        self.__query_params["page[size]"] = page_size
         return self
 
-    def sort(self, sort_field, sort_order='asc'):
+    def sort(self, sort_field, sort_order="asc"):
         """Prepare this RequestBuilder to sort by a field.
         :param sort_field: The field name to sort on.
         :param sort_order: The order for sorting (asc/desc), default: asc.
         :return: self
         """
-        if sort_order not in ['asc', 'desc']:
+        if sort_order not in ["asc", "desc"]:
             raise ValueError('Sort order can only be "asc" or "desc".')
 
-        self.__query_params['sort'] = '{sort}{field}'.format(
-            sort='-' if sort_order == 'desc' else '',
+        self.__query_params["sort"] = "{sort}{field}".format(
+            sort="-" if sort_order == "desc" else "",
             field=sort_field,
         )
         return self
@@ -74,14 +74,14 @@ class RequestBuilder(object):
         :param sort_field: The field name to sort on.
         :return: self
         """
-        return self.sort(sort_field, 'asc')
+        return self.sort(sort_field, "asc")
 
     def sort_desc(self, sort_field):
         """Prepare this RequestBuilder to sort by a field in descending order.
         :param sort_field: The field name to sort on.
         :return: self
         """
-        return self.sort(sort_field, 'desc')
+        return self.sort(sort_field, "desc")
 
     def get(self, identifier=None):
         """Make a call to the API using the previously set options.
@@ -90,9 +90,9 @@ class RequestBuilder(object):
         """
 
         response = self.__make_call(
-            'GET',
+            "GET",
             self.__build_url(identifier),
-            params=self.__query_params if not identifier else None
+            params=self.__query_params if not identifier else None,
         )
 
         return Parser(response.content).parse()
@@ -111,18 +111,23 @@ class RequestBuilder(object):
 
         # If there are changed attributes, assume it s a new resource.
         if len(changed_attributes) > 0:
-            response = self.__make_call('POST', self.__build_url(), {'data': resource.to_json()})
+            response = self.__make_call(
+                "POST", self.__build_url(), {"data": resource.to_json()}
+            )
 
             return Parser(response.content).parse()
 
-        # If there are changed relations and no changed attributes, assume a POST to the relation.
+        # If there are changed relations and no changed attributes, assume a POST to
+        # the relation.
         if len(changed_relations) > 0:
             responses = []
             for relation_name in changed_relations:
                 response = self.__make_call(
-                    'POST',
-                    '{}/relationships/{}'.format(self.__build_url(resource.id()), relation_name),
-                    changed_relations[relation_name]
+                    "POST",
+                    "{}/relationships/{}".format(
+                        self.__build_url(resource.id()), relation_name
+                    ),
+                    changed_relations[relation_name],
                 )
                 responses.append(Parser(response.content).parse())
 
@@ -135,18 +140,18 @@ class RequestBuilder(object):
         # Patch changed attributes.
         if len(changed_attributes) > 0:
             self.__make_call(
-                'PATCH',
-                self.__build_url(resource.id()),
-                {'data': changed_attributes}
+                "PATCH", self.__build_url(resource.id()), {"data": changed_attributes}
             )
 
         # Patch changed relations.
         if len(changed_relations) > 0:
             for relation_name in changed_relations:
                 self.__make_call(
-                    'PATCH',
-                    '{}/relationships/{}'.format(self.__build_url(resource.id()), relation_name),
-                    changed_relations[relation_name]
+                    "PATCH",
+                    "{}/relationships/{}".format(
+                        self.__build_url(resource.id()), relation_name
+                    ),
+                    changed_relations[relation_name],
                 )
 
         return True
@@ -156,15 +161,17 @@ class RequestBuilder(object):
 
         # If no relations are changed, DELETE the whole resource.
         if len(changed_relations) == 0:
-            self.__make_call('DELETE', self.__build_url(resource.id()))
+            self.__make_call("DELETE", self.__build_url(resource.id()))
 
             return True
 
         for relation_name in changed_relations:
             self.__make_call(
-                'DELETE',
-                '{}/relationships/{}'.format(self.__build_url(resource.id()), relation_name),
-                changed_relations[relation_name]
+                "DELETE",
+                "{}/relationships/{}".format(
+                    self.__build_url(resource.id()), relation_name
+                ),
+                changed_relations[relation_name],
             )
 
         return True
@@ -180,7 +187,7 @@ class RequestBuilder(object):
             url += self.__resource
 
         if identifier:
-            url += '/' + identifier
+            url += "/" + identifier
 
         return url
 
@@ -190,18 +197,14 @@ class RequestBuilder(object):
         :return: A dict with all the headers.
         """
         return {
-            'Accept': 'application/vnd.Exonet.v1+json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer %s' % (self.__client.authenticator.get_token())
+            "Accept": "application/vnd.Exonet.v1+json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer %s" % (self.__client.authenticator.get_token()),
         }
 
     def __make_call(self, method, url, json_data=None, params=None):
         response = requests.request(
-            method,
-            url,
-            headers=self.__get_headers(),
-            json=json_data,
-            params=params
+            method, url, headers=self.__get_headers(), json=json_data, params=params
         )
 
         # Handle validation errors.
@@ -215,17 +218,17 @@ class RequestBuilder(object):
 
     def __get_recursive(self, data=None, url=None):
         """
-        Get the URL and call this method recursivly as long as there is an URL in the 'next' field
-        of the 'links' data.
+        Get the URL and call this method recursivly as long as there is an URL in the
+        'next' field of the 'links' data.
 
         :param data: The ApiResourceSet to append the resources to.
         :param url: The URL to call.
         :return: The ApiResourceSet containing all requested resources.
         """
         response = self.__make_call(
-            'GET',
+            "GET",
             url or self.__build_url(),
-            params=self.__query_params if not url else None
+            params=self.__query_params if not url else None,
         )
 
         content = Parser(response.content).parse()
@@ -236,7 +239,7 @@ class RequestBuilder(object):
 
         data.add_resource(content.resources())
 
-        next_link = content.links().get('next')
+        next_link = content.links().get("next")
         if next_link is not None:
             return self.__get_recursive(data, next_link)
 

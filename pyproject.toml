@@ -1,0 +1,36 @@
+[tool.poetry]
+authors = ["Exonet <development@exonet.nl>"]
+classifiers = [
+  'Development Status :: 4 - Beta',
+  'Intended Audience :: Developers',
+  'Topic :: Software Development :: Libraries :: Python Modules',
+  'License :: OSI Approved :: MIT License',
+  'Programming Language :: Python :: 3.7',
+  'Programming Language :: Python :: 3.8',
+  'Programming Language :: Python :: 3.9',
+  'Programming Language :: Python :: 3.10',
+]
+description = "Library to interact with the Exonet API."
+license = "MIT"
+name = "exonetapi"
+packages = [
+  {include = "exonetapi"},
+  {include = "exonetapi/**/*.py"},
+]
+version = "4.0.0"
+
+[tool.poetry.dependencies]
+inflection = "^0.5.1"
+python = "^3.7"
+requests = "^2.27.1"
+
+[tool.poetry.dev-dependencies]
+black = {version = "^22.1.0", allow-prereleases = true}
+flake8 = "^4.0.1"
+pytest = "^7.0.1"
+pytest-cov = "^3.0.0"
+bandit = "^1.7.4"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]

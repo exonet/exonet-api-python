@@ -5,8 +5,6 @@ Python 3 library for the Exonet API.
 .. image:: https://img.shields.io/pypi/v/exonetapi.svg?style=flat-square
 .. image:: https://img.shields.io/pypi/pyversions/exonetapi.svg?style=flat-square
 .. image:: https://img.shields.io/pypi/l/exonetapi.svg?style=flat-square
-.. image:: https://img.shields.io/lgtm/grade/python/g/exonet/exonet-api-python.svg
-   :target: https://lgtm.com/projects/g/exonet/exonet-api-python/context:python
 
 Conventions
 -----------
@@ -54,9 +52,9 @@ This should make two API calls and print the ticket and email details for one of
 Testing
 -------
 
-Run unit tests and coverage::
+Run unit tests::
 
- coverage run -m unittest discover tests -v && coverage html
+ poetry run pytest --cov=exonetapi
 
 Change log
 ----------
@@ -66,7 +64,11 @@ Please see `releases <https://github.com/exonet/exonet-api-python/releases>` for
 Security
 --------
 
-If you discover any security related issues please email `support@exonet.nl <mailto:support@exonet.nl>`_ instead of using the issue tracker.
+Run bandit::
+
+ poetry run bandit -r exonetapi
+
+If you discover any security related issues please email `development@exonet.nl <mailto:development@exonet.nl>`_ instead of using the issue tracker.
 
 Credits
 -------
