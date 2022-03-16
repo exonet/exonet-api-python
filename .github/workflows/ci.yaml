@@ -1,45 +1,120 @@
 ---
 name: CI
 
-# yamllint disable-line rule:truthy
 on:
   push:
     branches:
       - master
   pull_request:
-    branches:
-      - master
-  release:
-    types: [released]
 
 jobs:
-  run-tests:
-    name: 📦 Build & publish package
+  lint:
+    name: Lint and validate code
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: 🛠 Set up Python 3.9
+      - name: Set up Python 3.9
         uses: actions/setup-python@v3
+        id: setup-python
         with:
           python-version: 3.9
 
-      - name: 📝  Install Poetry
+      - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: 🏗  Install dependencies
+      - name: Load cached .venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        if: ${{ steps.cached-poetry-dependencies.outputs.cache-hit != 'true' }}
         run: poetry install --no-interaction --no-root
 
-      - name: 🛠  Build package
-        run: poetry build
+      - name: Run flake8
+        run: poetry run flake8
 
-      - name: 🌏  Publish distribution to PyPI
-        if: ${{ github.event_name == 'release' }}
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Run bandit
+        run: poetry run bandit -r exonetapi
+
+  test:
+    name: Run tests on python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.7', '3.8', '3.9', '3.10']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        id: setup-python
         with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Load cached .venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        if: ${{ steps.cached-poetry-dependencies.outputs.cache-hit != 'true' }}
+        run: poetry install --no-interaction --no-root
+
+      - name: Run pytest
+        run: poetry run pytest --cov exonetapi
+
+  build:
+    name: Build package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        id: setup-python
+        with:
+          python-version: 3.9
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Load cached .venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        if: ${{ steps.cached-poetry-dependencies.outputs.cache-hit != 'true' }}
+        run: poetry install --no-interaction --no-root
+
+      - name: Build package
+        run: poetry build
