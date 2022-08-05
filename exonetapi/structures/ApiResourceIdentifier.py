@@ -44,7 +44,7 @@ class ApiResourceIdentifier(object):
         return exonetapi.RequestBuilder(self.type()).get(self.id())
 
     def related(self, name):
-        """Define a new relation for the resource. Can be used to make 
+        """Define a new relation for the resource. Can be used to make
         new requests to the API.
 
         :param name: The name of the relation.
@@ -53,8 +53,8 @@ class ApiResourceIdentifier(object):
         return Relation(name, self.type(), self.id())
 
     def relationship(self, name, *data):
-        """Define a new relationship for this resource, replace an existing 
-        one or get an existing one. When data is provided the relationship 
+        """Define a new relationship for this resource, replace an existing
+        one or get an existing one. When data is provided the relationship
         is set, without data the relationship is returned.
 
         :param name: The name of the relation to set.
