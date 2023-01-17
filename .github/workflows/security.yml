@@ -1,0 +1,51 @@
+---
+name: Security
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  check-licenses:
+    name: Check licenses for dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        id: setup-python
+        with:
+          python-version: '3.10'
+
+      - name: Check licenses
+        id: licenses
+        run: |
+            echo ::set-output name=LICENSES::$(
+              # License regex. Functions as a whitelist.
+              license_regex='MIT|MPL|HPND|PSF|BSD|Apache|ISC|LGPL|Expat|Python\sSoftware\sFoundation\sLicense'
+
+              # Get all pkg names from pip via JSON parsing and loop over it.
+              for pip_pkg in $(pip list --format=json | jq -r '.[].name'); do
+
+                # Store the licenses which are not whitelisted in a var.
+                not_whitelisted_license=$(pip show -v "${pip_pkg}" | grep -P '^\s+License' |  awk -F ' :: ' '{ print $3 }' | grep -vP "${license_regex}")
+
+                # If there are non whitelisted licenses in the Python project,
+                # print name and license.
+                if [[ -n "${not_whitelisted_license}" ]]; then
+                  echo PKG: "${pip_pkg}", License: "${not_whitelisted_license}"
+                fi
+              done
+            )
+
+      - name: Output licenses
+        run: echo "${{ steps.licenses.outputs.LICENSES }}"
+
+      - name: Fail if not empty
+        if: ${{ steps.licenses.outputs.LICENSES != '' }}
+        run: exit 1
