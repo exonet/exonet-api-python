@@ -27,7 +27,7 @@ jobs:
         run: |
             echo ::set-output name=LICENSES::$(
               # License regex. Functions as a whitelist.
-              license_regex='MIT|MPL|HPND|PSF|BSD|Apache|ISC|LGPL|Expat|Python\sSoftware\sFoundation\sLicense'
+              license_regex='MIT|MPL|HPND|PSF|BSD|Apache|ISC|LGPL|Expat|Python\sSoftware\sFoundation\sLicense|The\sUnlicense'
 
               # Get all pkg names from pip via JSON parsing and loop over it.
               for pip_pkg in $(pip list --format=json | jq -r '.[].name'); do
