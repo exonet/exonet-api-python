@@ -61,7 +61,10 @@ class Authenticator:
         headers = {"Accept": "application/vnd.Exonet.v1+json"}
 
         response = requests.post(
-            self.__host + self.__authentication_endpoint, headers=headers, data=payload
+            self.__host + self.__authentication_endpoint,
+            headers=headers,
+            data=payload,
+            timeout=30
         )
 
         # Raise exception on failed request.
