@@ -31,6 +31,7 @@ class testAuthenticator(testCase):
                 "Accept": "application/vnd.Exonet.v1+json",
             },
             data="payload",
+            timeout=30
         )
 
         self.assertEqual(token, "new token")
@@ -58,6 +59,7 @@ class testAuthenticator(testCase):
                 "client_id": "client id",
                 "client_secret": "client secret",
             },
+            timeout=30
         )
 
 
