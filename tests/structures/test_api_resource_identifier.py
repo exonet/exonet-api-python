@@ -156,8 +156,8 @@ class testApiResourceIdentifier(testCase):
         relation = resource.related("something")
         self.assertIsInstance(relation, Relation)
 
-    @mock.patch("exonetapi.RequestBuilder.__init__", return_value=None)
-    @mock.patch("exonetapi.RequestBuilder.get")
+    @mock.patch("exonetapi.RequestBuilder.RequestBuilder.__init__", return_value=None)
+    @mock.patch("exonetapi.RequestBuilder.RequestBuilder.get")
     def test_post(self, mock_requestbuilder_get, mock_requestbuilder_init):
         mock_requestbuilder_get.get = MagicMock(return_value=None)
         ApiResource({"type": "fake", "id": "FakeID"}).get()

@@ -1,5 +1,4 @@
-import unittest
-from unittest import mock
+from unittest.mock import patch
 
 from tests.testCase import testCase
 from exonetapi.Client import Client
@@ -7,12 +6,14 @@ from exonetapi.RequestBuilder import RequestBuilder
 
 
 class testClient(testCase):
-    @mock.patch("exonetapi.auth.Authenticator.__init__", return_value=None)
+    @patch("exonetapi.auth.Authenticator.Authenticator.__init__", return_value=None)
     def test_init_arguments(self, mock_authenticator):
         client = Client("https://test.url")
 
+        # Assert the host connection is set up.
+        mock_authenticator.assert_called_once_with("https://test.url", "/oauth/token")
+
         self.assertEqual(client.get_host(), "https://test.url")
-        mock_authenticator.assert_called_with("https://test.url", "/oauth/token")
 
     def test_set_host(self):
         client = Client("https://test.url")
@@ -29,6 +30,3 @@ class testClient(testCase):
 
         self.assertIsInstance(resource, RequestBuilder)
 
-
-if __name__ == "__main__":
-    unittest.main()

@@ -81,7 +81,7 @@ class testRequestBuilder(testCase):
             self.request_builder._RequestBuilder__query_params["sort"], "-domain"
         )
 
-    @mock.patch("exonetapi.auth.Authenticator.get_token")
+    @mock.patch("exonetapi.auth.Authenticator.Authenticator.get_token")
     def test_get_headers(self, mock_authenticator_get_token):
         mock_authenticator_get_token.return_value = "test_token"
 
@@ -95,8 +95,8 @@ class testRequestBuilder(testCase):
             },
         )
 
-    @mock.patch("exonetapi.result.Parser.parse")
-    @mock.patch("exonetapi.result.Parser.__init__")
+    @mock.patch("exonetapi.result.Parser.Parser.parse")
+    @mock.patch("exonetapi.result.Parser.Parser.__init__")
     @mock.patch("requests.request")
     def test_get(self, mock_requests_request, mock_parser_init, mock_parser_parse):
         mock_parser_parse.return_value = "parsedReturnValue"
@@ -124,8 +124,8 @@ class testRequestBuilder(testCase):
         self.assertTrue(mock_parser_parse.called)
         self.assertEqual("parsedReturnValue", result)
 
-    @mock.patch("exonetapi.result.Parser.parse")
-    @mock.patch("exonetapi.result.Parser.__init__")
+    @mock.patch("exonetapi.result.Parser.Parser.parse")
+    @mock.patch("exonetapi.result.Parser.Parser.__init__")
     @mock.patch("requests.request")
     def test_post(self, mock_requests_request, mock_parser_init, mock_parser_parse):
         resource = ApiResource({"type": "things", "id": "someId"})
@@ -159,8 +159,8 @@ class testRequestBuilder(testCase):
         self.assertTrue(mock_parser_parse.called)
         self.assertEqual("parsedReturnValue", result)
 
-    @mock.patch("exonetapi.result.Parser.parse")
-    @mock.patch("exonetapi.result.Parser.__init__")
+    @mock.patch("exonetapi.result.Parser.Parser.parse")
+    @mock.patch("exonetapi.result.Parser.Parser.__init__")
     @mock.patch("requests.request")
     def test_post_relation(
         self, mock_requests_request, mock_parser_init, mock_parser_parse
@@ -306,7 +306,7 @@ class testRequestBuilder(testCase):
         self.assertTrue(result)
 
     @mock.patch("requests.request")
-    @mock.patch("exonetapi.exceptions.ValidationException.__init__", return_value=None)
+    @mock.patch("exonetapi.exceptions.ValidationException.ValidationException.__init__", return_value=None)
     def test_post_validation_error(
         self, mock_validation_exception, mock_requests_request
     ):
