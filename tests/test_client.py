@@ -3,10 +3,11 @@ from unittest.mock import patch
 from tests.testCase import testCase
 from exonetapi.Client import Client
 from exonetapi.RequestBuilder import RequestBuilder
+from exonetapi.auth.Authenticator import Authenticator
 
 
 class testClient(testCase):
-    @patch("exonetapi.auth.Authenticator.Authenticator.__init__", return_value=None)
+    @patch.object(Authenticator, "__init__", return_value=None)
     def test_init_arguments(self, mock_authenticator):
         client = Client("https://test.url")
 
@@ -29,4 +30,3 @@ class testClient(testCase):
         resource = client.resource("/test")
 
         self.assertIsInstance(resource, RequestBuilder)
-

@@ -3,6 +3,8 @@ from unittest import mock
 
 from exonetapi.structures.ApiResourceSet import ApiResourceSet
 from exonetapi.structures.ApiResource import ApiResource
+from exonetapi.RequestBuilder import RequestBuilder
+
 from tests.testCase import testCase
 
 
@@ -22,7 +24,7 @@ class testApiResourceSet(testCase):
 
         self.assertEqual(links, api_resource_set.links())
 
-    @mock.patch("exonetapi.RequestBuilder.RequestBuilder.get", return_value="api_response")
+    @mock.patch.object(RequestBuilder, "get", return_value="api_response")
     def test_pagination(self, mock_request_builder):
         links = {
             "next": "https://api.exonet.nl/next_url?filter[unit]=test",

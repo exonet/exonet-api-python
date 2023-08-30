@@ -4,6 +4,7 @@ from unittest import mock
 from tests.testCase import testCase
 
 from exonetapi.structures.Relation import Relation
+from exonetapi.RequestBuilder import RequestBuilder
 
 
 class testRelation(testCase):
@@ -18,7 +19,7 @@ class testRelation(testCase):
 
         self.assertEqual(3, len(relation))
 
-    @mock.patch("exonetapi.RequestBuilder.RequestBuilder.get", return_value="get_response")
+    @mock.patch.object(RequestBuilder, "get", return_value="get_response")
     def test_getattr(self, mock_request_builder):
         """Call a method on the relation and expect it to be passed to the
         RequestBuilder."""

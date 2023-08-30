@@ -9,6 +9,7 @@ from exonetapi.structures.ApiResource import ApiResource
 from exonetapi.structures.Relationship import Relationship
 from exonetapi.structures.Relation import Relation
 from exonetapi import create_resource
+from exonetapi.RequestBuilder import RequestBuilder
 
 import json
 
@@ -156,8 +157,8 @@ class testApiResourceIdentifier(testCase):
         relation = resource.related("something")
         self.assertIsInstance(relation, Relation)
 
-    @mock.patch("exonetapi.RequestBuilder.RequestBuilder.__init__", return_value=None)
-    @mock.patch("exonetapi.RequestBuilder.RequestBuilder.get")
+    @mock.patch.object(RequestBuilder, "__init__", return_value=None)
+    @mock.patch.object(RequestBuilder, "get")
     def test_post(self, mock_requestbuilder_get, mock_requestbuilder_init):
         mock_requestbuilder_get.get = MagicMock(return_value=None)
         ApiResource({"type": "fake", "id": "FakeID"}).get()

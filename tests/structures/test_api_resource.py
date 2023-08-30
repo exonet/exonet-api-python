@@ -6,6 +6,7 @@ from tests.testCase import testCase
 
 from exonetapi.structures.ApiResource import ApiResource
 from exonetapi import create_resource
+from exonetapi.RequestBuilder import RequestBuilder
 
 import json
 
@@ -154,22 +155,22 @@ class testApiResource(testCase):
             json.dumps(resource.to_json_changed_attributes()),
         )
 
-    @mock.patch("exonetapi.RequestBuilder.RequestBuilder.__init__", return_value=None)
-    @mock.patch("exonetapi.RequestBuilder.RequestBuilder.patch")
+    @mock.patch.object(RequestBuilder, "__init__", return_value=None)
+    @mock.patch.object(RequestBuilder, "patch")
     def test_patch(self, mock_requestbuilder_patch, mock_requestbuilder_init):
         mock_requestbuilder_patch.patch = MagicMock(return_value=None)
         ApiResource({"type": "fake", "id": "FakeID"}).patch()
         mock_requestbuilder_init.assert_called_with("fake")
 
-    @mock.patch("exonetapi.RequestBuilder.RequestBuilder.__init__", return_value=None)
-    @mock.patch("exonetapi.RequestBuilder.RequestBuilder.delete")
+    @mock.patch.object(RequestBuilder, "__init__", return_value=None)
+    @mock.patch.object(RequestBuilder, "delete")
     def test_delete(self, mock_requestbuilder_delete, mock_requestbuilder_init):
         mock_requestbuilder_delete.delete = MagicMock(return_value=None)
         ApiResource({"type": "fake", "id": "FakeID"}).delete()
         mock_requestbuilder_init.assert_called_with("fake")
 
-    @mock.patch("exonetapi.RequestBuilder.RequestBuilder.__init__", return_value=None)
-    @mock.patch("exonetapi.RequestBuilder.RequestBuilder.post")
+    @mock.patch.object(RequestBuilder, "__init__", return_value=None)
+    @mock.patch.object(RequestBuilder, "post")
     def test_post(self, mock_requestbuilder_post, mock_requestbuilder_init):
         mock_requestbuilder_post.post = MagicMock(return_value=None)
         ApiResource({"type": "fake", "id": "FakeID"}).post()
