@@ -4,17 +4,35 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: daily
-      time: "03:00"
+      interval: "weekly"
+      day: "tuesday"
+      time: "03:30"
+    groups:
+      patches-and-minor-upgrades:
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: pip
     directory: "/.github/workflows"
     schedule:
-      interval: daily
+      interval: "weekly"
+      day: "tuesday"
       time: "03:30"
+    groups:
+      patches-and-minor-upgrades:
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: daily
-      time: "04:00"
+      interval: "weekly"
+      day: "tuesday"
+      time: "03:30"
+    groups:
+      patches-and-minor-upgrades:
+        update-types:
+          - "minor"
+          - "patch"
