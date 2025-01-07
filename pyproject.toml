@@ -1,6 +1,6 @@
 [project]
 name = "exonetapi"
-version = "4.0.0"
+version = "5.0.0"
 description = "Library to interact with the Exonet API."
 authors = [{ name = "Exonet", email = "development@exonet.nl" }]
 maintainers = [{ name = "Exonet", email = "development@exonet.nl" }]
