@@ -1,9 +1,9 @@
-[tool.poetry]
+[project]
 name = "exonetapi"
 version = "4.0.0"
 description = "Library to interact with the Exonet API."
-authors = ["Exonet <development@exonet.nl>"]
-maintainers = ["Exonet <development@exonet.nl>"]
+authors = [{ name = "Exonet", email = "development@exonet.nl" }]
+maintainers = [{ name = "Exonet", email = "development@exonet.nl" }]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/exonet/exonet-api-python"
@@ -21,17 +21,20 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+requires-python = ">=3.8"
+
+dependencies = [
+  "inflection==0.5.1",
+  "requests==2.32.3",
+]
+
+[tool.poetry]
 packages = [
   {include = "exonetapi"},
   {include = "exonetapi/**/*.py"},
 ]
 
-[tool.poetry.dependencies]
-inflection = "^0.5.1"
-python = "^3.8"
-requests = "^2.27.1"
-
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = {version = "^24.8.0", allow-prereleases = true}
 flake8 = "^5.0.4"
 pytest = "^8.3.4"
