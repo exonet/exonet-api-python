@@ -38,7 +38,7 @@ packages = [
 
 [tool.poetry.group.dev.dependencies]
 black = {version = "^25.1.0", allow-prereleases = true}
-flake8 = "^5.0.4"
+flake8 = "^7.3.0"
 pytest = "^8.4.1"
 pytest-cov = "^5.0.0"
 bandit = "^1.8.5"
