@@ -41,7 +41,7 @@ black = {version = "^25.1.0", allow-prereleases = true}
 flake8 = "^7.3.0"
 pytest = "^8.4.1"
 pytest-cov = "^6.2.1"
-bandit = "^1.8.5"
+bandit = "^1.8.6"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
