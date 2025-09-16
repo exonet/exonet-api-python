@@ -40,7 +40,7 @@ packages = [
 black = {version = "^25.1.0", allow-prereleases = true}
 flake8 = "^7.3.0"
 pytest = "^8.4.2"
-pytest-cov = "^6.3.0"
+pytest-cov = "^7.0.0"
 bandit = "^1.8.6"
 
 [build-system]
