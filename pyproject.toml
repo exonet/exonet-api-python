@@ -27,7 +27,7 @@ requires-python = ">=3.9"
 
 dependencies = [
   "inflection==0.5.1",
-  "requests==2.32.3",
+  "requests==2.32.4",
 ]
 
 [tool.poetry]
