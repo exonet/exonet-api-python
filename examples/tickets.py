@@ -1,5 +1,6 @@
 # Run this script using: python examples/tickets.py <YOUR-TOKEN>
 import sys
+
 from exonetapi import Client
 
 # Create a new Client.

@@ -1,18 +1,20 @@
+import json
 import unittest
-from unittest.mock import MagicMock
 from unittest import mock
+from unittest.mock import MagicMock
 
-from tests.testCase import testCase
+import pytest
 
-from exonetapi.structures.ApiResource import ApiResource
 from exonetapi import create_resource
 from exonetapi.RequestBuilder import RequestBuilder
+from exonetapi.structures.ApiResource import ApiResource
+from tests.base import BaseTestCase
 
-import json
 
+class TestApiResource(BaseTestCase):
+    """Tests for the ApiResource."""
 
-class testApiResource(testCase):
-    def test_init(self):
+    def test_init(self) -> None:
         resource = create_resource(
             {
                 "type": "fake",
@@ -21,38 +23,26 @@ class testApiResource(testCase):
         resource.attribute("first_name", "John")
         resource.attribute("last_name", "Doe")
 
-        self.assertEqual(resource.attribute("first_name"), "John")
-        self.assertEqual(resource.type(), "fake")
-        self.assertIsNone(resource.id())
-        self.assertEqual(
-            resource.attributes(),
-            {
-                "first_name": "John",
-                "last_name": "Doe",
-            },
-        )
+        assert resource.attribute("first_name") == "John"
+        assert resource.type() == "fake"
+        assert resource.id() is None
+        assert resource.attributes() == {"first_name": "John", "last_name": "Doe"}
 
-    def test_init_string(self):
+    def test_init_string(self) -> None:
         resource = ApiResource("fake", "abc")
         resource.attribute("first_name", "John")
         resource.attribute("last_name", "Doe")
 
-        self.assertEqual(resource.attribute("first_name"), "John")
-        self.assertEqual(resource.type(), "fake")
-        self.assertEqual(resource.id(), "abc")
-        self.assertEqual(
-            resource.attributes(),
-            {
-                "first_name": "John",
-                "last_name": "Doe",
-            },
-        )
+        assert resource.attribute("first_name") == "John"
+        assert resource.type() == "fake"
+        assert resource.id() == "abc"
+        assert resource.attributes() == {"first_name": "John", "last_name": "Doe"}
 
-    def test_init_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_init_invalid(self) -> None:
+        with pytest.raises(ValueError, match="First argument must be a string or dict"):
             ApiResource(1234)
 
-    def test_init_relationship(self):
+    def test_init_relationship(self) -> None:
         resource = create_resource(
             {
                 "type": "fake",
@@ -69,12 +59,11 @@ class testApiResource(testCase):
             ),
         )
 
-        self.assertEqual(
-            resource.get_json_relationships(),
-            {"account": {"data": {"type": "account", "id": "someAccountID"}}},
-        )
+        assert resource.get_json_relationships() == {
+            "account": {"data": {"type": "account", "id": "someAccountID"}}
+        }
 
-    def test_set_relationship(self):
+    def test_set_relationship(self) -> None:
         resource = create_resource({"type": "fake"})
 
         resource.relationship(
@@ -85,19 +74,16 @@ class testApiResource(testCase):
             ],
         )
 
-        self.assertEqual(
-            resource.get_json_relationships(),
-            {
-                "messages": {
-                    "data": [
-                        {"id": "messageOne", "type": "message"},
-                        {"id": "messageTwo", "type": "message"},
-                    ]
-                }
-            },
-        )
+        assert resource.get_json_relationships() == {
+            "messages": {
+                "data": [
+                    {"id": "messageOne", "type": "message"},
+                    {"id": "messageTwo", "type": "message"},
+                ]
+            }
+        }
 
-    def test_to_json(self):
+    def test_to_json(self) -> None:
         resource = ApiResource(
             {
                 "type": "fake",
@@ -114,28 +100,25 @@ class testApiResource(testCase):
             ),
         )
 
-        self.assertEqual(
-            json.dumps(resource.to_json()),
-            json.dumps(
-                {
-                    "type": "fake",
-                    "attributes": {},
-                    "id": "FakeID",
-                    "relationships": {
-                        "thing": {"data": {"type": "things", "id": "thingID"}}
-                    },
-                }
-            ),
+        assert json.dumps(resource.to_json()) == json.dumps(
+            {
+                "type": "fake",
+                "attributes": {},
+                "id": "FakeID",
+                "relationships": {
+                    "thing": {"data": {"type": "things", "id": "thingID"}}
+                },
+            }
         )
 
-    def test_to_json_changed_attributes(self):
+    def test_to_json_changed_attributes(self) -> None:
         resource = ApiResource(
             {
                 "type": "fake",
                 "id": "FakeID",
             }
         )
-        self.assertEqual({}, resource.to_json_changed_attributes())
+        assert resource.to_json_changed_attributes() == {}
 
         resource.attribute("test", "Hello World")
         resource.set_relationship(
@@ -148,35 +131,32 @@ class testApiResource(testCase):
             ),
         )
 
-        self.assertEqual(
-            json.dumps(
-                {"type": "fake", "attributes": {"test": "Hello World"}, "id": "FakeID"}
-            ),
-            json.dumps(resource.to_json_changed_attributes()),
-        )
+        assert json.dumps(
+            {"type": "fake", "attributes": {"test": "Hello World"}, "id": "FakeID"}
+        ) == json.dumps(resource.to_json_changed_attributes())
 
     @mock.patch.object(RequestBuilder, "__init__", return_value=None)
     @mock.patch.object(RequestBuilder, "patch")
-    def test_patch(self, mock_requestbuilder_patch, mock_requestbuilder_init):
+    def test_patch(self, mock_requestbuilder_patch, mock_requestbuilder_init) -> None:
         mock_requestbuilder_patch.patch = MagicMock(return_value=None)
         ApiResource({"type": "fake", "id": "FakeID"}).patch()
         mock_requestbuilder_init.assert_called_with("fake")
 
     @mock.patch.object(RequestBuilder, "__init__", return_value=None)
     @mock.patch.object(RequestBuilder, "delete")
-    def test_delete(self, mock_requestbuilder_delete, mock_requestbuilder_init):
+    def test_delete(self, mock_requestbuilder_delete, mock_requestbuilder_init) -> None:
         mock_requestbuilder_delete.delete = MagicMock(return_value=None)
         ApiResource({"type": "fake", "id": "FakeID"}).delete()
         mock_requestbuilder_init.assert_called_with("fake")
 
     @mock.patch.object(RequestBuilder, "__init__", return_value=None)
     @mock.patch.object(RequestBuilder, "post")
-    def test_post(self, mock_requestbuilder_post, mock_requestbuilder_init):
+    def test_post(self, mock_requestbuilder_post, mock_requestbuilder_init) -> None:
         mock_requestbuilder_post.post = MagicMock(return_value=None)
         ApiResource({"type": "fake", "id": "FakeID"}).post()
         mock_requestbuilder_init.assert_called_with("fake")
 
-    def test_reset_changed_attributes(self):
+    def test_reset_changed_attributes(self) -> None:
         resource = ApiResource(
             {
                 "type": "fake",
@@ -185,13 +165,14 @@ class testApiResource(testCase):
         )
         resource.attribute("test", "Hello World")
 
-        self.assertEqual(
-            {"attributes": {"test": "Hello World"}, "id": "FakeID", "type": "fake"},
-            resource.to_json_changed_attributes(),
-        )
+        assert resource.to_json_changed_attributes() == {
+            "attributes": {"test": "Hello World"},
+            "id": "FakeID",
+            "type": "fake",
+        }
 
         resource.reset_changed_attributes()
-        self.assertEqual({}, resource.to_json_changed_attributes())
+        assert resource.to_json_changed_attributes() == {}
 
 
 if __name__ == "__main__":

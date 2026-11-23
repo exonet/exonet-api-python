@@ -1,8 +1,8 @@
 # Run this script using: python examples/dns_zones.py <YOUR-TOKEN>
 import sys
+
 from exonetapi import Client
-from exonetapi.structures import ApiResourceIdentifier
-from exonetapi.structures import ApiResource
+from exonetapi.structures import ApiResource, ApiResourceIdentifier
 
 # Create a new Client.
 client = Client()
@@ -15,7 +15,7 @@ print("\nAdd a new DNS zone\n")
 # Create a new resource with the desired attributes.
 zone = ApiResource("dns_zones")
 zone.attribute("name", "my-new-zone.com")
-zone.attribute("dnssec", True)
+zone.attribute("dnssec", True)  # noqa: FBT003
 # Replace the customer ID with your own customer ID.
 zone.relationship("customer", ApiResourceIdentifier("customers", "X09kwRdbbAxN"))
 # Send the new resource to the API.
@@ -46,6 +46,6 @@ record_result_1.patch()
 # Delete the test record.
 record_result_2.delete()
 
-print("DNS Zone ID: {}".format(zone_result.id()))
-print("DNS Record ID: {}".format(record_result_1.id()))
+print(f"DNS Zone ID: {zone_result.id()}")
+print(f"DNS Record ID: {record_result_1.id()}")
 print(record_result_1.related("zone").get().attribute("name"))
