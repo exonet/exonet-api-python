@@ -16,34 +16,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v6
-        id: setup-python
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v10.4.0  # setup-uv only publishes full version tags
         with:
-          python-version: 3.11
-
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-
-      - name: Load cached .venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v5
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          version-file: .github/workflows/requirements.txt
+          python-version: '3.11'
+          enable-cache: true
 
       - name: Install dependencies
-        if: ${{ steps.cached-poetry-dependencies.outputs.cache-hit != 'true' }}
-        run: poetry install --no-interaction --no-root
+        run: uv sync --locked
 
       - name: Run flake8
-        run: poetry run flake8
+        run: uv run flake8
 
       - name: Run bandit
-        run: poetry run bandit -r exonetapi
+        run: uv run bandit -r exonetapi
 
   test:
     name: Run tests on python ${{ matrix.python-version }}
@@ -53,80 +40,36 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.11', '3.12', '3.13']
-        include:
-          - poetry-version: latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
-        id: setup-python
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v10.4.0  # setup-uv only publishes full version tags
         with:
+          version-file: .github/workflows/requirements.txt
           python-version: ${{ matrix.python-version }}
-          architecture: x64
-
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ matrix.poetry-version }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-
-      - name: Load cached .venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v5
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          enable-cache: true
 
       - name: Install dependencies
-        if: ${{ steps.cached-poetry-dependencies.outputs.cache-hit != 'true' }}
-        run: poetry install --no-interaction --no-root
+        run: uv sync --locked
 
       - name: Run pytest
-        run: poetry run pytest --cov exonetapi
+        run: uv run pytest --cov exonetapi
 
   build:
     name: Build package
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ['3.11', '3.12', '3.13']
-        include:
-          - poetry-version: latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
-        id: setup-python
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v10.4.0  # setup-uv only publishes full version tags
         with:
-          python-version: ${{ matrix.python-version }}
-          architecture: x64
-
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ matrix.poetry-version }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-
-      - name: Load cached .venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v5
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
-      - name: Install dependencies
-        if: ${{ steps.cached-poetry-dependencies.outputs.cache-hit != 'true' }}
-        run: poetry install --no-interaction --no-root
+          version-file: .github/workflows/requirements.txt
 
       - name: Build package
-        run: poetry build
+        run: uv build

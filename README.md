@@ -77,40 +77,35 @@ Even better: You could submit a pull request with a fix / new feature!
 
 ## Setting up development environment
 
-This Python project is fully managed using the [Poetry][poetry] dependency
-manager.
+This Python project is fully managed using the [uv][uv] package manager.
 
 You need at least:
 
 - Python 3.11+
-- [Poetry][poetry-install]
+- [uv][uv-install]
 
 Install all packages, including all development requirements:
 
 ```bash
-poetry install
+uv sync
 ```
 
-Poetry creates by default an virtual environment where it installs all
-necessary pip packages, to enter or exit the venv run the following commands:
-
-```bash
-poetry shell
-exit
-```
+uv creates a virtual environment in `.venv` and installs all packages in it.
+`uv run` runs a command inside that environment, so there is no need to
+activate it.
 
 *Now you're all set to get started!*
 
 To run the Python tests:
 
 ```bash
-poetry run pytest
+uv run pytest
 ```
 
 To run the bandit checks:
 
 ```bash
-poetry run bandit
+uv run bandit -r exonetapi
 ```
 
 
@@ -142,6 +137,6 @@ of using the issue tracker.
 [link-releases]: https://github.com/exonet/exonet-api-python/releases
 [link-contributors]: ../../contributors
 
-[poetry-install]: https://python-poetry.org/docs/#installation
-[poetry]: https://python-poetry.org
+[uv-install]: https://docs.astral.sh/uv/getting-started/installation/
+[uv]: https://docs.astral.sh/uv/
 [pre-commit]: https://pre-commit.com

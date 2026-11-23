@@ -5,10 +5,8 @@ description = "Library to interact with the Exonet API."
 authors = [{ name = "Exonet", email = "development@exonet.nl" }]
 maintainers = [{ name = "Exonet", email = "development@exonet.nl" }]
 license = "MIT"
+license-files = ["LICENSE.md"]
 readme = "README.md"
-homepage = "https://github.com/exonet/exonet-api-python"
-repository = "https://github.com/exonet/exonet-api-python"
-documentation = "https://github.com/exonet/exonet-api-python"
 keywords = ["async", "client", "exonet", "exonetapi"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -28,19 +26,24 @@ dependencies = [
   "requests==2.34.2",
 ]
 
-[tool.poetry]
-packages = [
-  {include = "exonetapi"},
-  {include = "exonetapi/**/*.py"},
+[project.urls]
+Homepage = "https://github.com/exonet/exonet-api-python"
+Repository = "https://github.com/exonet/exonet-api-python"
+Documentation = "https://github.com/exonet/exonet-api-python"
+
+[dependency-groups]
+dev = [
+  "bandit>=1.9.4,<2",
+  "black>=26.5.1,<27",
+  "flake8>=7.3.0,<8",
+  "pytest>=9.1.1,<10",
+  "pytest-cov>=7.1.0,<8",
 ]
 
-[tool.poetry.group.dev.dependencies]
-black = {version = "^26.5.1", allow-prereleases = true}
-flake8 = "^7.3.0"
-pytest = "^9.1.1"
-pytest-cov = "^7.1.0"
-bandit = "^1.9.4"
-
 [build-system]
-build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core>=1.0.0"]
+requires = ["uv_build>=0.13.9,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "exonetapi"
+module-root = ""
