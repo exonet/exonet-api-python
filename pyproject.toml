@@ -22,8 +22,8 @@ classifiers = [
 requires-python = ">=3.10"
 
 dependencies = [
-  "inflection==0.5.1",
-  "requests==2.34.2",
+  "inflection>=0.5.1,<0.6",
+  "requests>=2.32.4,<3",
 ]
 
 [project.urls]

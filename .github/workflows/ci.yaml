@@ -58,6 +58,24 @@ jobs:
       - name: Run pytest
         run: uv run pytest --cov exonetapi
 
+  test-lowest:
+    name: Run tests with the lowest supported dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v10.4.0  # setup-uv only publishes full version tags
+        with:
+          version-file: .github/workflows/requirements.txt
+          python-version: '3.11'
+          enable-cache: true
+
+      - name: Run pytest
+        run: uv run --isolated --resolution lowest-direct pytest
+
   build:
     name: Build package
     runs-on: ubuntu-latest
