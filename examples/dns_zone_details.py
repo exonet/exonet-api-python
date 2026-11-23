@@ -14,7 +14,7 @@ Get a single dns_zone resource. Because depending on who is authorized, the dns_
 IDs change, all dns_zones are retrieved with a limit of 1. From this result, the first
 DNS zone is used. In a real world scenario you would call something like
 `zone = client.resource('dns_zones').get('VX09kwR3KxNo')` to get a single DNS zone by
-it's ID.
+its ID.
 """
 zones = client.resource("dns_zones").size(1).get()
 

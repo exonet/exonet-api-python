@@ -1,6 +1,8 @@
 import unittest
 from unittest import mock
 
+import pytest
+
 from exonetapi.RequestBuilder import RequestBuilder
 from exonetapi.structures.ApiResource import ApiResource
 from exonetapi.structures.ApiResourceSet import ApiResourceSet
@@ -66,6 +68,18 @@ class TestApiResourceSet(BaseTestCase):
 
         for api_resource in api_resource_set.resources():
             assert api_resource.id() == "abc" or api_resource.id() == "def"
+
+    def test_get_item(self) -> None:
+        api_resource_set = ApiResourceSet()
+        api_resource_set.add_resource(
+            [ApiResource("fake", "abc"), ApiResource("fake", "def")]
+        )
+
+        assert api_resource_set[0].id() == "abc"
+        assert api_resource_set[-1].id() == "def"
+
+        with pytest.raises(IndexError):
+            api_resource_set[2]
 
 
 if __name__ == "__main__":

@@ -70,6 +70,10 @@ class ApiResourceSet:
         """Count the resources in this set."""
         return len(self.__resources)
 
+    def __getitem__(self, index: int) -> ApiResource:
+        """Return the resource at this position in the set."""
+        return self.__resources[index]
+
     def __iter__(self) -> Self:
         """Iterate over the resources in this set."""
         return self
