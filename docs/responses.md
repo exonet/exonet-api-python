@@ -13,6 +13,11 @@ for certificate in certificates:
     print(certificate.id())
 ```
 
+A single resource is available by its position in the set:
+```python
+first_certificate = certificates[0]
+```
+
 The get the number of items in a resource set, you can use one of the following methods:
 ```php
 len(certificates); // Returns the number of resources in the current resource set.

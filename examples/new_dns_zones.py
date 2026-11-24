@@ -1,4 +1,4 @@
-# Run this script using: python examples/dns_zones.py <YOUR-TOKEN>
+# Run this script using: python examples/new_dns_zones.py <YOUR-TOKEN>
 import sys
 
 from exonetapi import Client
