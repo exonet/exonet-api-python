@@ -3,6 +3,7 @@ from unittest import mock
 from unittest.mock import MagicMock
 
 from exonetapi.auth import Authenticator
+from exonetapi.user_agent import USER_AGENT
 from tests.base import BaseTestCase
 
 
@@ -33,6 +34,7 @@ class TestAuthenticator(BaseTestCase):
             "https://test.url/auth",
             headers={
                 "Accept": "application/vnd.Exonet.v1+json",
+                "User-Agent": USER_AGENT,
             },
             data="payload",
             timeout=30,
@@ -55,6 +57,7 @@ class TestAuthenticator(BaseTestCase):
             "https://test.url/auth",
             headers={
                 "Accept": "application/vnd.Exonet.v1+json",
+                "User-Agent": USER_AGENT,
             },
             data={
                 "grant_type": "password",
