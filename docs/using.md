@@ -10,10 +10,10 @@ is the "Personal Access Token":
 from exonetapi import Client
 
 # Create a new Client.
-client = Client('https://api.exonet.nl')
+client = Client("https://api.exonet.nl")
 
 # Authenticate with personal access token.
-client.authenticator.set_token('<YOUR_API_TOKEN>')
+client.authenticator.set_token("<YOUR_API_TOKEN>")
 ```
 
 ---

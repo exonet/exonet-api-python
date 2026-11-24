@@ -19,18 +19,16 @@ Example to get the user details of the authorised user:
 from exonetapi import Client
 
 # Create a new Client.
-client = Client('https://api.exonet.nl')
+client = Client("https://api.exonet.nl")
 
 # Authorize with a personal access token.
-client.authenticator.set_token('<YOUR_TOKEN>')
+client.authenticator.set_token("<YOUR_TOKEN>")
 
 # Make an API call. Get details of the authorized user.
-user_details = client.resource('me').get()
+user_details = client.resource("me").get()
 
 # Print user's name.
-print('Autorized as: {name}'.format(
-    name=user_details.attribute('name')
-))
+print("Autorized as: {name}".format(name=user_details.attribute("name")))
 ```
 
 See the `/docs` directory for complete documentation and additional code snippets.
@@ -106,6 +104,13 @@ To run the bandit checks:
 
 ```bash
 uv run bandit -r exonetapi
+```
+
+To lint and format the code:
+
+```bash
+uv run ruff check .
+uv run ruff format .
 ```
 
 

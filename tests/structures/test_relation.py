@@ -1,31 +1,31 @@
 import unittest
 from unittest import mock
 
-from tests.testCase import testCase
-
-from exonetapi.structures.Relation import Relation
 from exonetapi.RequestBuilder import RequestBuilder
+from exonetapi.structures.Relation import Relation
+from tests.base import BaseTestCase
 
 
-class testRelation(testCase):
-    def test_len_empty(self):
+class TestRelation(BaseTestCase):
+    """Tests for the Relation."""
+
+    def test_len_empty(self) -> None:
         relation = Relation("author", "posts", "postID")
 
-        self.assertEqual(0, len(relation))
+        assert len(relation) == 0
 
-    def test_len_filled(self):
+    def test_len_filled(self) -> None:
         relation = Relation("author", "posts", "postID")
         relation.set_resource_identifiers(["a", "b", "c"])
 
-        self.assertEqual(3, len(relation))
+        assert len(relation) == 3
 
     @mock.patch.object(RequestBuilder, "get", return_value="get_response")
-    def test_getattr(self, mock_request_builder):
-        """Call a method on the relation and expect it to be passed to the
-        RequestBuilder."""
+    def test_getattr(self, mock_request_builder) -> None:
+        """Pass a method call on the relation on to the RequestBuilder."""
         relation = Relation("author", "posts", "postID")
 
-        self.assertEqual("get_response", relation.get())
+        assert relation.get() == "get_response"
         mock_request_builder.assert_called()
 
 

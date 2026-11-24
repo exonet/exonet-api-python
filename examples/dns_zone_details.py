@@ -1,5 +1,6 @@
 # Run this script using: python examples/dns_zone_details.py <YOUR-TOKEN>
 import sys
+
 from exonetapi import Client
 
 # Create a new Client.

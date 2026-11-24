@@ -7,7 +7,7 @@ When the API returns multiple resources, for example when getting an overview pa
 is returned. The instance of this class contains the requested resources. Traverse each individual resource by using a
 `for`-loop on the instance:
 ```python
-certificates = client.resource('certificates').get()
+certificates = client.resource("certificates").get()
 for certificate in certificates:
     # Each item is an instance of an ApiResource.
     print(certificate.id())
@@ -38,16 +38,16 @@ Each resource returned by the API is transformed to an [`ApiResource`](resources
 to the attributes, type and ID of the resource.
 
 ```python
-certificate = client.resource('certificates').get('VX09kwR3KxNo')
+certificate = client.resource("certificates").get("VX09kwR3KxNo")
 
 print(
-    'Certificate {domain} has ID: {id}.\n'
-    '- expires {expire_date}\n'
-    '- Wildcard? {wildcard}'.format(
+    "Certificate {domain} has ID: {id}.\n"
+    "- expires {expire_date}\n"
+    "- Wildcard? {wildcard}".format(
         id=certificate.id(),
-        domain=certificate.attribute('domain'),
-        wildcard=certificate.attribute('wildcard'),
-        expire_date=certificate.attribute('expires_at')
+        domain=certificate.attribute("domain"),
+        wildcard=certificate.attribute("wildcard"),
+        expire_date=certificate.attribute("expires_at"),
     )
 )
 ```

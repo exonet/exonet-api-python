@@ -1,9 +1,13 @@
+from typing import Any
+
 from inflection import camelize
+
 from .structures.ApiResource import ApiResource
 
 
-def create_resource(resource):
+def create_resource(resource: dict[str, Any]) -> ApiResource:
     """Create a dynamic Resource based on the type that is provided in the data.
+
     :param resource: The resource.
     :return: A Resource instance.
     """

@@ -1,17 +1,18 @@
 import unittest
 
-from tests.testCase import testCase
-
 from exonetapi.create_resource import create_resource
+from tests.base import BaseTestCase
 
 
-class test_create_resource(testCase):
-    def test_create_resource(self):
+class TestCreateResource(BaseTestCase):
+    """Tests for create_resource."""
+
+    def test_create_resource(self) -> None:
         resource_data = {"type": "test_resource"}
 
         resource = create_resource(resource_data)
 
-        self.assertEqual(resource.__class__.__name__, "TestResource")
+        assert resource.__class__.__name__ == "TestResource"
 
 
 if __name__ == "__main__":

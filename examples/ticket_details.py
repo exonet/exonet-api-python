@@ -1,5 +1,6 @@
 # Run this script using: python examples/ticket_details.py <YOUR-TOKEN>
 import sys
+
 from exonetapi import Client
 
 # Create a new Client.
@@ -39,7 +40,7 @@ print(
 # Get the emails in the ticket.
 emails = ticket.related("emails").get()
 
-print("This ticket has {mailCount} emails".format(mailCount=len(emails)))
+print(f"This ticket has {len(emails)} emails")
 for email in emails:
     print(
         "---------------------------------------------\n"
