@@ -23,8 +23,9 @@ jobs:
           python-version: '3.11'
           enable-cache: true
 
+      # Only the dependencies that ship with exonetapi, not the dev tools.
       - name: Install dependencies
-        run: uv sync --locked
+        run: uv sync --locked --no-dev
 
       - name: Check licenses
-        run: uv run python .github/scripts/check_licenses.py
+        run: uv run --no-dev python .github/scripts/check_licenses.py

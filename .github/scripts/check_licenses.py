@@ -6,7 +6,7 @@ import sys
 
 ALLOWED = re.compile(
     r"MIT|MPL|HPND|PSF|BSD|Apache|ISC|LGPL|Expat"
-    r"|Python Software Foundation License|The Unlicense",
+    r"|Python Software Foundation License|Unlicense",
 )
 PROJECT = "exonetapi"
 
@@ -14,7 +14,8 @@ PROJECT = "exonetapi"
 def licenses(dist: importlib.metadata.Distribution) -> list[str]:
     # A package declares its license in any of three fields, so read them all.
     meta = dist.metadata
-    found = [meta.get("License-Expression") or ""]
+    # Every part of an AND expression applies, so each part has to be allowed.
+    found = re.split(r"\s+AND\s+", meta.get("License-Expression") or "")
     found.append((meta.get("License") or "").strip().split("\n")[0])
     found += [
         classifier.rsplit(" :: ", 1)[-1]
