@@ -76,6 +76,7 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "exonetapi/**/*.py" = ["N999"]  # CamelCase module names are public import paths
 "examples/*" = ["INP001", "T201"]  # Standalone scripts that print their results
+".github/scripts/*" = ["INP001", "T201"]  # CI scripts that report on stdout
 
 [tool.ruff.lint.pylint]
 max-args = 15
