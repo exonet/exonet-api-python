@@ -21,6 +21,12 @@ jobs:
         with:
           version-file: .github/workflows/requirements.txt
 
+      # The release tag is the version, so pyproject.toml needs no bump per release.
+      - name: Set the version from the release tag
+        env:
+          VERSION: ${{ github.event.release.tag_name }}
+        run: uv version "$VERSION" --frozen
+
       - name: Build package
         run: uv build
 
