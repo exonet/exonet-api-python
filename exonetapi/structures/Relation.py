@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Self
+from typing import TYPE_CHECKING, Any, Self, TypeAlias
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from exonetapi.structures.ApiResourceIdentifier import ApiResourceIdentifier
     from exonetapi.structures.ApiResourceSet import ApiResourceSet
 
-    ResourceIdentifiers = (
+    ResourceIdentifiers: TypeAlias = (
         ApiResourceIdentifier | ApiResourceSet | list[ApiResourceIdentifier] | None
     )
 

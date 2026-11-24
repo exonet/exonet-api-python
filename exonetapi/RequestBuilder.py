@@ -7,13 +7,13 @@ from typing import TYPE_CHECKING, Any, Self
 import requests
 
 from exonetapi.exceptions.ValidationException import ValidationException
-from exonetapi.structures import ApiResourceSet
+from exonetapi.structures.ApiResourceSet import ApiResourceSet
 
-from .result import Parser
+from .result.Parser import Parser
 
 if TYPE_CHECKING:
     from exonetapi.Client import Client
-    from exonetapi.structures import ApiResource
+    from exonetapi.structures.ApiResource import ApiResource
 
 
 class RequestBuilder:

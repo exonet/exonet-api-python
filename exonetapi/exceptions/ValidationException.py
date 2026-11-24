@@ -1,3 +1,5 @@
+"""Http validation exception."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -6,10 +8,6 @@ from requests.exceptions import HTTPError
 
 if TYPE_CHECKING:
     from requests import Response
-
-"""
-Http validation exception.
-"""
 
 
 class ValidationException(HTTPError):

@@ -6,11 +6,12 @@ import json
 from typing import TYPE_CHECKING, Any
 
 from exonetapi.create_resource import create_resource
-from exonetapi.structures import ApiResourceIdentifier, ApiResourceSet
+from exonetapi.structures.ApiResourceIdentifier import ApiResourceIdentifier
+from exonetapi.structures.ApiResourceSet import ApiResourceSet
 from exonetapi.structures.Relationship import Relationship
 
 if TYPE_CHECKING:
-    from exonetapi.structures import ApiResource
+    from exonetapi.structures.ApiResource import ApiResource
 
 
 class Parser:
