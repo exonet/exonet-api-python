@@ -6,9 +6,11 @@ on:
     types: [released]
 
 jobs:
-  publish:
-    name: Build & publish package
+  build:
+    name: Build package
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -22,8 +24,30 @@ jobs:
       - name: Build package
         run: uv build
 
-      - name: Publish distribution to PyPI
-        if: ${{ github.event_name == 'release' }}
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Upload distributions
+        uses: actions/upload-artifact@v7
         with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          name: dist
+          path: dist/
+
+  # A separate job, so only the upload step can request the PyPI token.
+  publish:
+    name: Publish package
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/exonetapi/
+    permissions:
+      # PyPI trusted publishing exchanges this OIDC token for an upload token.
+      id-token: write
+
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
