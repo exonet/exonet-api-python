@@ -219,8 +219,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "inflection", specifier = "==0.5.1" },
-    { name = "requests", specifier = "==2.34.2" },
+    { name = "inflection", specifier = ">=0.5.1,<0.6" },
+    { name = "requests", specifier = ">=2.33.0,<3" },
 ]
 
 [package.metadata.requires-dev]
