@@ -11,6 +11,7 @@ from exonetapi.exceptions.ValidationException import ValidationException
 from exonetapi.RequestBuilder import RequestBuilder
 from exonetapi.result.Parser import Parser
 from exonetapi.structures.ApiResource import ApiResource
+from exonetapi.user_agent import USER_AGENT
 from tests.base import BaseTestCase
 
 
@@ -86,6 +87,7 @@ class TestRequestBuilder(BaseTestCase):
         headers = self.request_builder._RequestBuilder__get_headers()
         assert headers == {
             "Accept": "application/vnd.Exonet.v1+json",
+            "User-Agent": USER_AGENT,
             "Content-Type": "application/json",
             "Authorization": "Bearer test_token",
         }
@@ -109,6 +111,7 @@ class TestRequestBuilder(BaseTestCase):
             "https://api.exonet.nl/things/testIad",
             headers={
                 "Accept": "application/vnd.Exonet.v1+json",
+                "User-Agent": USER_AGENT,
                 "Content-Type": "application/json",
                 "Authorization": "Bearer None",
             },
@@ -146,6 +149,7 @@ class TestRequestBuilder(BaseTestCase):
             "https://api.exonet.nl/things",
             headers={
                 "Accept": "application/vnd.Exonet.v1+json",
+                "User-Agent": USER_AGENT,
                 "Content-Type": "application/json",
                 "Authorization": "Bearer None",
             },
@@ -182,6 +186,7 @@ class TestRequestBuilder(BaseTestCase):
             "https://api.exonet.nl/things/someId/relationships/name",
             headers={
                 "Accept": "application/vnd.Exonet.v1+json",
+                "User-Agent": USER_AGENT,
                 "Content-Type": "application/json",
                 "Authorization": "Bearer None",
             },
@@ -213,6 +218,7 @@ class TestRequestBuilder(BaseTestCase):
             "https://api.exonet.nl/things/someId",
             headers={
                 "Accept": "application/vnd.Exonet.v1+json",
+                "User-Agent": USER_AGENT,
                 "Content-Type": "application/json",
                 "Authorization": "Bearer None",
             },
@@ -240,6 +246,7 @@ class TestRequestBuilder(BaseTestCase):
             "https://api.exonet.nl/things/someId/relationships/name",
             headers={
                 "Accept": "application/vnd.Exonet.v1+json",
+                "User-Agent": USER_AGENT,
                 "Content-Type": "application/json",
                 "Authorization": "Bearer None",
             },
@@ -268,6 +275,7 @@ class TestRequestBuilder(BaseTestCase):
             "https://api.exonet.nl/things/someId",
             headers={
                 "Accept": "application/vnd.Exonet.v1+json",
+                "User-Agent": USER_AGENT,
                 "Content-Type": "application/json",
                 "Authorization": "Bearer None",
             },
@@ -295,6 +303,7 @@ class TestRequestBuilder(BaseTestCase):
             "https://api.exonet.nl/things/someId/relationships/name",
             headers={
                 "Accept": "application/vnd.Exonet.v1+json",
+                "User-Agent": USER_AGENT,
                 "Content-Type": "application/json",
                 "Authorization": "Bearer None",
             },
@@ -331,6 +340,7 @@ class TestRequestBuilder(BaseTestCase):
             "https://api.exonet.nl/things",
             headers={
                 "Accept": "application/vnd.Exonet.v1+json",
+                "User-Agent": USER_AGENT,
                 "Content-Type": "application/json",
                 "Authorization": "Bearer None",
             },
@@ -369,6 +379,7 @@ class TestRequestBuilder(BaseTestCase):
             "https://api.exonet.nl/things",
             headers={
                 "Accept": "application/vnd.Exonet.v1+json",
+                "User-Agent": USER_AGENT,
                 "Content-Type": "application/json",
                 "Authorization": "Bearer None",
             },
@@ -380,6 +391,7 @@ class TestRequestBuilder(BaseTestCase):
             "https://api.exonet.nl/next_page",
             headers={
                 "Accept": "application/vnd.Exonet.v1+json",
+                "User-Agent": USER_AGENT,
                 "Content-Type": "application/json",
                 "Authorization": "Bearer None",
             },

@@ -8,6 +8,7 @@ import requests
 
 from exonetapi.exceptions.ValidationException import ValidationException
 from exonetapi.structures.ApiResourceSet import ApiResourceSet
+from exonetapi.user_agent import USER_AGENT
 
 from .result.Parser import Parser
 
@@ -213,6 +214,7 @@ class RequestBuilder:
         """
         return {
             "Accept": "application/vnd.Exonet.v1+json",
+            "User-Agent": USER_AGENT,
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.__client.authenticator.get_token()}",
         }

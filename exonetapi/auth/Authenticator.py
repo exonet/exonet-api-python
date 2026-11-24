@@ -2,6 +2,8 @@
 
 import requests
 
+from exonetapi.user_agent import USER_AGENT
+
 
 class Authenticator:
     """Manage the authentication and keep track of (valid) tokens."""
@@ -58,7 +60,10 @@ class Authenticator:
         :param payload:
         :return: A new access token.
         """
-        headers = {"Accept": "application/vnd.Exonet.v1+json"}
+        headers = {
+            "Accept": "application/vnd.Exonet.v1+json",
+            "User-Agent": USER_AGENT,
+        }
 
         response = requests.post(
             self.__host + self.__authentication_endpoint,
