@@ -11,19 +11,19 @@ keywords = ["async", "client", "exonet", "exonetapi"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: 3",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 dependencies = [
-  "inflection==0.5.1",
-  "requests==2.34.2",
+  "inflection>=0.5.1,<0.6",
+  "requests>=2.33.0,<3",
 ]
 
 [project.urls]
@@ -34,11 +34,61 @@ Documentation = "https://github.com/exonet/exonet-api-python"
 [dependency-groups]
 dev = [
   "bandit>=1.9.4,<2",
-  "black>=26.5.1,<27",
-  "flake8>=7.3.0,<8",
   "pytest>=9.1.1,<10",
   "pytest-cov>=7.1.0,<8",
+  "ruff>=0.17,<0.18",
 ]
+
+[tool.ruff]
+force-exclude = true
+line-length = 88
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "ANN401",  # Opinionated warning on disallowing dynamically typed expressions
+  "D203",    # Conflicts with other rules
+  "D213",    # Conflicts with other rules
+  "D417",    # False positives in some occasions
+  "PLR2004", # Just annoying, not really useful
+  "SLOT000", # Has a bug with enums: https://github.com/astral-sh/ruff/issues/5748
+  # Conflicts with the Ruff formatter
+  "COM812",
+  "ISC001",
+
+  # DevOps Conventions
+  "CPY001",  # No copyright header in internal services
+  "D100",    # We don't care about the comment on the first line of a file. https://docs.astral.sh/ruff/rules/undocumented-public-module/
+  "D102",    # No docstrings
+  "D103",    # No docstrings
+  "D104",    # No docstrings
+  "D107",    # No docstrings
+  "FBT001",  # We like booleans as arguments. https://docs.astral.sh/ruff/rules/boolean-type-hint-positional-argument/
+  "FBT002",  # We like booleans as arguments. https://docs.astral.sh/ruff/rules/boolean-default-value-positional-argument/
+  "TRY003",  # We need the error info inside these exceptions. https://docs.astral.sh/ruff/rules/raise-vanilla-args/
+  "TRY401",  # We like redundancy. https://docs.astral.sh/ruff/rules/verbose-log-message/
+  "EM101",   # See TRY003. https://docs.astral.sh/ruff/rules/raw-string-in-exception/
+  "N818",    # We prefer exception over error. https://docs.astral.sh/ruff/rules/error-instead-of-exception/
+  "ISC003",  # we like concatenating strings. https://docs.astral.sh/ruff/rules/explicit-string-concatenation/
+  "PERF401",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"exonetapi/**/*.py" = ["N999"]  # CamelCase module names are public import paths
+"examples/*" = ["INP001", "T201"]  # Standalone scripts that print their results
+
+[tool.ruff.lint.pylint]
+max-args = 15
+
+[tool.ruff.lint.flake8-pytest-style]
+mark-parentheses = false
+fixture-parentheses = false
+
+[tool.ruff.lint.isort]
+known-first-party = ["exonetapi"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 25
 
 [build-system]
 requires = ["uv_build>=0.13.9,<0.14"]

@@ -1,14 +1,21 @@
+"""Http validation exception."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from requests.exceptions import HTTPError
 
-"""
-Http validation exception.
-"""
+if TYPE_CHECKING:
+    from requests import Response
 
 
 class ValidationException(HTTPError):
-    def __init__(self, response):
+    """Raised when the API rejects a request because its data is invalid."""
+
+    def __init__(self, response: Response) -> None:
         # Collect validation errors as list of strings.
-        self.validation_errors = {}
+        self.validation_errors: dict[str, list[str]] = {}
 
         # Loop errors.
         for error in response.json()["errors"]:
@@ -34,5 +41,5 @@ class ValidationException(HTTPError):
             response=response,
         )
 
-    def get_failed_validations(self):
+    def get_failed_validations(self) -> dict[str, list[str]]:
         return self.validation_errors

@@ -1,28 +1,28 @@
-"""
-Obtain tokens and keep track of authentication details.
-"""
+"""Obtain tokens and keep track of authentication details."""
+
 import requests
 
 
 class Authenticator:
-    """
-    Manage the authentication and keep track of (valid) tokens.
-    """
+    """Manage the authentication and keep track of (valid) tokens."""
 
-    def __init__(self, host, authentication_endpoint):
+    def __init__(self, host: str, authentication_endpoint: str) -> None:
         self.__host = host
         self.__authentication_endpoint = authentication_endpoint
-        self.__auth_details = None
+        self.__auth_details: dict[str, str] | None = None
 
-    def get_token(self):
+    def get_token(self) -> str | None:
         """Get the obtained authentication token.
 
         :return: The token if available.
         """
         if self.__auth_details:
             return self.__auth_details["access_token"].strip()
+        return None
 
-    def password_auth(self, username, password, client_id, client_secret):
+    def password_auth(
+        self, username: str, password: str, client_id: str, client_secret: str
+    ) -> None:
         """Authorize using the password grant.
 
         :param username: The username.
@@ -41,7 +41,7 @@ class Authenticator:
             }
         )
 
-    def set_token(self, token):
+    def set_token(self, token: str) -> None:
         """Set a token to use when authorizing.
 
         This bypasses any calls to the authorization endpoint, but instead uses the
@@ -52,7 +52,7 @@ class Authenticator:
         """
         self.__auth_details = {"access_token": token}
 
-    def get_new_token(self, payload):
+    def get_new_token(self, payload: dict[str, str]) -> str:
         """Get a new token via the authorization endpoint.
 
         :param payload:
@@ -64,7 +64,7 @@ class Authenticator:
             self.__host + self.__authentication_endpoint,
             headers=headers,
             data=payload,
-            timeout=30
+            timeout=30,
         )
 
         # Raise exception on failed request.

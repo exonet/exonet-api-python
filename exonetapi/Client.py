@@ -1,17 +1,21 @@
-"""
-Main class to interact with the Exonet API.
-"""
+"""Main class to interact with the Exonet API."""
+
+from typing import Any, ClassVar
+from urllib.parse import urlparse
+
 from .auth import Authenticator
 from .RequestBuilder import RequestBuilder
-from urllib.parse import urlparse
 
 
 class Singleton(type):
-    _instances = {}
+    """Metaclass that gives every class using it a single shared instance."""
 
-    def __call__(cls, *args, **kwargs):
+    _instances: ClassVar[dict[type, Any]] = {}
+
+    def __call__(cls, *args: Any, **kwargs: Any) -> Any:
+        """Return the existing instance, or create it on the first call."""
         if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+            cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]
 
 
@@ -24,7 +28,7 @@ class Client(metaclass=Singleton):
     # The URL to use for authentication.
     authentication_endpoint = "/oauth/token"
 
-    def __init__(self, host=None):
+    def __init__(self, host: str | None = None) -> None:
         self.__host = "https://api.exonet.nl"
 
         if host:
@@ -34,26 +38,26 @@ class Client(metaclass=Singleton):
             self.get_host(), self.authentication_endpoint
         )
 
-    def set_host(self, host):
-        """
-        Set the API host.
+    def set_host(self, host: str) -> None:
+        """Set the API host.
+
         Make sure a protocol is set.
 
         :param host: The API host including the http(s) protocol.
-        :return: The parsed API host.
         """
         parsed_host = urlparse(host)
 
         # Make sure the host uses a valid scheme.
         if parsed_host.scheme not in ("http", "https"):
-            raise ConnectionAbortedError("Invalid protocol for host: %s" % host)
+            message = f"Invalid protocol for host: {host}"
+            raise ConnectionAbortedError(message)
 
         self.__host = parsed_host.geturl()
 
-    def get_host(self):
+    def get_host(self) -> str:
         return self.__host
 
-    def resource(self, resource):
+    def resource(self, resource: str) -> RequestBuilder:
         """Prepare a new request to a resource endpoint.
 
         :param resource: The type of resource.

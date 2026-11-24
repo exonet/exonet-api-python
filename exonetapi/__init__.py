@@ -1,6 +1,6 @@
 from .Client import Client
+from .create_resource import create_resource
 from .RequestBuilder import RequestBuilder
 from .result import Parser
-from .create_resource import create_resource
 
-__all__ = ["Client", "RequestBuilder", "Parser", "create_resource"]
+__all__ = ["Client", "Parser", "RequestBuilder", "create_resource"]

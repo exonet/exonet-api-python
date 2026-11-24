@@ -11,13 +11,13 @@ handling and will throw an exception when the request fails.
 from exonetapi import Client
 
 # Create a new Client.
-client = Client('https://api.exonet.nl')
+client = Client("https://api.exonet.nl")
 
 # Login with machine token.
-client.authenticator.set_token('INVALID_TOKEN')
+client.authenticator.set_token("INVALID_TOKEN")
 
 # Try to make a request, will fail due to invalid token.
-myDetails = client.resource('me').get()
+myDetails = client.resource("me").get()
 ```
 
 ## Catching exceptions and outputting errors
@@ -26,18 +26,19 @@ why the request was invalid. Catch the exception and output the request body con
 
 ```python
 from exonetapi import Client
+
 # Import the exception to catch.
 from requests.exceptions import HTTPError
 
 # Create a new Client.
-client = Client('https://api.exonet.nl')
+client = Client("https://api.exonet.nl")
 
 # Login with machine token.
-client.Authenticator.set_token('A_PREVIOUSLY_OBTAINED_TOKEN')
+client.Authenticator.set_token("A_PREVIOUSLY_OBTAINED_TOKEN")
 
 try:
     # Try to get a certificate while providing an invalid ID.
-    certificate = client.request('certificates').id('invalidID').get()
+    certificate = client.request("certificates").id("invalidID").get()
 except HTTPError as e:
     print(e.response.text)
     raise e
@@ -60,14 +61,14 @@ try:
     created_item = record.post()
 except ValidationException as err:
     # Print validation errors.
-    print('{}'.format(err))
+    print("{}".format(err))
     validation_errors = err.get_failed_validations()
     for field in validation_errors:
         for error in validation_errors[field]:
-            print('{}: {}'.format(field, error))
+            print("{}: {}".format(field, error))
 except HTTPError as err:
     # Print all other errors.
-    print('HTTP Error: {}'.format(err))
+    print("HTTP Error: {}".format(err))
 ``` 
 
 Validation errors that are not related to a field are keyed with `generic`.

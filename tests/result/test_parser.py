@@ -1,11 +1,13 @@
 import unittest
 
-from tests.testCase import testCase
 from exonetapi.result import Parser
+from tests.base import BaseTestCase
 
 
-class testParser(testCase):
-    def test_parse_list(self):
+class TestParser(BaseTestCase):
+    """Tests for the Parser."""
+
+    def test_parse_list(self) -> None:
         json_data_list = """
         {
           "data": [
@@ -49,17 +51,17 @@ class testParser(testCase):
             }
           ]
         }
-        """  # noqa: E501
+        """
 
         result = Parser(str.encode(json_data_list)).parse().resources()
 
-        self.assertEqual(result[0].id(), "DV6axK4GwNEb")
-        self.assertEqual(result[0].type(), "comments")
+        assert result[0].id() == "DV6axK4GwNEb"
+        assert result[0].type() == "comments"
 
-        self.assertEqual(result[1].id(), "zWX9r7exA28G")
-        self.assertEqual(result[1].type(), "comments")
+        assert result[1].id() == "zWX9r7exA28G"
+        assert result[1].type() == "comments"
 
-    def test_parse_single(self):
+    def test_parse_single(self) -> None:
         json_data_list = """
         {
           "data":
@@ -83,14 +85,14 @@ class testParser(testCase):
               }
             }
         }
-        """  # noqa: E501
+        """
 
         result = Parser(str.encode(json_data_list)).parse()
 
-        self.assertEqual(result.id(), "DV6axK4GwNEb")
-        self.assertEqual(result.type(), "comments")
+        assert result.id() == "DV6axK4GwNEb"
+        assert result.type() == "comments"
 
-    def test_parse_single_with_multi_relation(self):
+    def test_parse_single_with_multi_relation(self) -> None:
         json_data_list = """
         {
           "data": {
@@ -119,7 +121,7 @@ class testParser(testCase):
             }
           }
         }
-        """  # noqa: E501
+        """
 
         result = (
             Parser(str.encode(json_data_list))
@@ -128,49 +130,7 @@ class testParser(testCase):
             .get_resource_identifiers()
         )
 
-        self.assertEqual(len(result), 2)
-
-        def test_parse_single_with_multi_relation(self):
-            json_data_list = """
-            {
-              "data":
-                {
-                  "type": "comments",
-                  "id": "DV6axK4GwNEb",
-                  "attributes": {
-                    "subject": "Can you help me?"
-                  },
-                  "relationships": {
-                    "tags": {
-                      "links": {
-                        "self": "https://api.exonet.nl/comments/DV6axK4GwNEb/relationships/tags",
-                        "related": "https://api.exonet.nl/comments/DV6axK4GwNEb/tags"
-                      },
-                      "data": [
-                          {
-                            "type": "tags",
-                            "id": "ABC"
-                          },
-                          {
-                            "type": "tags",
-                            "id": "XYZ"
-                          }
-
-                      ]
-                    }
-                  }
-                }
-            }
-            """  # noqa: E501
-
-            result = (
-                Parser(json_data_list)
-                .parse()
-                .relationship("tags")
-                .get_resource_identifiers()
-            )
-
-            self.assertEqual(len(result), 2)
+        assert len(result) == 2
 
 
 if __name__ == "__main__":
