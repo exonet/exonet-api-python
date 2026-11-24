@@ -29,12 +29,12 @@ print(
     f"\nTicket id:\t\t{ticket.id()}\n"
     f"Ticket number:\t\t{ticket.attribute('number')}\n"
     f"Created at:\t\t{ticket.attribute('created_date')}\n"
-    f"Last email date:\t{ticket.attribute('last_email_date')}\n"
+    f"Status:\t\t\t{ticket.attribute('status')}\n"
 )
 
-# The conversation of a ticket lists its messages; get the emails among them.
-conversation = ticket.relationship("conversation").get_resource_identifiers() or []
-emails = [message.get() for message in conversation if message.type() == "emails"]
+# The conversation of a ticket holds all its messages. Keep only the emails.
+conversation = ticket.related("conversation").get()
+emails = [message for message in conversation if message.type() == "emails"]
 
 print(f"This ticket has {len(emails)} emails")
 for email in emails:
