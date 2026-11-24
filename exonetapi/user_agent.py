@@ -13,4 +13,6 @@ def _package_version() -> str:
         return "unknown"
 
 
-USER_AGENT = f"exonetapi/{_package_version()} {requests.utils.default_user_agent()}"
+USER_AGENT = (
+    f"exonet-api-python/{_package_version()} {requests.utils.default_user_agent()}"
+)
